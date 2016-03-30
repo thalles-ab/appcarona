@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    tools:context=".activity.LoginActivity">
+
+    <ImageView
+        android:id="@+id/loginBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/uvv_05"/>
+
+    <RelativeLayout
+        android:id="@+id/loginWrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:background="@drawable/background"
+        android:padding="@dimen/padding_login_wrapper">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="@dimen/size_login_page_logo"
+            android:layout_height="@dimen/size_login_page_logo"
+            android:layout_margin="@dimen/margin_logo_login_page"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"/>
+
+        <EditText
+            android:id="@+id/loginField"
+            android:layout_width="@dimen/width_login_fields"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/image"
+            android:layout_centerHorizontal="true"
+            android:inputType="number"
+            android:hint="@string/hint_login"
+            android:nextFocusDown="@+id/passwordField"
+            style="@style/EditTextField"/>
+
+        <EditText
+            android:id="@id/passwordField"
+            android:layout_width="@dimen/width_login_fields"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/loginField"
+            android:layout_centerHorizontal="true"
+            android:inputType="textPassword"
+            android:hint="@string/hint_password"
+            android:nextFocusForward="@+id/logIn"
+            style="@style/EditTextField"/>
+
+        <TextView
+            android:id="@id/logIn"
+            android:layout_width="@dimen/width_login_fields"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_logo_login_page"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/passwordField"
+            android:text="@string/lbl_enter"
+            android:textSize="@dimen/ts_enter_button"
+            android:onClick="onClickLogin"
+            style="@style/TextButton"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/register"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="right"
+                android:gravity="right"
+                android:text="@string/lbl_signup_now"
+                android:focusableInTouchMode="false"
+                android:onClick="onClickSignUp"
+                style="@style/TextButton"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#250d87</color>
+    <color name="colorPrimaryDark">#19103b</color>
+    <color name="colorAccent">#ffac1c</color>
+
+    <!-- Basic Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- Main Colors-->
+    <color name="main_a">#FFFFFF</color>
+    <color name="main_b">#0c116c</color>
+    <color name="main_c">#ff9500</color>
+
+    <!-- Text Color (txc) -->
+    <color name="txc_text_button_inactive">#FFFFFF</color>
+    <color name="txc_text_button_active">#0c116c</color>
+    <color name="txc_default_text">#000000</color>
+    <color name="txc_edit_text_content">#000000</color>
+    <color name="txc_button_inactive">#FFFFFF</color>
+    <color name="txc_button_active">#e99205</color>
+
+    <!-- Background Color (bgc) -->
+    <color name="bgc_button_inactive">#250d87</color>
+    <color name="bgc_button_active">#1a0960</color>
+    <color name="bgc_login_start">#A0DFDFDF</color>
+    <color name="bgc_login_end">#A0767676</color>
+
+    <!-- Stroke Color (stc)-->
+    <color name="stc_edit_text_unfocused">#19103b</color>
+    <color name="stc_edit_text_focused">#ffac1c</color>
+    <color name="stc_photo">#250d87</color>
+
+    <!-- Other colors -->
 </resources>

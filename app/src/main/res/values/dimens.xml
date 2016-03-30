@@ -1,0 +1,46 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- Margin -->
+    <dimen name="margin_edit_text_login_page">10dp</dimen>
+    <dimen name="margin_logo_login_page">10dp</dimen>
+    <dimen name="margin_home_page_user_data">3dp</dimen>
+    <dimen name="margin_edit_profile_field">5dp</dimen>
+    <dimen name="margin_button">5dp</dimen>
+    <dimen name="margin_user_photo">10dp</dimen>
+    <dimen name="margin_btn_signup_horizontal">12dp</dimen>
+    <dimen name="margin_btn_signup_vertical">15dp</dimen>
+
+    <!-- Padding -->
+    <dimen name="padding_y_edit_text_login_page">5dp</dimen>
+    <dimen name="padding_x_edit_text_login_page">15dp</dimen>
+    <dimen name="padding_home_page_user_data">15dp</dimen>
+    <dimen name="padding_login_wrapper">15dp</dimen>
+    <dimen name="padding_edit_profile_page">15dp</dimen>
+    <dimen name="padding_edit_profile_photo_wrapper">5dp</dimen>
+    <dimen name="padding_button_horizontal">5dp</dimen>
+    <dimen name="padding_register_data_wrapper">15dp</dimen>
+
+    <!-- Size, Width and Height -->
+    <dimen name="width_login_fields">200dp</dimen>
+    <dimen name="size_login_page_logo">175dp</dimen>
+    <dimen name="size_home_page_photo">100dp</dimen>
+    <dimen name="size_user_photo">100dp</dimen>
+    <dimen name="size_edit_profile_page_photo">100dp</dimen>
+    <dimen name="width_photo_border">1dp</dimen>
+
+    <!-- Text Size -->
+    <dimen name="ts_edit_profile_title">20sp</dimen>
+    <dimen name="ts_edit_profile_text">14sp</dimen>
+    <dimen name="ts_text_button">12sp</dimen>
+    <dimen name="ts_enter_button">18sp</dimen>
+
+    <!-- Drawables -->
+    <dimen name="corner_login_wrapper_bg">20dp</dimen>
+    <dimen name="corner_edit_text_bg">7dp</dimen>
+    <dimen name="corner_button_bg">7dp</dimen>
+    <dimen name="corner_photo">5dp</dimen>
+    <dimen name="stroke_edit_text_bg">1dp</dimen>
+</resources>

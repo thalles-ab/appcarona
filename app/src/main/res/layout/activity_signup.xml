@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.SignUpActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_register_data_wrapper"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/fieldUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_name"
+            style="@style/EditTextField"/>
+
+        <EditText
+            android:id="@+id/fieldUserRegistration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_registration"
+            android:inputType="number"
+            style="@style/EditTextField"/>
+
+        <EditText
+            android:id="@+id/fieldUserPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_password"
+            android:inputType="textPassword"
+            style="@style/EditTextField"/>
+
+        <EditText
+            android:id="@+id/fieldUserConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_confirm_password"
+            android:inputType="textPassword"
+            style="@style/EditTextField"/>
+
+
+        <Button
+            android:id="@+id/confirmRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_signup"
+            android:layout_marginLeft="@dimen/margin_btn_signup_horizontal"
+            android:layout_marginRight="@dimen/margin_btn_signup_horizontal"
+            android:layout_marginTop="@dimen/margin_btn_signup_vertical"
+            android:onClick="onClickSignUp"
+            style="@style/Button"/>
+    </LinearLayout>
+
+</ScrollView>

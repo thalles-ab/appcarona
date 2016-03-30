@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activity.HomeActivity"
+    android:padding="@dimen/padding_home_page_user_data">
+
+    <LinearLayout
+        android:id="@+id/userDataWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/userPhoto"
+            android:layout_width="@dimen/size_home_page_photo"
+            android:layout_height="@dimen/size_home_page_photo"
+            android:src="@drawable/user_placeholder"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:padding="@dimen/padding_home_page_user_data">
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_home_page_user_data"
+                android:hint="@string/hint_name"/>
+
+            <TextView
+                android:id="@+id/userCourse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_home_page_user_data"
+                android:hint="@string/hint_course"/>
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="@dimen/margin_home_page_user_data" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/editProfileButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/userDataWrapper"
+        android:text="@string/lbl_edit_profile"
+        android:onClick="onClickEditProfile"
+        style="@style/Button"/>
+
+    <Button
+        android:id="@+id/requestRideButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editProfileButton"
+        android:text="@string/lbl_request_ride"
+        android:onClick="onClickRequestRide"
+        style="@style/Button"/>
+
+    <Button
+        android:id="@+id/offerRideButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/requestRideButton"
+        android:text="@string/lbl_offer_ride"
+        android:onClick="onClickOfferRide"
+        style="@style/Button"/>
+
+</RelativeLayout>

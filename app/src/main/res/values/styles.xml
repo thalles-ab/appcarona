@@ -1,11 +1,58 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="TextButton">
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@drawable/color_state_text_button</item>
+        <item name="android:textSize">@dimen/ts_text_button</item>
+        <item name="android:focusableInTouchMode">false</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="Button">
+        <item name="android:background">@drawable/background_button</item>
+        <item name="android:textColor">@drawable/color_state_button_text</item>
+        <item name="android:layout_marginTop">@dimen/margin_button</item>
+        <item name="android:layout_marginBottom">@dimen/margin_button</item>
+        <item name="android:layout_marginLeft">@dimen/margin_button</item>
+        <item name="android:layout_marginRight">@dimen/margin_button</item>
+        <item name="android:paddingLeft">@dimen/padding_button_horizontal</item>
+        <item name="android:paddingRight">@dimen/padding_button_horizontal</item>
+    </style>
+
+    <style name="EditTextField">
+        <item name="android:background">@drawable/background_edit_text</item>
+        <item name="android:layout_marginTop">@dimen/margin_edit_text_login_page</item>
+        <item name="android:layout_marginBottom">@dimen/margin_edit_text_login_page</item>
+        <item name="android:layout_marginRight">@dimen/margin_edit_text_login_page</item>
+        <item name="android:layout_marginLeft">@dimen/margin_edit_text_login_page</item>
+        <item name="android:paddingTop">@dimen/padding_y_edit_text_login_page</item>
+        <item name="android:paddingBottom">@dimen/padding_y_edit_text_login_page</item>
+        <item name="android:paddingRight">@dimen/padding_x_edit_text_login_page</item>
+        <item name="android:paddingLeft">@dimen/padding_x_edit_text_login_page</item>
+        <item name="android:textColor">@color/txc_edit_text_content</item>
+    </style>
+
+    <style name="DialogButton">
+        <item name="android:background">@drawable/background_button</item>
+        <item name="android:textColor">@drawable/color_state_button_text</item>
+        <item name="android:layout_marginTop">@dimen/margin_button</item>
+        <item name="android:layout_marginBottom">@dimen/margin_button</item>
+        <item name="android:layout_marginLeft">@dimen/margin_button</item>
+        <item name="android:layout_marginRight">@dimen/margin_button</item>
+        <item name="android:paddingLeft">@dimen/padding_button_horizontal</item>
+        <item name="android:paddingRight">@dimen/padding_button_horizontal</item>
     </style>
 
 </resources>
