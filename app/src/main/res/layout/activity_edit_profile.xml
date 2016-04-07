@@ -34,10 +34,10 @@
                 android:layout_width="@dimen/size_user_photo"
                 android:layout_height="@dimen/size_user_photo"
                 android:layout_margin="@dimen/margin_user_photo"
-                fresco:placeholderImage="@drawable/user_placeholder"
                 fresco:roundedCornerRadius="@dimen/corner_photo"
                 fresco:roundingBorderWidth="@dimen/width_photo_border"
                 fresco:roundingBorderColor="@color/stc_photo"/>
+            <!--fresco:placeholderImage="@drawable/user_placeholder"-->
 
             <Button
                 android:id="@+id/userChangePhoto"
@@ -76,11 +76,90 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/addressWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@id/userDataWrapper">
+
+            <TextView
+                android:id="@+id/userHomeAddressLbl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/ts_edit_profile_title"
+                android:typeface="sans"
+                android:textStyle="bold"
+                android:text="@string/lbl_house"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="@dimen/margin_edit_profile_field"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/userHomeAddress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:text="Endereço"/>
+
+                <Button
+                    android:id="@+id/changeHomeAddress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:text="@string/btn_change"
+                    android:layout_gravity="top"
+                    android:onClick="onClickSelectLocation"
+                    style="@style/Button"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/userWorkAddressLbl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_work_place"
+                android:textSize="@dimen/ts_edit_profile_title"
+                android:typeface="sans"
+                android:textStyle="bold"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="@dimen/margin_edit_profile_field"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/userWorkAddress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:text="Endereço"/>
+
+                <Button
+                    android:id="@+id/changeWorkPlaceAddress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:layout_gravity="top"
+                    android:text="@string/btn_change"
+                    android:onClick="onClickSelectLocation"
+                    style="@style/Button"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/save_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/userDataWrapper"
+            android:layout_below="@id/addressWrapper"
             android:text="@string/lbl_save_changes"
             style="@style/Button"/>
 

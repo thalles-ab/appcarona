@@ -77,4 +77,13 @@
         android:onClick="onClickOfferRide"
         style="@style/Button"/>
 
+    <Button
+        android:id="@+id/logOutButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/offerRideButton"
+        android:text="@string/lbl_logout"
+        android:onClick="onClickLogOut"
+        style="@style/Button"/>
+
 </RelativeLayout>

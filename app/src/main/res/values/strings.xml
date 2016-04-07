@@ -6,6 +6,7 @@
     <string name="lbl_edit_profile">Editar Perfil</string>
     <string name="lbl_request_ride">Solicitar Carona</string>
     <string name="lbl_offer_ride">Oferecer Carona</string>
+    <string name="lbl_logout">Sair</string>
     <string name="lbl_person">Pessoa</string>
     <string name="lbl_cars">Carros</string>
     <string name="lbl_places">Locais</string>
@@ -17,6 +18,12 @@
     <string name="lbl_signup_now">Cadastre-se</string>
     <string name="lbl_signup">Cadastrar</string>
     <string name="lbl_home">Home</string>
+    <string name="lbl_house">Casa</string>
+    <string name="lbl_work_place">Trabalho</string>
+    <string name="lbl_destination">Destino</string>
+    <string name="lbl_departure">Saída</string>
+    <string name="lbl_date">Data</string>
+    <string name="lbl_hour">Hora</string>
 
     <!-- Hints -->
     <string name="hint_login">login</string>
@@ -32,9 +39,44 @@
     <string name="btn_cancel">Cancelar</string>
     <string name="btn_select_photo">Escolher foto</string>
     <string name="btn_signup">Cadastrar</string>
+    <string name="btn_change">Alterar</string>
+    <string name="btn_select">Selecionar</string>
+    <string name="btn_confirm">Confirmar</string>
 
     <!-- Errors -->
     <string name="error_fill_field">Preencha este campo.</string>
     <string name="error_empty_field">Este campo é obrigatório.</string>
     <string name="error_password_not_equal">As senhas não são iguais</string>
+    
+    <!-- Texts -->
+    <string name="txt_select">Selecione</string>
+    <string name="txt_current_location">Localização Atual</string>
+    <string name="txt_house">Casa</string>
+    <string name="txt_work_place">Trabalho</string>
+    <string name="txt_uvv">UVV</string>
+    <string name="txt_other">Outro</string>
+    <string name="txt_uvv_boavista_tribunal">Campus Boa Vista - Entrada Em Frente ao Tribunal</string>
+    <string name="txt_uvv_boavista_shopping">Campus Boa Vista - Entrada Em Frente ao Shopping</string>
+    <string name="txt_uvv_bio">BioPráticas</string>
+    <string name="txt_uvv_praia_costa">Campus Praia da Costa</string>
+    <string name="txt_uvv_shopping_boulevard">Shopping Boulevard</string>
+    
+    
+    <!-- Options -->
+    <string-array name="locations">
+        <item>@string/txt_select</item>
+        <item>@string/txt_current_location</item>
+        <item>@string/txt_house</item>
+        <item>@string/txt_work_place</item>
+        <item>@string/txt_uvv</item>
+        <item>@string/txt_other</item>
+    </string-array>
+    <string-array name="uvv_locations">
+        <item>@string/txt_select</item>
+        <item>@string/txt_uvv_boavista_tribunal</item>
+        <item>@string/txt_uvv_boavista_shopping</item>
+        <item>@string/txt_uvv_bio</item>
+        <item>@string/txt_uvv_praia_costa</item>
+        <item>@string/txt_uvv_shopping_boulevard</item>
+    </string-array>
 </resources>

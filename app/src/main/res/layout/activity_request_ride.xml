@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="br.uvv.carona.activity.RequestRideActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_request_ride_page">
+
+        <TextView
+            android:id="@+id/departureLbl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_departure"
+            style="@style/Title"/>
+
+        <LinearLayout
+            android:id="@+id/departureWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_request_ride_wrapper"
+            android:orientation="vertical"
+            android:layout_below="@id/departureLbl">
+
+            <Spinner
+                android:id="@+id/departurePlacesOptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/locations" />
+
+            <Spinner
+                android:id="@+id/departureUvvCampusOptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/uvv_locations" />
+
+            <TextView
+                android:id="@+id/departureLocationAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="endereço"
+                style="@style/TextField"/>
+
+            <Button
+                android:id="@+id/chooseDepartureLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_select"
+                android:onClick="onClickChoosePlace"
+                style="@style/Button"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/destinationLbl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_destination"
+            android:layout_below="@id/departureWrapper"
+            style="@style/Title"/>
+
+        <LinearLayout
+            android:id="@+id/destinationWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_request_ride_wrapper"
+            android:orientation="vertical"
+            android:layout_below="@id/destinationLbl">
+
+            <Spinner
+                android:id="@+id/destinationPlacesOptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/locations"/>
+
+            <Spinner
+                android:id="@+id/destinationUvvCampusOptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/uvv_locations" />
+
+            <TextView
+                android:id="@+id/destinationLocationAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="endereço"
+                style="@style/TextField"/>
+
+            <Button
+                android:id="@+id/chooseDestinationLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_select"
+                android:onClick="onClickChoosePlace"
+                style="@style/Button"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/dateLbl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/lbl_date"
+            android:layout_below="@id/destinationWrapper"
+            style="@style/Title"/>
+
+        <LinearLayout
+            android:id="@+id/dateWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/dateLbl"
+            android:padding="@dimen/padding_request_ride_wrapper">
+
+            <TextView
+                android:id="@+id/rideDate"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"/>
+
+            <Button
+                android:id="@+id/chooseDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="@string/btn_change"
+                android:onClick="onClickChooseDate"
+                style="@style/Button"/>
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/hourLbl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/lbl_hour"
+            android:layout_below="@id/dateWrapper"
+            style="@style/Title"/>
+
+        <LinearLayout
+            android:id="@+id/hourWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/hourLbl"
+            android:padding="@dimen/padding_request_ride_wrapper">
+
+            <TextView
+                android:id="@+id/rideHour"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"/>
+
+            <Button
+                android:id="@+id/chooseHour"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="@string/btn_change"
+                android:onClick="onClickChooseHour"
+                style="@style/Button"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/hourWrapper"
+            android:text="@string/btn_confirm"
+            android:onClick="onClickCheckOffers"
+            style="@style/Button"/>
+
+    </RelativeLayout>
+
+</ScrollView>

@@ -20,6 +20,16 @@ public class SignUpActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    /**
+     * <p>
+     * Faz todas as verificações de preenchimento dos campos obrigatórios
+     * </p>
+     * <p>
+     * Caso os campos obrigatórios tenham sido preenchidos, será enviado uma chamada
+     * à API para realizar a tentativa de cadastro.
+     * </p>
+     * @param view {@link View} no qual foi atribuído esta função no atributo {@link R.attr}
+     */
     public void onClickSignUp(View view){
         EditText name = (EditText)this.findViewById(R.id.fieldUserName);
         EditText registration = (EditText)this.findViewById(R.id.fieldUserRegistration);

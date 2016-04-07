@@ -13,13 +13,17 @@ import br.uvv.carona.R;
 public class LoginActivity extends BaseActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         setLoginWrapperSize();
     }
 
+    /**
+     * Atribui um valor de largura e altura do {@link RelativeLayout} que
+     * engloba os campos de ação
+     */
     private void setLoginWrapperSize(){
         RelativeLayout wrapper = (RelativeLayout)findViewById(R.id.loginWrapper);
         ViewGroup.LayoutParams layoutParams = wrapper.getLayoutParams();
@@ -27,6 +31,11 @@ public class LoginActivity extends BaseActivity {
         layoutParams.width = (int)(this.getWindowManager().getDefaultDisplay().getWidth() * 0.85);
     }
 
+    /**
+     * Verifica se todos os campos de login foram preenchidos e inicia
+     * a chamada à API para tentar realizar o login
+     * @param view
+     */
     public void onClickLogin(View view){
         EditText loginField = (EditText)findViewById(R.id.loginField);
         EditText passwordField = (EditText)findViewById(R.id.passwordField);
@@ -48,6 +57,10 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Redireciona o usuário para a tela de cadastro
+     * @param view {@link View} com este {@link android.view.View.OnClickListener} atribuído
+     */
     public void onClickSignUp(View view){
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);

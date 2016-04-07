@@ -20,6 +20,7 @@
     <color name="txc_edit_text_content">#000000</color>
     <color name="txc_button_inactive">#FFFFFF</color>
     <color name="txc_button_active">#e99205</color>
+    <color name="txc_title">#000000</color>
 
     <!-- Background Color (bgc) -->
     <color name="bgc_button_inactive">#250d87</color>

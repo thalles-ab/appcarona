@@ -22,6 +22,8 @@
     <dimen name="padding_edit_profile_photo_wrapper">5dp</dimen>
     <dimen name="padding_button_horizontal">5dp</dimen>
     <dimen name="padding_register_data_wrapper">15dp</dimen>
+    <dimen name="padding_request_ride_page">15dp</dimen>
+    <dimen name="padding_request_ride_wrapper">15dp</dimen>
 
     <!-- Size, Width and Height -->
     <dimen name="width_login_fields">200dp</dimen>
@@ -36,6 +38,8 @@
     <dimen name="ts_edit_profile_text">14sp</dimen>
     <dimen name="ts_text_button">12sp</dimen>
     <dimen name="ts_enter_button">18sp</dimen>
+    <dimen name="ts_title">21sp</dimen>
+    <dimen name="ts_common">15sp</dimen>
 
     <!-- Drawables -->
     <dimen name="corner_login_wrapper_bg">20dp</dimen>

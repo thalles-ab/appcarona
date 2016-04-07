@@ -45,10 +45,17 @@ public class HomeActivity extends BaseActivity {
     }
 
     public void onClickRequestRide(View view){
-
+        Intent intent = new Intent(this, RequestRideActivity.class);
+        startActivity(intent);
     }
 
     public void onClickOfferRide(View view){
 
+    }
+
+    public void onClickLogOut(View view){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

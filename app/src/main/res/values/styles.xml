@@ -12,6 +12,27 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Title">
+        <item name="android:textSize">@dimen/ts_title</item>
+        <item name="android:textColor">@color/txc_title</item>
+        <item name="android:focusableInTouchMode">false</item>
+        <item name="android:clickable">false</item>
+    </style>
+
+    <style name="TextField">
+        <item name="android:background">@drawable/background_edit_text</item>
+        <item name="android:layout_marginTop">@dimen/margin_edit_text_login_page</item>
+        <item name="android:layout_marginBottom">@dimen/margin_edit_text_login_page</item>
+        <item name="android:layout_marginRight">@dimen/margin_edit_text_login_page</item>
+        <item name="android:layout_marginLeft">@dimen/margin_edit_text_login_page</item>
+        <item name="android:paddingTop">@dimen/padding_y_edit_text_login_page</item>
+        <item name="android:paddingBottom">@dimen/padding_y_edit_text_login_page</item>
+        <item name="android:paddingRight">@dimen/padding_x_edit_text_login_page</item>
+        <item name="android:paddingLeft">@dimen/padding_x_edit_text_login_page</item>
+        <item name="android:textSize">@dimen/ts_common</item>
+        <item name="android:textColor">@color/txc_default_text</item>
+    </style>
+
     <style name="TextButton">
         <item name="android:gravity">center</item>
         <item name="android:textColor">@drawable/color_state_text_button</item>
