@@ -46,6 +46,7 @@ public class HomeActivity extends BaseActivity {
 
     public void onClickRequestRide(View view){
         Intent intent = new Intent(this, RequestRideActivity.class);
+        intent.putExtra(RequestRideActivity.PLACE_REQUEST_TAG, RequestRideActivity.DEPARTURE_PLACE_REQUEST);
         startActivity(intent);
     }
 

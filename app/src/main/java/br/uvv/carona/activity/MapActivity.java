@@ -30,6 +30,8 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
     public static final String SELECTED_PLACE_LATLNG_TAG = "SELECTED_PLACE_LATLNG_TAG";
     public static final String SELECTED_PLACE_ADDRESS_TAG = "SELECTED_PLACE_ADDRESS_TAG";
     public static final String SELECTED_ROUTE_TAG = "SELECTED_ROUTE_TAG";
+    public static final String DEPARTURE_TAG = ".DEPARTURE_TAG";
+    public static final String DESTINATION_TAG = ".DESTINATION_TAG";
 
     private SupportMapFragment mMapFragment;
     private GoogleMap mMap;

@@ -8,173 +8,129 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.uvv.carona.R;
+import br.uvv.carona.model.Place;
 
 public class RequestRideActivity extends BaseActivity {
-    private static final String DEPARTURE_SELECTION_TAG = "DEPARTURE_SELECTION_TAG";
-    private static final String DESTINATION_SELECTION_TAG = "DESTINATION_SELECTION_TAG";
-    private static final String DEPARTURE_UVV_SELECTION_TAG = "DEPARTURE_UVV_SELECTION_TAG";
-    private static final String DESTINATION_UVV_SELECTION_TAG = "DESTINATION_UVV_SELECTION_TAG";
+    public static final String PLACE_REQUEST_TAG = ".PLACE_REQUEST_TAG";
+    public static final String DEPARTURE_PLACE_TAG = ".DEPARTURE_PLACE_TAG";
+    public static final String PLACES_TAG = ".PLACES_TAG";
+    public static final int DEPARTURE_PLACE_REQUEST = 10;
+    public static final int DESTINATION_PLACE_REQUEST = 11;
 
-    private static final int DEPARTURE_PLACE_REQUEST = 10;
-    private static final int DESTINATION_PLACE_REQUEST = 11;
+    private RadioGroup mOptions;
+    private Button mConfirm;
 
-    private Spinner mDepartureSpinner;
-    private Spinner mDestinationSpinner;
-    private Spinner mDepartureUvvSpinner;
-    private Spinner mDestinationUvvSpinner;
-    private TextView mDepartureAddress;
-    private TextView mDestinationAddress;
-    private Button mSelectDeparturePlace;
-    private Button mSelectDestinationPlace;
+    private int mRequestType;
+    private List<Place> mPlaces;
+    private Place mPlaceOrigin;
+    private Place mPlaceDestination;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_ride);
 
-        int[] selections = {0,0,0,0};
-
         if(savedInstanceState == null){
+            this.mRequestType = getIntent().getIntExtra(PLACE_REQUEST_TAG, -1);
+            this.mPlaces = new ArrayList<>();
 
+            if(this.mRequestType == DESTINATION_PLACE_REQUEST){
+                this.mPlaceOrigin = (Place)getIntent().getSerializableExtra(DEPARTURE_PLACE_TAG);
+            }
         }else{
-            selections[0] = savedInstanceState.getInt(DEPARTURE_SELECTION_TAG);
-            selections[1] = savedInstanceState.getInt(DESTINATION_SELECTION_TAG);
-            selections[2] = savedInstanceState.getInt(DEPARTURE_UVV_SELECTION_TAG);
-            selections[3] = savedInstanceState.getInt(DESTINATION_UVV_SELECTION_TAG);
+            this.mRequestType = savedInstanceState.getInt(PLACE_REQUEST_TAG);
+            this.mPlaces = (List<Place>)savedInstanceState.getSerializable(PLACES_TAG);
         }
 
         setUpContent();
-        setUpPlacesOptionsSpinners(selections[0], selections[1], selections[2], selections[3]);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setTitle(getString(R.string.lbl_request_ride));
+        if(this.mRequestType == DEPARTURE_PLACE_REQUEST) {
+            getSupportActionBar().setTitle(getString(R.string.lbl_departure));
+        }else{
+            getSupportActionBar().setTitle(getString(R.string.lbl_destination));
+        }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(DEPARTURE_SELECTION_TAG, mDepartureSpinner.getSelectedItemPosition());
-        outState.putInt(DESTINATION_SELECTION_TAG, mDestinationSpinner.getSelectedItemPosition());
-        outState.putInt(DEPARTURE_UVV_SELECTION_TAG, mDepartureUvvSpinner.getSelectedItemPosition());
-        outState.putInt(DESTINATION_UVV_SELECTION_TAG, mDestinationUvvSpinner.getSelectedItemPosition());
+        outState.putInt(PLACE_REQUEST_TAG, this.mRequestType);
+        outState.putSerializable(PLACES_TAG, (Serializable)this.mPlaces);
+        if(this.mRequestType == DESTINATION_PLACE_REQUEST) {
+            outState.putSerializable(DEPARTURE_PLACE_TAG, mPlaceOrigin);
+        }
     }
 
     private void setUpContent(){
-        this.mDepartureSpinner = (Spinner)findViewById(R.id.departurePlacesOptions);
-        this.mDestinationSpinner = (Spinner)findViewById(R.id.destinationPlacesOptions);
-        this.mDepartureUvvSpinner = (Spinner)findViewById(R.id.departureUvvCampusOptions);
-        this.mDestinationUvvSpinner = (Spinner)findViewById(R.id.destinationUvvCampusOptions);
-        this.mDepartureAddress = (TextView)findViewById(R.id.departureLocationAddress);
-        this.mDestinationAddress = (TextView)findViewById(R.id.destinationLocationAddress);
-        this.mSelectDeparturePlace = (Button)findViewById(R.id.chooseDepartureLocation);
-        this.mSelectDestinationPlace = (Button)findViewById(R.id.chooseDestinationLocation);
-    }
+        this.mConfirm = (Button)findViewById(R.id.confirm);
+        this.mOptions = (RadioGroup)findViewById(R.id.optionsGroup);
 
-    private void setUpPlacesOptionsSpinners(int selectionDeparture, int selectionDepartureUvv, int selectionDestination, int selectionDestinationUvv){
-        this.mDepartureSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selected = (String)parent.getSelectedItem();
-                if(selected.equals(getString(R.string.txt_uvv))){
-                    mDepartureUvvSpinner.setVisibility(View.VISIBLE);
-                    mDepartureAddress.setVisibility(View.GONE);
-                    mSelectDeparturePlace.setVisibility(View.GONE);
-                }else if(selected.equals(getString(R.string.txt_other))){
-                    mDepartureUvvSpinner.setVisibility(View.GONE);
-                    mDepartureAddress.setVisibility(View.VISIBLE);
-                    mDepartureAddress.setText("");
-                    mSelectDeparturePlace.setVisibility(View.VISIBLE);
-                }else{
-                    mDepartureUvvSpinner.setVisibility(View.GONE);
-                    mDepartureAddress.setVisibility(View.GONE);
-                    mSelectDeparturePlace.setVisibility(View.GONE);
-                }
-            }
+        String[] options = getResources().getStringArray(R.array.locations);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        this.mDestinationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selected = (String)parent.getSelectedItem();
-                if(selected.equals(getString(R.string.txt_uvv))){
-                    mDestinationUvvSpinner.setVisibility(View.VISIBLE);
-                    mDestinationAddress.setVisibility(View.GONE);
-                    mSelectDestinationPlace.setVisibility(View.GONE);
-                }else if(selected.equals(getString(R.string.txt_other))){
-                    mDestinationUvvSpinner.setVisibility(View.GONE);
-                    mDestinationAddress.setVisibility(View.VISIBLE);
-                    mDestinationAddress.setText("");
-                    mSelectDestinationPlace.setVisibility(View.VISIBLE);
-                }else{
-                    mDestinationUvvSpinner.setVisibility(View.GONE);
-                    mDestinationAddress.setVisibility(View.GONE);
-                    mSelectDestinationPlace.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        this.mDepartureSpinner.setSelection(selectionDeparture);
-        this.mDestinationSpinner.setSelection(selectionDestination);
-
-        this.mDepartureUvvSpinner.setSelection(selectionDepartureUvv);
-        this.mDestinationUvvSpinner.setSelection(selectionDestinationUvv);
+        for(int i = 0; i < options.length; i++){
+            Place p = new Place();
+            p.address = options[i];
+            p.latitude = 0;
+            p.longitude = 0;
+            p.id = -1;
+            this.mPlaces.add(p);
+            RadioButton radioButton = new RadioButton(this);
+            radioButton.setText(this.mPlaces.get(i).address);
+            this.mOptions.addView(radioButton);
+        }
     }
 
     public void onClickChoosePlace(View view){
         Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra(MapActivity.TYPE_MAP_REQUEST, 0);
-        int request;
-        if(view.getId() == R.id.chooseDepartureLocation){
-            request = DEPARTURE_PLACE_REQUEST;
-        }else {
-            request = DESTINATION_PLACE_REQUEST;
-        }
-        startActivityForResult(intent, request);
-    }
-
-    public void onClickChooseDate(View view){
-
-    }
-
-    public void onClickChooseHour(View view){
-
+        startActivityForResult(intent, mRequestType);
     }
 
     public void onClickCheckOffers(View view){
         boolean ok = true;
-        if(this.mDestinationSpinner.getSelectedItem().toString().equals(getString(R.string.txt_select))){
-            ((TextView)this.mDestinationSpinner.getSelectedView()).setError("");
-            ok = false;
-        } else if(this.mDestinationSpinner.getSelectedItem().toString().equals(getString(R.string.txt_uvv)) &&
-                this.mDestinationUvvSpinner.getSelectedItem().toString().equals(getString(R.string.txt_select))){
-            ((TextView)this.mDestinationUvvSpinner.getSelectedView()).setError("");
-            ok = false;
-        }
-        if(this.mDepartureSpinner.getSelectedItem().toString().equals(getString(R.string.txt_select))){
-            ((TextView)this.mDepartureSpinner.getSelectedView()).setError("");
-            ok = false;
-        } else if(this.mDepartureSpinner.getSelectedItem().toString().equals(getString(R.string.txt_uvv)) &&
-                this.mDepartureUvvSpinner.getSelectedItem().toString().equals(getString(R.string.txt_select))){
-            ((TextView)this.mDepartureUvvSpinner.getSelectedView()).setError("");
-            ok = false;
-        }
 
-        if(ok){
+        int id = mOptions.getCheckedRadioButtonId();
+        if(id == -1){
+            //TODO SHOW MESSAGE TO REQUEST A SELECTION
+        }else {
+            View v = this.findViewById(id);
+            int index = this.mOptions.indexOfChild(v);
 
+            if (mRequestType == DEPARTURE_PLACE_REQUEST) {
+                this.mPlaceOrigin = this.mPlaces.get(index);
+            } else {
+                this.mPlaceDestination = this.mPlaces.get(index);
+            }
+
+            Toast.makeText(this, mPlaces.get(index).address, Toast.LENGTH_LONG).show();
+
+            if (ok) {
+                if (this.mRequestType == DEPARTURE_PLACE_REQUEST) {
+                    Intent intent = new Intent(this, RequestRideActivity.class);
+                    intent.putExtra(RequestRideActivity.PLACE_REQUEST_TAG, DESTINATION_PLACE_REQUEST);
+                    intent.putExtra(RequestRideActivity.DEPARTURE_PLACE_TAG, mPlaceOrigin);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(this, MapActivity.class);
+                    intent.putExtra(MapActivity.DEPARTURE_TAG, this.mPlaceOrigin);
+                    intent.putExtra(MapActivity.DESTINATION_TAG, this.mPlaceDestination);
+                    intent.putExtra(MapActivity.TYPE_MAP_REQUEST, 1);
+                    startActivity(intent);
+                }
+            }
         }
     }
 
