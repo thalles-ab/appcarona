@@ -60,6 +60,10 @@
     <string name="txt_uvv_bio">BioPráticas</string>
     <string name="txt_uvv_praia_costa">Campus Praia da Costa</string>
     <string name="txt_uvv_shopping_boulevard">Shopping Boulevard</string>
+
+    <!-- Messages -->
+    <string name="msg_error_get_address">Não foi possível adquirir o endereço da localização indicada.</string>
+    <string name="msg_getting_route">Buscando rota...</string>
     
     
     <!-- Options -->

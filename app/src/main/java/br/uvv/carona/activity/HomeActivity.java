@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import br.uvv.carona.R;
+import br.uvv.carona.util.EnumUtil;
 
 public class HomeActivity extends BaseActivity {
     private static final String USER_PHOTO_TAG = "USER_PHOTO";
@@ -51,7 +52,9 @@ public class HomeActivity extends BaseActivity {
     }
 
     public void onClickOfferRide(View view){
-
+        Intent intent = new Intent(this, MapActivity.class);
+        intent.putExtra(MapActivity.TYPE_MAP_REQUEST, EnumUtil.MapRequestEnum.MarkRoute);
+        startActivity(intent);
     }
 
     public void onClickLogOut(View view){

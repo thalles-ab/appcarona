@@ -1,8 +1,14 @@
 package br.uvv.carona.activity;
 
+import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -17,6 +23,8 @@ import br.uvv.carona.R;
 
 public class BaseActivity extends AppCompatActivity {
 
+    private ProgressDialog mProgressDialog;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +36,25 @@ public class BaseActivity extends AppCompatActivity {
             onBackPressed();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void startProgressDialog(@StringRes int idString){
+        if(this.mProgressDialog == null){
+            this.mProgressDialog = new ProgressDialog(this);
+            this.mProgressDialog.setCancelable(false);
+        }
+        this.mProgressDialog.setMessage(getString(idString));
+        this.mProgressDialog.show();
+    }
+
+    public boolean isProgressDialogShowing(){
+        return this.mProgressDialog != null && this.mProgressDialog.isShowing();
+    }
+
+    protected void stopProgressDialog(){
+        if(this.isProgressDialogShowing()){
+            this.mProgressDialog.dismiss();
+        }
     }
 
     protected void openGallery(int code){

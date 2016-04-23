@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 import br.uvv.carona.R;
+import br.uvv.carona.model.Place;
+import br.uvv.carona.util.EnumUtil;
 
 
 public class EditProfileActivity extends BaseActivity {
@@ -61,7 +63,7 @@ public class EditProfileActivity extends BaseActivity {
 
     public void onClickSelectLocation(View view){
         Intent intent = new Intent(this, MapActivity.class);
-        intent.putExtra(MapActivity.TYPE_MAP_REQUEST, 0);
+        intent.putExtra(MapActivity.TYPE_MAP_REQUEST, EnumUtil.MapRequestEnum.AddPlace);
         int requestCode;
         if(view.getId() == R.id.changeHomeAddress){
             requestCode = LOCATION_REQUEST_HOUSE;
@@ -84,15 +86,13 @@ public class EditProfileActivity extends BaseActivity {
                 }
             } else if (requestCode == LOCATION_REQUEST_HOUSE) {
                 if (data != null) {
-                    String[] address = data.getStringArrayExtra(MapActivity.SELECTED_PLACE_ADDRESS_TAG);
-                    List<LatLng> geoLoc = data.getParcelableExtra(MapActivity.SELECTED_PLACE_LATLNG_TAG);
-                    this.mHouseAddress.setText(address[0]);
+                    List<Place> places = (List<Place>)data.getSerializableExtra(MapActivity.PLACES_TAG);
+                    this.mHouseAddress.setText(places.get(0).address);
                 }
             } else if (requestCode == LOCATION_REQUEST_WORK) {
                 if (data != null) {
-                    String[] address = data.getStringArrayExtra(MapActivity.SELECTED_PLACE_ADDRESS_TAG);
-                    List<LatLng> geoLoc = data.getParcelableExtra(MapActivity.SELECTED_PLACE_LATLNG_TAG);
-                    this.mWorkAddress.setText(address[0]);
+                    List<Place> places = (List<Place>)data.getSerializableExtra(MapActivity.PLACES_TAG);
+                    this.mWorkAddress.setText(places.get(0).address);
                 }
             }
         }
