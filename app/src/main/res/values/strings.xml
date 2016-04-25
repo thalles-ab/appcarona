@@ -47,7 +47,7 @@
     <string name="error_fill_field">Preencha este campo.</string>
     <string name="error_empty_field">Este campo é obrigatório.</string>
     <string name="error_password_not_equal">As senhas não são iguais</string>
-    
+
     <!-- Texts -->
     <string name="txt_select">Selecione</string>
     <string name="txt_current_location">Localização Atual</string>
@@ -64,8 +64,8 @@
     <!-- Messages -->
     <string name="msg_error_get_address">Não foi possível adquirir o endereço da localização indicada.</string>
     <string name="msg_getting_route">Buscando rota...</string>
-    
-    
+
+
     <!-- Options -->
     <string-array name="locations">
         <item>@string/txt_select</item>

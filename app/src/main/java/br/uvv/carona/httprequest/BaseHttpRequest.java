@@ -32,11 +32,11 @@ public class BaseHttpRequest {
                 connection.addRequestProperty("Authorization", authorization);
             }
             if(method == HttpMethodUtil.POST || method == HttpMethodUtil.PUT){
-                connection.setConnectTimeout(25000);
-                connection.setReadTimeout(25000);
+                connection.setConnectTimeout(5000);
+                connection.setReadTimeout(2500);
             }else {
-                connection.setConnectTimeout(15000);
-                connection.setReadTimeout(15000);
+                connection.setConnectTimeout(2500);
+                connection.setReadTimeout(1500);
             }
 
             boolean doInput = true;

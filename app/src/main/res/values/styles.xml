@@ -48,8 +48,14 @@
         <item name="android:layout_marginBottom">@dimen/margin_button</item>
         <item name="android:layout_marginLeft">@dimen/margin_button</item>
         <item name="android:layout_marginRight">@dimen/margin_button</item>
-        <item name="android:paddingLeft">@dimen/padding_button_horizontal</item>
-        <item name="android:paddingRight">@dimen/padding_button_horizontal</item>
+    </style>
+
+    <style name="MapButton" parent="Button">
+        <item name="android:background">@drawable/background_map_button</item>
+        <item name="android:layout_marginTop">@dimen/margin_btn_map</item>
+        <item name="android:layout_marginBottom">@dimen/margin_btn_map</item>
+        <item name="android:layout_marginLeft">@dimen/margin_btn_map</item>
+        <item name="android:layout_marginRight">@dimen/margin_btn_map</item>
     </style>
 
     <style name="EditTextField">

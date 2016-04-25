@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="br.uvv.carona.activity.OfferRideActivity">
+
+    <TextView
+        android:id="@+id/rideDepartureLbl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/lbl_departure"
+        style="@style/Title"/>
+
+    <TextView
+        android:id="@+id/rideDepartureAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rideDepartureLbl"
+        style="@style/EditTextField"/>
+
+    <TextView
+        android:id="@+id/rideDestinationLbl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rideDepartureAddress"
+        android:text="@string/lbl_destination"
+        style="@style/Title"/>
+
+    <TextView
+        android:id="@+id/rideDestinationAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rideDestinationLbl"
+        style="@style/EditTextField"/>
+
+</RelativeLayout>

@@ -12,6 +12,7 @@
     <dimen name="margin_user_photo">10dp</dimen>
     <dimen name="margin_btn_signup_horizontal">12dp</dimen>
     <dimen name="margin_btn_signup_vertical">15dp</dimen>
+    <dimen name="margin_btn_map">0dp</dimen>
 
     <!-- Padding -->
     <dimen name="padding_y_edit_text_login_page">5dp</dimen>
@@ -44,7 +45,7 @@
     <!-- Drawables -->
     <dimen name="corner_login_wrapper_bg">20dp</dimen>
     <dimen name="corner_edit_text_bg">7dp</dimen>
-    <dimen name="corner_button_bg">7dp</dimen>
+    <dimen name="corner_button_bg">3dp</dimen>
     <dimen name="corner_photo">5dp</dimen>
     <dimen name="stroke_edit_text_bg">1dp</dimen>
 </resources>
