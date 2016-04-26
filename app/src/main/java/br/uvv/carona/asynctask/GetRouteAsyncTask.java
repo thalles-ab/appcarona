@@ -87,7 +87,7 @@ public class GetRouteAsyncTask extends BaseAsyncTask<RouteRequest, String> {
                 JSONObject route = new JSONObject(result);
                 JSONArray status = route.getJSONArray("geocoded_waypoints");
                 if(status.length() < 1){
-
+                    //TODO tratar erro
                 }else {
                     boolean statusOK = true;
                     for(int i = 0; i < status.length(); i++){
@@ -99,19 +99,15 @@ public class GetRouteAsyncTask extends BaseAsyncTask<RouteRequest, String> {
                         Type type = new TypeToken<List<RouteResult>>() {
                         }.getType();
                         List<RouteResult> results = AppPartiUVV.sGson.fromJson(routeArray.toString(), type);
-                        List<RouteRide> routeRides = new ArrayList<>();
-                        for(int i = 0; i < results.size() && i < 3; i++){
-                            RouteRide routeRide = new RouteRide();
-                            routeRide.encodedPoints = results.get(i).overviewPolyLine.points;
-                            routeRide.startAddress = results.get(i).legs.get(0).startAddress;
-                            routeRide.startLocation = results.get(i).legs.get(0).startLocation;
-                            int legSize = results.get(i).legs.size() - 1;
-                            routeRide.endAddress = results.get(i).legs.get(legSize).endAddress;
-                            routeRide.endLocation = results.get(i).legs.get(legSize).endLocation;
-                            routeRides.add(routeRide);
-                        }
+                        RouteRide routeRide = new RouteRide();
+                        routeRide.encodedPoints = results.get(0).overviewPolyLine.points;
+                        routeRide.startAddress = results.get(0).legs.get(0).startAddress;
+                        routeRide.startLocation = results.get(0).legs.get(0).startLocation;
+                        int legSize = results.get(0).legs.size() - 1;
+                        routeRide.endAddress = results.get(0).legs.get(legSize).endAddress;
+                        routeRide.endLocation = results.get(0).legs.get(legSize).endLocation;
 
-                        EventBus.getDefault().post(new EventBusEvents.RouteEvent(routeRides));
+                        EventBus.getDefault().post(new EventBusEvents.RouteEvent(routeRide));
                     }
                 }
             } catch (JSONException e) {

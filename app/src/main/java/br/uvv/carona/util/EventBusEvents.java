@@ -32,9 +32,14 @@ public class EventBusEvents {
 
     public static class RouteEvent{
         public List<RouteRide> routes;
+        public RouteRide route;
 
         public RouteEvent(List<RouteRide> routes) {
             this.routes = routes;
+        }
+
+        public RouteEvent(RouteRide route) {
+            this.route = route;
         }
     }
 

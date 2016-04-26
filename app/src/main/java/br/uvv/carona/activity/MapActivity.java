@@ -2,10 +2,10 @@ package br.uvv.carona.activity;
 
 import android.Manifest;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,6 +14,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -29,6 +31,8 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import br.uvv.carona.R;
@@ -38,12 +42,12 @@ import br.uvv.carona.model.Place;
 import br.uvv.carona.model.RouteRide;
 import br.uvv.carona.model.route.RouteRequest;
 import br.uvv.carona.service.GeolocationService;
-import br.uvv.carona.util.EnumUtil;
 import br.uvv.carona.util.EventBusEvents;
+import br.uvv.carona.util.MapRequestEnum;
 
 public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener{
+        OnMapReadyCallback, GoogleMap.OnMapClickListener, OnMarkerDragListener, OnMarkerClickListener{
 
     public static final String TYPE_MAP_REQUEST = ".TYPE_MAP_REQUEST";
     public static final String PLACES_TAG = ".PLACES_TAG";
@@ -54,16 +58,16 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
     private GoogleMap mMap;
     private GoogleApiClient mApiClient;
 
-    private EnumUtil.MapRequestEnum mTypeMapRequest;
+    private MapRequestEnum mTypeMapRequest;
 
     private Marker mSelectedPlaceA;
     private Marker mSelectedPlaceB;
 
-    private List<Polyline> mRoutes;
+    private Polyline mRoute;
     private List<Marker> mMarkers;
-    private List<RouteRide> mRides;
+    private RouteRide mNewRideRoute;
 
-    private boolean mSelectDepartureLocation = true;
+    private Boolean mSelectDepartureLocation = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,15 +75,13 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
         setContentView(R.layout.activity_map);
 
         if(savedInstanceState == null){
-            this.mTypeMapRequest = (EnumUtil.MapRequestEnum)getIntent().getSerializableExtra(TYPE_MAP_REQUEST);
+            this.mTypeMapRequest = (MapRequestEnum)getIntent().getSerializableExtra(TYPE_MAP_REQUEST);
         }else{
-            this.mTypeMapRequest = (EnumUtil.MapRequestEnum)savedInstanceState.getSerializable(TYPE_MAP_REQUEST);
+            this.mTypeMapRequest = (MapRequestEnum)savedInstanceState.getSerializable(TYPE_MAP_REQUEST);
         }
         this.mMarkers = new ArrayList<>();
-        this.mRoutes = new ArrayList<>();
-        this.mRides = new ArrayList<>();
 
-        if(this.mTypeMapRequest != EnumUtil.MapRequestEnum.MarkRoute){
+        if(this.mTypeMapRequest != MapRequestEnum.MarkRoute){
             this.findViewById(R.id.selectOptionWrapper).setVisibility(View.GONE);
             this.mSelectDepartureLocation = true;
         }
@@ -98,6 +100,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        this.mApiClient.connect();
     }
 
     @Override
@@ -110,6 +113,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+        this.mApiClient.disconnect();
     }
 
     @Override
@@ -146,6 +150,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
         this.mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         this.mMap.getUiSettings().setCompassEnabled(false);
         this.mMap.setBuildingsEnabled(false);
+        this.mMap.setOnMarkerDragListener(this);
         this.mMap.setOnMarkerClickListener(this);
 
         if(android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.M &&
@@ -184,90 +189,93 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
 
     @Override
     public void onMapClick(LatLng latLng) {
-        if(this.mSelectDepartureLocation){
-            if(this.mSelectedPlaceA != null){
-                this.mSelectedPlaceA.remove();
-                this.mSelectedPlaceA = null;
-            }
-
-            MarkerOptions markerOptions = new MarkerOptions().position(latLng).anchor(0.5f, 1.0f);
-            this.mSelectedPlaceA = this.mMap.addMarker(markerOptions);
+        if(this.mSelectDepartureLocation == null){
+            this.mMarkers.add(this.mMap.addMarker(new MarkerOptions().position(latLng)
+                    .anchor(0.5f, 1.0f)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                    .draggable(true)));
         }else{
-            if(this.mSelectedPlaceB != null){
-                this.mSelectedPlaceB.remove();
-                this.mSelectedPlaceB = null;
-            }
+            if(this.mSelectDepartureLocation){
+                if(this.mSelectedPlaceA != null){
+                    this.mSelectedPlaceA.remove();
+                    this.mSelectedPlaceA = null;
+                }
 
-            MarkerOptions markerOptions = new MarkerOptions().position(latLng).anchor(0.5f, 1.0f);
-            this.mSelectedPlaceB = this.mMap.addMarker(markerOptions);
+                MarkerOptions markerOptions = new MarkerOptions().position(latLng)
+                        .anchor(0.5f, 1.0f)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                this.mSelectedPlaceA = this.mMap.addMarker(markerOptions);
+            }else{
+                if(this.mSelectedPlaceB != null){
+                    this.mSelectedPlaceB.remove();
+                    this.mSelectedPlaceB = null;
+                }
+
+                MarkerOptions markerOptions = new MarkerOptions().position(latLng)
+                        .anchor(0.5f, 1.0f)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                this.mSelectedPlaceB = this.mMap.addMarker(markerOptions);
+            }
+            int size = this.mMarkers.size();
+            for(int i = 0; i < size; i++){
+                mMarkers.get(i).remove();
+            }
+            this.mMarkers.clear();
         }
 
-        if(this.mSelectedPlaceA != null && this.mSelectedPlaceB != null && this.mTypeMapRequest == EnumUtil.MapRequestEnum.MarkRoute){
-            if(this.mMarkers.size() > 0){
-                int size = this.mMarkers.size();
-                for(int i = 0; i < size; i++){
-                    mMarkers.get(i).remove();
-                }
-                this.mMarkers.clear();
-            }
+        if(this.mSelectedPlaceA != null && this.mSelectedPlaceB != null && this.mTypeMapRequest == MapRequestEnum.MarkRoute){
+            this.findViewById(R.id.setWaypoints).setVisibility(View.VISIBLE);
             makeRouteRequest();
+        }else {
+            this.findViewById(R.id.setWaypoints).setVisibility(View.GONE);
         }
     }
 
     private void makeRouteRequest(){
         List<LatLng> positions = null;
         if(this.mMarkers.size() > 0){
-            positions = new ArrayList<>();
             int size = this.mMarkers.size();
+            positions = new ArrayList<>();
             for(int i = 0; i < size; i++){
                 positions.add(this.mMarkers.get(i).getPosition());
-                mMarkers.get(i).remove();
             }
-            this.mMarkers.clear();
         }
         new GetRouteAsyncTask(getString(R.string.google_map_api_key))
                 .execute(new RouteRequest(this.mSelectedPlaceA.getPosition(), this.mSelectedPlaceB.getPosition(), positions));
         this.startProgressDialog(R.string.msg_getting_route);
-        if(this.mRoutes != null){
-            for(int i = this.mRoutes.size() - 1 ; i >= 0; i--) {
-                this.mRoutes.get(i).remove();
-                this.mRoutes.remove(i);
-            }
+        if(this.mRoute != null){
+            this.mRoute.remove();
+            this.mRoute = null;
         }
     }
 
     public void onMarkByClick(View view){
         if(view.getId() == R.id.selectDeparture){
             this.mSelectDepartureLocation = true;
-        }else{
+        }else if(view.getId() == R.id.selectDestination){
             this.mSelectDepartureLocation = false;
+        }else{
+            this.mSelectDepartureLocation = null;
         }
     }
 
     public void onConfirmPlaceClick(View view){
-        if(this.mSelectedPlaceA == null || (this.mSelectedPlaceB == null && this.mTypeMapRequest == EnumUtil.MapRequestEnum.MarkRoute)){
+        if(this.mSelectedPlaceA == null || (this.mSelectedPlaceB == null && this.mTypeMapRequest == MapRequestEnum.MarkRoute)){
             //TODO SHOW ERROR TO USER
             Toast.makeText(this, "Selecione todos os pontos necessários", Toast.LENGTH_LONG).show();
         }else {
-            if(this.mTypeMapRequest == EnumUtil.MapRequestEnum.MarkRoute){
-                RouteRide routeRide = null;
-                for(int i = 0; i < this.mRoutes.size(); i++){
-                    if(this.mRoutes.get(i).getColor() == getResources().getColor(R.color.route_color_selected)){
-                        routeRide = this.mRides.get(i);
-                        break;
-                    }
-                }
-                if(routeRide == null){
+            if(this.mTypeMapRequest == MapRequestEnum.MarkRoute){
+                if(this.mNewRideRoute == null){
                     //TODO ask to select
                 }else{
                     Intent intent = new Intent(this, OfferRideActivity.class);
-                    intent.putExtra(OfferRideActivity.RIDE_ROUTE_TAG, routeRide);
+                    intent.putExtra(OfferRideActivity.RIDE_ROUTE_TAG, this.mNewRideRoute);
                     startActivity(intent);
                 }
             }else {
                 Intent intent = new Intent(this, GeolocationService.class);
                 intent.putExtra(GeolocationService.LAT_LNG_A_TAG, this.mSelectedPlaceA.getPosition());
-                if (this.mTypeMapRequest == EnumUtil.MapRequestEnum.MarkRoute) {
+                if (this.mTypeMapRequest == MapRequestEnum.MarkRoute) {
                     intent.putExtra(GeolocationService.LAT_LNG_B_TAG, this.mSelectedPlaceB.getPosition());
                 }
                 startService(intent);
@@ -291,9 +299,9 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
     @Subscribe
     public void getPlaceAddress(EventBusEvents.PlaceAddressEvent event){
         //TODO verify event's content
-        if (this.mTypeMapRequest == EnumUtil.MapRequestEnum.AddPlace) {
+        if (this.mTypeMapRequest == MapRequestEnum.AddPlace) {
 
-        } else if (this.mTypeMapRequest == EnumUtil.MapRequestEnum.MarkRoute) {
+        } else if (this.mTypeMapRequest == MapRequestEnum.MarkRoute) {
 
         }
         sendResult(event.places);
@@ -301,40 +309,38 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
 
     @Subscribe
     public void getRoute(EventBusEvents.RouteEvent event){
-        this.mRides = event.routes;
-        for(int i = 0; i < event.routes.size(); i++) {
-            int red = 150 * (i%3+1);
-            int blue = 75 * (i%2+1);
-            int green = 150 * (i%4+1);
-            List<LatLng> routePoints = event.routes.get(i).getDecodedPoints();
-            this.mRoutes.add(this.mMap.addPolyline(new PolylineOptions()
-                            .addAll(routePoints)
-                            .width(12)
-                            .color(Color.argb(200, red, green, blue))
-                            .geodesic(true))
-            );
-            int size = routePoints.size();
-            int mid = (size - 1) / 2;
-            this.mMarkers.add(this.mMap.addMarker(new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
-                    .position(routePoints.get(mid))));
-        }
+        this.mNewRideRoute = event.route;
+        List<LatLng> routePoints = this.mNewRideRoute.getDecodedPoints();
+        this.mRoute = this.mMap.addPolyline(new PolylineOptions()
+                        .addAll(routePoints)
+                        .width(12)
+                        .color(getResources().getColor(R.color.route_color))
+                        .geodesic(true));
         this.stopProgressDialog();
     }
 
     @Override
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+        makeRouteRequest();
+    }
+
+    @Override
     public boolean onMarkerClick(Marker marker) {
-        if(marker != this.mSelectedPlaceA && marker != this.mSelectedPlaceB) {
-            int id = this.mMarkers.indexOf(marker);
-            for (int i = 0; i < this.mRoutes.size(); i++) {
-                if (i == id) {
-                    this.mRoutes.get(i).setColor(getResources().getColor(R.color.route_color_selected));
-                    this.mMarkers.get(i).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-                } else {
-                    this.mRoutes.get(i).setColor(getResources().getColor(R.color.route_color_unselected));
-                    this.mMarkers.get(i).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-                }
-            }
+        if(this.mMarkers.contains(marker)){
+            int index = this.mMarkers.indexOf(marker);
+            marker.remove();
+            this.mMarkers.remove(index);
+            makeRouteRequest();
         }
         return true;
     }

@@ -3,16 +3,15 @@ package br.uvv.carona.httprequest;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.util.Map;
 
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.httprequest.util.HttpMethodUtil;
@@ -101,26 +100,12 @@ public class BaseHttpRequest {
     }
 
     public static String readIt(InputStream stream) throws IOException {
-        Reader reader = new InputStreamReader(stream, "UTF-8");
-        int data = reader.read();
-        String string = "";
-        while (data != -1) {
-            char current = (char) data;
-            data = reader.read();
-            string = string + current;
+        BufferedReader r = new BufferedReader(new InputStreamReader(stream));
+        StringBuilder total = new StringBuilder();
+        String line;
+        while ((line = r.readLine()) != null) {
+            total.append(line);
         }
-        return string;
-    }
-
-    protected static String convertMapParams(Map<String, Object> params) {
-        if (params == null)
-            return "";
-
-        StringBuilder str = new StringBuilder("?");
-        for (Map.Entry<String, Object> item : params.entrySet()) {
-            str.append(item.getKey()).append("=").append(item.getValue() instanceof Double && item.getValue() != null ?
-                    ((Double) item.getValue()).intValue() : item.getValue()).append("&");
-        }
-        return str.toString();
+        return total.toString();
     }
 }

@@ -22,8 +22,10 @@
     <string name="lbl_work_place">Trabalho</string>
     <string name="lbl_destination">Destino</string>
     <string name="lbl_departure">Saída</string>
+    <string name="lbl_other_points">Outros Pontos</string>
     <string name="lbl_date">Data</string>
     <string name="lbl_hour">Hora</string>
+    <string name="lbl_confirm_ride">Confirmação de Carona</string>
 
     <!-- Hints -->
     <string name="hint_login">login</string>
@@ -40,6 +42,7 @@
     <string name="btn_select_photo">Escolher foto</string>
     <string name="btn_signup">Cadastrar</string>
     <string name="btn_change">Alterar</string>
+    <string name="btn_change_date_time">Alterar Data/Hora</string>
     <string name="btn_select">Selecionar</string>
     <string name="btn_confirm">Confirmar</string>
 

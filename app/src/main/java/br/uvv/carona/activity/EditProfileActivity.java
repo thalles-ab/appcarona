@@ -7,14 +7,12 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
-import java.util.Map;
 
 import br.uvv.carona.R;
 import br.uvv.carona.model.Place;
-import br.uvv.carona.util.EnumUtil;
+import br.uvv.carona.util.MapRequestEnum;
 
 
 public class EditProfileActivity extends BaseActivity {
@@ -63,7 +61,7 @@ public class EditProfileActivity extends BaseActivity {
 
     public void onClickSelectLocation(View view){
         Intent intent = new Intent(this, MapActivity.class);
-        intent.putExtra(MapActivity.TYPE_MAP_REQUEST, EnumUtil.MapRequestEnum.AddPlace);
+        intent.putExtra(MapActivity.TYPE_MAP_REQUEST, MapRequestEnum.AddPlace);
         int requestCode;
         if(view.getId() == R.id.changeHomeAddress){
             requestCode = LOCATION_REQUEST_HOUSE;

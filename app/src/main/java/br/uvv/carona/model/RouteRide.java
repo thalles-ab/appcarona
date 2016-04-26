@@ -12,7 +12,7 @@ import br.uvv.carona.model.route.RouteResult;
 
 public class RouteRide extends BaseObject {
 
-    public User userOffer;
+    public Student userOffer;
     public String encodedPoints;
     public String endAddress;
     public RouteResult.LatLng endLocation;
