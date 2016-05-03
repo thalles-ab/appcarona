@@ -3,6 +3,9 @@ package br.uvv.carona.activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import br.uvv.carona.R;
 
 public class SplashScreenActivity extends BaseActivity {
@@ -11,7 +14,13 @@ public class SplashScreenActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+        Timer task = new Timer();
+        task.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        },2000);
     }
 }

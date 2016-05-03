@@ -48,4 +48,5 @@
     <dimen name="corner_button_bg">3dp</dimen>
     <dimen name="corner_photo">5dp</dimen>
     <dimen name="stroke_edit_text_bg">1dp</dimen>
+    <dimen name="splash_image_size">150dp</dimen>
 </resources>

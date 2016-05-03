@@ -21,7 +21,6 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -34,10 +33,7 @@
             android:label="@string/lbl_signup" />
         <activity android:name=".activity.HomeActivity" />
         <activity android:name=".activity.EditProfileActivity" />
-        <activity
-            android:name=".activity.MapActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.MapActivity" />
 
         <service
             android:name=".service.GeolocationService"
@@ -47,8 +43,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_map_api_key" />
 
-        <activity android:name=".activity.RequestRideActivity" />
-        <activity android:name=".activity.OfferRideActivity"></activity>
+        <activity android:name=".activity.RequestRideActivity"/>
     </application>
 
 </manifest>
