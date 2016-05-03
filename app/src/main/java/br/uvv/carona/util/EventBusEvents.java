@@ -5,7 +5,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.List;
 
 import br.uvv.carona.model.Place;
-import br.uvv.carona.model.route.RouteResult;
+import br.uvv.carona.model.RouteRide;
 
 public class EventBusEvents {
 
@@ -31,16 +31,15 @@ public class EventBusEvents {
     }
 
     public static class RouteEvent{
-        public List<LatLng> latLngs;
-        public RouteResult routeResult;
+        public List<RouteRide> routes;
+        public RouteRide route;
 
-        public RouteEvent(List<LatLng> latLngs) {
-            this.latLngs = latLngs;
+        public RouteEvent(List<RouteRide> routes) {
+            this.routes = routes;
         }
 
-        public RouteEvent(List<LatLng> latLngs, RouteResult routeResult) {
-            this.latLngs = latLngs;
-            this.routeResult = routeResult;
+        public RouteEvent(RouteRide route) {
+            this.route = route;
         }
     }
 

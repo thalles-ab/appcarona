@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="br.uvv.carona.activity.OfferRideActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/rideDepartureLbl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_departure"
+            style="@style/Title"/>
+
+        <TextView
+            android:id="@+id/rideDepartureAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rideDepartureLbl"
+            style="@style/EditTextField"/>
+
+        <TextView
+            android:id="@+id/rideDestinationLbl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rideDepartureAddress"
+            android:text="@string/lbl_destination"
+            style="@style/Title"/>
+
+        <TextView
+            android:id="@+id/rideDestinationAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rideDestinationLbl"
+            style="@style/EditTextField"/>
+
+        <LinearLayout
+            android:id="@+id/rideDateTimeWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/rideDestinationAddress">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.34">
+
+                <TextView
+                    android:id="@+id/rideDateLbl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_date"
+                    style="@style/Title" />
+
+                <TextView
+                    android:id="@+id/rideDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/rideDateLbl"
+                    android:hint="00/00/0000"
+                    style="@style/EditTextField" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.33">
+
+                <TextView
+                    android:id="@+id/rideHourLbl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_hour"
+                    style="@style/Title" />
+
+                <TextView
+                    android:id="@+id/rideHour"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/rideHourLbl"
+                    android:hint="00:00"
+                    style="@style/EditTextField" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/changeDateHour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_below="@id/rideDateTimeWrapper"
+            android:text="@string/btn_change_date_time"
+            android:onClick="onClickChangeDateTime"
+            style="@style/Button"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/changeDateHour"
+            android:layout_marginTop="20dp">
+
+            <Button
+                android:id="@+id/cancel_action"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/btn_cancel"
+                android:onClick="onClickChangeDateTime"
+                style="@style/Button"/>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/btn_confirm"
+                android:onClick="onClickChangeDateTime"
+                style="@style/Button"/>
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</ScrollView>

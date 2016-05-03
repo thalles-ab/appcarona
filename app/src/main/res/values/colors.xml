@@ -34,4 +34,5 @@
     <color name="stc_photo">#250d87</color>
 
     <!-- Other colors -->
+    <color name="route_color">#aa0c0fb9</color>
 </resources>

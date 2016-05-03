@@ -1,27 +1,34 @@
 package br.uvv.carona.asynctask;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.reflect.TypeToken;
+import com.google.maps.android.PolyUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.httprequest.BaseHttpRequest;
 import br.uvv.carona.httprequest.util.HttpMethodUtil;
+import br.uvv.carona.model.RouteRide;
+import br.uvv.carona.model.route.RouteRequest;
 import br.uvv.carona.model.route.RouteResult;
 import br.uvv.carona.util.EventBusEvents;
 
 /**
  * Created by CB1772 on 23/04/2016.
  */
-public class GetRouteAsyncTask extends BaseAsyncTask<LatLng, String> {
+public class GetRouteAsyncTask extends BaseAsyncTask<RouteRequest, String> {
 
     private String mGoogleApiKey;
 
@@ -31,24 +38,43 @@ public class GetRouteAsyncTask extends BaseAsyncTask<LatLng, String> {
 
 
     @Override
-    protected String doInBackground(LatLng... params) {
-        if(params.length == 2){
-            try{
-                StringBuilder urlBuilder = new StringBuilder();
-                urlBuilder.append("https://maps.googleapis.com/maps/api/directions/json?origin=");
-                urlBuilder.append(Double.toString(params[0].latitude));
-                urlBuilder.append(",");
-                urlBuilder.append(Double.toString(params[0].longitude));
-                urlBuilder.append("&destination=");
-                urlBuilder.append(Double.toString(params[1].latitude));
-                urlBuilder.append(",");
-                urlBuilder.append(Double.toString(params[1].longitude));
-                urlBuilder.append("&sensor=false&mode=driving&alternatives=true&key=");
-                urlBuilder.append(mGoogleApiKey);
-                return BaseHttpRequest.createRequest(HttpMethodUtil.GET, urlBuilder.toString(), null, null);
-            }catch (Exception e){
-                this.mException = e;
+    protected String doInBackground(RouteRequest... params) {
+        try{
+            StringBuilder urlBuilder = new StringBuilder();
+            urlBuilder.append("https://maps.googleapis.com/maps/api/directions/json?origin=");
+            urlBuilder.append(Double.toString(params[0].start.latitude));
+            urlBuilder.append(",");
+            urlBuilder.append(Double.toString(params[0].start.longitude));
+            urlBuilder.append("&destination=");
+            urlBuilder.append(Double.toString(params[0].end.latitude));
+            urlBuilder.append(",");
+            urlBuilder.append(Double.toString(params[0].end.longitude));
+            if(params[0].waypoints != null && params[0].waypoints.size() > 0){
+                int size = params[0].waypoints.size();
+                urlBuilder.append("&waypoints=");
+                if(size > 1){
+                    urlBuilder.append("via:");
+                }
+                for(int i = 0; i < size; i++){
+                    List<LatLng> l = new ArrayList<>();
+                    l.add(params[0].waypoints.get(i));
+                    urlBuilder.append("enc:");
+                    urlBuilder.append(PolyUtil.encode(l));
+                    urlBuilder.append(":");
+                    if(i != size-1){
+                        urlBuilder.append("|");
+                    }
+                    l.clear();
+                }
             }
+            urlBuilder.append("&sensor=false&mode=driving&alternatives=true&language=");
+            urlBuilder.append(Locale.getDefault().toString());
+            urlBuilder.append("&key=");
+            urlBuilder.append(mGoogleApiKey);
+            return BaseHttpRequest.createRequest(HttpMethodUtil.GET, urlBuilder.toString(), null, null);
+        }catch (Exception e){
+            this.mException = e;
+            Log.e("ERROR REQUEST", e.getMessage());
         }
         return super.doInBackground(params);
     }
@@ -57,56 +83,38 @@ public class GetRouteAsyncTask extends BaseAsyncTask<LatLng, String> {
     protected void onPostExecute(String result) {
         boolean success = !TextUtils.isEmpty(result) && this.mException == null;
         if(success){
-            //TODO RETURN ROUTE
             try {
                 JSONObject route = new JSONObject(result);
-                JSONArray routeArray = route.getJSONArray("routes");
-                JSONObject routes = routeArray.getJSONObject(0);
-                JSONObject overviewPolylines = routes.getJSONObject("overview_polyline");
-                String encodedString = overviewPolylines.getString("points");
-                List<LatLng> list = decodePoly(encodedString);
+                JSONArray status = route.getJSONArray("geocoded_waypoints");
+                if(status.length() < 1){
+                    //TODO tratar erro
+                }else {
+                    boolean statusOK = true;
+                    for(int i = 0; i < status.length(); i++){
+                        String r = new JSONObject(status.getString(i)).getString("geocoder_status");
+                        statusOK = statusOK && r.toLowerCase().equals("ok");
+                    }
+                    if(statusOK) {
+                        JSONArray routeArray = route.getJSONArray("routes");
+                        Type type = new TypeToken<List<RouteResult>>() {
+                        }.getType();
+                        List<RouteResult> results = AppPartiUVV.sGson.fromJson(routeArray.toString(), type);
+                        RouteRide routeRide = new RouteRide();
+                        routeRide.encodedPoints = results.get(0).overviewPolyLine.points;
+                        routeRide.startAddress = results.get(0).legs.get(0).startAddress;
+                        routeRide.startLocation = results.get(0).legs.get(0).startLocation;
+                        int legSize = results.get(0).legs.size() - 1;
+                        routeRide.endAddress = results.get(0).legs.get(legSize).endAddress;
+                        routeRide.endLocation = results.get(0).legs.get(legSize).endLocation;
 
-                RouteResult r = AppPartiUVV.sGson.fromJson(result, RouteResult.class);
-
-                EventBus.getDefault().post(new EventBusEvents.RouteEvent(list, r));
+                        EventBus.getDefault().post(new EventBusEvents.RouteEvent(routeRide));
+                    }
+                }
             } catch (JSONException e) {
                 this.mException = e;
+                Log.e("ERROR REQUEST", e.getMessage());
             }
         }
         super.onPostExecute(result);
-    }
-
-    private List<LatLng> decodePoly(String encoded) {
-
-        List<LatLng> poly = new ArrayList<LatLng>();
-        int index = 0, len = encoded.length();
-        int lat = 0, lng = 0;
-
-        while (index < len) {
-            int b, shift = 0, result = 0;
-            do {
-                b = encoded.charAt(index++) - 63;
-                result |= (b & 0x1f) << shift;
-                shift += 5;
-            } while (b >= 0x20);
-            int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-            lat += dlat;
-
-            shift = 0;
-            result = 0;
-            do {
-                b = encoded.charAt(index++) - 63;
-                result |= (b & 0x1f) << shift;
-                shift += 5;
-            } while (b >= 0x20);
-            int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-            lng += dlng;
-
-            LatLng p = new LatLng( (((double) lat / 1E5)),
-                    (((double) lng / 1E5) ));
-            poly.add(p);
-        }
-
-        return poly;
     }
 }
