@@ -16,10 +16,13 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import br.uvv.carona.R;
+import br.uvv.carona.util.EventBusEvents;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -57,6 +60,11 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    @Subscribe
+    public void getErrorEvent(EventBusEvents.ErrorEvent event){
+        this.mProgressDialog.dismiss();
+    }
+
     protected void openGallery(int code){
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -69,6 +77,11 @@ public class BaseActivity extends AppCompatActivity {
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         return displaymetrics;
+    }
+
+    public int dpToPx(int dp) {
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
     //Retorna 'true' caso contenha um EditText sem nenhum dado e marca os mesmos com um erro.

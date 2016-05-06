@@ -20,6 +20,7 @@ import java.util.List;
 
 import br.uvv.carona.R;
 import br.uvv.carona.model.Place;
+import br.uvv.carona.util.MapRequestEnum;
 
 public class RequestRideActivity extends BaseActivity {
     public static final String PLACE_REQUEST_TAG = ".PLACE_REQUEST_TAG";
@@ -124,31 +125,11 @@ public class RequestRideActivity extends BaseActivity {
                     intent.putExtra(RequestRideActivity.DEPARTURE_PLACE_TAG, mPlaceOrigin);
                     startActivity(intent);
                 } else {
-                    Intent intent = new Intent(this, MapActivity.class);
-                    intent.putExtra(MapActivity.DEPARTURE_TAG, this.mPlaceOrigin);
-                    intent.putExtra(MapActivity.DESTINATION_TAG, this.mPlaceDestination);
-                    intent.putExtra(MapActivity.TYPE_MAP_REQUEST, 1);
+                    Intent intent = new Intent(this, CheckRideOffersActivity.class);
+//                    intent.putExtra(MapActivity.DEPARTURE_TAG, this.mPlaceOrigin);
+//                    intent.putExtra(MapActivity.DESTINATION_TAG, this.mPlaceDestination);
                     startActivity(intent);
                 }
-            }
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK){
-            switch (requestCode){
-                case DEPARTURE_PLACE_REQUEST:
-                    if(data != null){
-
-                    }
-                    break;
-                case DESTINATION_PLACE_REQUEST:
-                    if(data != null){
-
-                    }
-                    break;
             }
         }
     }

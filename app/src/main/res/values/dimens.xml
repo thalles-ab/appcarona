@@ -13,7 +13,7 @@
     <dimen name="margin_btn_signup_horizontal">12dp</dimen>
     <dimen name="margin_btn_signup_vertical">15dp</dimen>
     <dimen name="margin_btn_map">0dp</dimen>
-
+    <dimen name="margin_dialog_button">0dp</dimen>
     <!-- Padding -->
     <dimen name="padding_y_edit_text_login_page">5dp</dimen>
     <dimen name="padding_x_edit_text_login_page">15dp</dimen>
@@ -25,6 +25,7 @@
     <dimen name="padding_register_data_wrapper">15dp</dimen>
     <dimen name="padding_request_ride_page">15dp</dimen>
     <dimen name="padding_request_ride_wrapper">15dp</dimen>
+    <dimen name="padding_dialog_button_wrapper">@dimen/stroke_dialog</dimen>
 
     <!-- Size, Width and Height -->
     <dimen name="width_login_fields">200dp</dimen>
@@ -49,4 +50,7 @@
     <dimen name="corner_photo">5dp</dimen>
     <dimen name="stroke_edit_text_bg">1dp</dimen>
     <dimen name="splash_image_size">150dp</dimen>
+    <dimen name="stroke_dialog">2dp</dimen>
+    <dimen name="corner_dialog">10dp</dimen>
+    <dimen name="corner_button_dialog">9dp</dimen>
 </resources>

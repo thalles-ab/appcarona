@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.httprequest.BaseHttpRequest;
 import br.uvv.carona.httprequest.util.HttpMethodUtil;
@@ -86,9 +87,7 @@ public class GetRouteAsyncTask extends BaseAsyncTask<RouteRequest, String> {
             try {
                 JSONObject route = new JSONObject(result);
                 JSONArray status = route.getJSONArray("geocoded_waypoints");
-                if(status.length() < 1){
-                    //TODO tratar erro
-                }else {
+                if(status.length() >= 1){
                     boolean statusOK = true;
                     for(int i = 0; i < status.length(); i++){
                         String r = new JSONObject(status.getString(i)).getString("geocoder_status");
@@ -106,9 +105,12 @@ public class GetRouteAsyncTask extends BaseAsyncTask<RouteRequest, String> {
                         int legSize = results.get(0).legs.size() - 1;
                         routeRide.endAddress = results.get(0).legs.get(legSize).endAddress;
                         routeRide.endLocation = results.get(0).legs.get(legSize).endLocation;
-
                         EventBus.getDefault().post(new EventBusEvents.RouteEvent(routeRide));
+                    }else{
+                        this.mException = new Exception(AppPartiUVV.getStringText(R.string.msg_error_couldnt_get_route));
                     }
+                }else{
+                    this.mException = new Exception(AppPartiUVV.getStringText(R.string.msg_error_couldnt_get_route));
                 }
             } catch (JSONException e) {
                 this.mException = e;

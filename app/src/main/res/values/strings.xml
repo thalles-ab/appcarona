@@ -21,6 +21,7 @@
     <string name="lbl_house">Casa</string>
     <string name="lbl_work_place">Trabalho</string>
     <string name="lbl_destination">Destino</string>
+    <string name="lbl_num_passagers">Número de passageiros</string>
     <string name="lbl_departure">Saída</string>
     <string name="lbl_other_points">Outros Pontos</string>
     <string name="lbl_date">Data</string>
@@ -66,6 +67,7 @@
 
     <!-- Messages -->
     <string name="msg_error_get_address">Não foi possível adquirir o endereço da localização indicada.</string>
+    <string name="msg_error_couldnt_get_route">Não foi possível adquirir a rota para os pontos indicados.\nPor favor, tente novamente.</string>
     <string name="msg_getting_route">Buscando rota...</string>
 
 

@@ -1,7 +1,5 @@
 package br.uvv.carona.util;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.List;
 
 import br.uvv.carona.model.Place;

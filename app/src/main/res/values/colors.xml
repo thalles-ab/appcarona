@@ -27,11 +27,13 @@
     <color name="bgc_button_active">#1a0960</color>
     <color name="bgc_login_start">#A0DFDFDF</color>
     <color name="bgc_login_end">#A0767676</color>
+    <color name="bgc_dialog">#DFDFDF</color>
 
     <!-- Stroke Color (stc)-->
     <color name="stc_edit_text_unfocused">#19103b</color>
     <color name="stc_edit_text_focused">#ffac1c</color>
     <color name="stc_photo">#250d87</color>
+    <color name="stc_dialog">#19103b</color>
 
     <!-- Other colors -->
     <color name="route_color">#aa0c0fb9</color>

@@ -50,12 +50,34 @@
         <item name="android:layout_marginRight">@dimen/margin_button</item>
     </style>
 
+    <style name="Button.Dialog" parent="Button">
+        <item name="android:background">@drawable/background_dialog_button</item>
+        <item name="android:textColor">@drawable/color_state_button_text</item>
+        <item name="android:layout_marginTop">@dimen/margin_dialog_button</item>
+        <item name="android:layout_marginBottom">@dimen/margin_dialog_button</item>
+        <item name="android:layout_marginLeft">@dimen/margin_dialog_button</item>
+        <item name="android:layout_marginRight">@dimen/margin_dialog_button</item>
+    </style>
+
     <style name="MapButton" parent="Button">
         <item name="android:background">@drawable/background_map_button</item>
         <item name="android:layout_marginTop">@dimen/margin_btn_map</item>
         <item name="android:layout_marginBottom">@dimen/margin_btn_map</item>
         <item name="android:layout_marginLeft">@dimen/margin_btn_map</item>
         <item name="android:layout_marginRight">@dimen/margin_btn_map</item>
+    </style>
+
+    <style name="TextFieldEdit" parent="style/Widget.AppCompat.EditText">
+        <item name="android:layout_marginTop">@dimen/margin_edit_text_login_page</item>
+        <item name="android:layout_marginBottom">@dimen/margin_edit_text_login_page</item>
+        <item name="android:layout_marginRight">@dimen/margin_edit_text_login_page</item>
+        <item name="android:layout_marginLeft">@dimen/margin_edit_text_login_page</item>
+        <item name="android:paddingTop">@dimen/padding_y_edit_text_login_page</item>
+        <item name="android:paddingBottom">@dimen/padding_y_edit_text_login_page</item>
+        <item name="android:paddingRight">@dimen/padding_x_edit_text_login_page</item>
+        <item name="android:paddingLeft">@dimen/padding_x_edit_text_login_page</item>
+        <item name="android:textSize">@dimen/ts_common</item>
+        <item name="android:textColor">@color/txc_default_text</item>
     </style>
 
     <style name="EditTextField">
