@@ -58,21 +58,29 @@
             android:orientation="vertical"
             android:layout_below="@id/userPhotoWrapper">
 
-            <EditText
-                android:id="@+id/userNameField"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_edit_profile_field"
-                android:hint="@string/hint_name"
-                android:textSize="@dimen/ts_edit_profile_text"/>
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/userNameField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_edit_profile_field"
+                    android:hint="@string/hint_name"
+                    android:textSize="@dimen/ts_edit_profile_text"/>
+            </android.support.design.widget.TextInputLayout>
 
-            <EditText
-                android:id="@+id/userCourseField"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_edit_profile_field"
-                android:hint="@string/hint_course"
-                android:textSize="@dimen/ts_edit_profile_text" />
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/userCourseField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_edit_profile_field"
+                    android:hint="@string/hint_course"
+                    android:textSize="@dimen/ts_edit_profile_text" />
+            </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
 

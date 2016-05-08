@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#250d87</color>
-    <color name="colorPrimaryDark">#19103b</color>
-    <color name="colorAccent">#ffac1c</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorSecondary">#5C6BC0</color>
+    <color name="colorPrimaryDark">@color/colorPrimary</color>
+    <color name="colorAccent">#ffb700</color>
 
     <!-- Basic Colors -->
     <color name="white">#FFFFFF</color>
@@ -10,31 +11,31 @@
 
     <!-- Main Colors-->
     <color name="main_a">#FFFFFF</color>
-    <color name="main_b">#0c116c</color>
-    <color name="main_c">#ff9500</color>
+    <color name="main_b">@color/colorPrimary</color>
+    <color name="main_c">@color/colorAccent</color>
 
     <!-- Text Color (txc) -->
-    <color name="txc_text_button_inactive">#FFFFFF</color>
+    <color name="txc_text_button_inactive">@color/white</color>
     <color name="txc_text_button_active">#0c116c</color>
-    <color name="txc_default_text">#000000</color>
-    <color name="txc_edit_text_content">#000000</color>
-    <color name="txc_button_inactive">#FFFFFF</color>
-    <color name="txc_button_active">#e99205</color>
-    <color name="txc_title">#000000</color>
+    <color name="txc_default_text">@android:color/black</color>
+    <color name="txc_edit_text_content">@android:color/black</color>
+    <color name="txc_button_inactive">@color/white</color>
+    <color name="txc_button_active">@color/white</color>
+    <color name="txc_title">@android:color/black</color>
 
     <!-- Background Color (bgc) -->
-    <color name="bgc_button_inactive">#250d87</color>
-    <color name="bgc_button_active">#1a0960</color>
+    <color name="bgc_button_inactive">@color/colorPrimary</color>
+    <color name="bgc_button_active">@color/colorSecondary</color>
     <color name="bgc_login_start">#A0DFDFDF</color>
     <color name="bgc_login_end">#A0767676</color>
     <color name="bgc_dialog">#DFDFDF</color>
 
     <!-- Stroke Color (stc)-->
     <color name="stc_edit_text_unfocused">#19103b</color>
-    <color name="stc_edit_text_focused">#ffac1c</color>
-    <color name="stc_photo">#250d87</color>
+    <color name="stc_edit_text_focused">@color/colorAccent</color>
+    <color name="stc_photo">@color/colorPrimary</color>
     <color name="stc_dialog">#19103b</color>
 
     <!-- Other colors -->
-    <color name="route_color">#aa0c0fb9</color>
+    <color name="route_color">@color/colorPrimary</color>
 </resources>

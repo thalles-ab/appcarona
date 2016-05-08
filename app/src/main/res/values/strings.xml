@@ -22,7 +22,7 @@
     <string name="lbl_work_place">Trabalho</string>
     <string name="lbl_destination">Destino</string>
     <string name="lbl_num_passagers">Número de passageiros</string>
-    <string name="lbl_departure">Saída</string>
+    <string name="lbl_departure">Origem</string>
     <string name="lbl_other_points">Outros Pontos</string>
     <string name="lbl_date">Data</string>
     <string name="lbl_hour">Hora</string>
@@ -69,11 +69,11 @@
     <string name="msg_error_get_address">Não foi possível adquirir o endereço da localização indicada.</string>
     <string name="msg_error_couldnt_get_route">Não foi possível adquirir a rota para os pontos indicados.\nPor favor, tente novamente.</string>
     <string name="msg_getting_route">Buscando rota...</string>
+    <string name="lbl_save">salvar</string>
 
 
     <!-- Options -->
     <string-array name="locations">
-        <item>@string/txt_select</item>
         <item>@string/txt_current_location</item>
         <item>@string/txt_house</item>
         <item>@string/txt_work_place</item>
@@ -81,7 +81,6 @@
         <item>@string/txt_other</item>
     </string-array>
     <string-array name="uvv_locations">
-        <item>@string/txt_select</item>
         <item>@string/txt_uvv_boavista_tribunal</item>
         <item>@string/txt_uvv_boavista_shopping</item>
         <item>@string/txt_uvv_bio</item>

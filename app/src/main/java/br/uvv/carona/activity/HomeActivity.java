@@ -21,7 +21,7 @@ public class HomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        getSupportActionBar().setTitle(R.string.lbl_home);
+        getSupportActionBar().setTitle(R.string.app_name);
 
         mUserPhotoView = (ImageView)findViewById(R.id.userPhoto);
         ((TextView)findViewById(R.id.userName)).setText("Fulano de Almeida");

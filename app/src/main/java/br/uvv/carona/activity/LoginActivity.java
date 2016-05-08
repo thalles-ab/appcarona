@@ -18,6 +18,10 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
 
         setLoginWrapperSize();
+
+        // BY PASS
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
     }
 
     /**
