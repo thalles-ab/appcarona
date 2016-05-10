@@ -2,6 +2,7 @@ package br.uvv.carona.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,23 +18,13 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        setLoginWrapperSize();
+//        setLoginWrapperSize();
 
         // BY PASS
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, HomeActivity.class);
+//        startActivity(intent);
     }
 
-    /**
-     * Atribui um valor de largura e altura do {@link RelativeLayout} que
-     * engloba os campos de ação
-     */
-    private void setLoginWrapperSize(){
-        RelativeLayout wrapper = (RelativeLayout)findViewById(R.id.loginWrapper);
-        ViewGroup.LayoutParams layoutParams = wrapper.getLayoutParams();
-        layoutParams.height = (int)(this.getWindowManager().getDefaultDisplay().getHeight() * 0.85);
-        layoutParams.width = (int)(this.getWindowManager().getDefaultDisplay().getWidth() * 0.85);
-    }
 
     /**
      * Verifica se todos os campos de login foram preenchidos e inicia
@@ -41,16 +32,22 @@ public class LoginActivity extends BaseActivity {
      * @param view
      */
     public void onClickLogin(View view){
-        EditText loginField = (EditText)findViewById(R.id.loginField);
-        EditText passwordField = (EditText)findViewById(R.id.passwordField);
+        TextInputLayout inputLogin = (TextInputLayout)findViewById(R.id.input_layout_matricula);
+        TextInputLayout inputPassword = (TextInputLayout)findViewById(R.id.input_layout_password);
+        EditText loginField = (EditText) findViewById(R.id.loginField);
+        EditText passwordField = (EditText) findViewById(R.id.passwordField);
         boolean nothingIsWrong = true;
         if(TextUtils.isEmpty(loginField.getText())){
-            loginField.setError(getString(R.string.error_empty_field));
+            inputLogin.setError(getString(R.string.error_empty_field));
             nothingIsWrong = false;
+        }else{
+            inputLogin.setErrorEnabled(false);
         }
         if(TextUtils.isEmpty(passwordField.getText())){
-            passwordField.setError(getString(R.string.error_empty_field));
+            inputPassword.setError(getString(R.string.error_empty_field));
             nothingIsWrong = false;
+        }else{
+            inputPassword.setErrorEnabled(false);
         }
 
         if(nothingIsWrong){
@@ -59,6 +56,10 @@ public class LoginActivity extends BaseActivity {
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
         }
+    }
+
+    public void onClickForgotPassword(View view){
+
     }
 
     /**
