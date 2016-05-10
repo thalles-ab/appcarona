@@ -4,14 +4,20 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import br.uvv.carona.R;
+import br.uvv.carona.util.FormType;
 import br.uvv.carona.util.MapRequestEnum;
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
     private static final String USER_PHOTO_TAG = "USER_PHOTO";
 
     private ImageView mUserPhotoView;
@@ -31,6 +37,11 @@ public class HomeActivity extends BaseActivity {
         }else{
             mUserPhotoView.setImageBitmap((Bitmap) savedInstanceState.getParcelable(USER_PHOTO_TAG));
         }
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -40,26 +51,73 @@ public class HomeActivity extends BaseActivity {
         outState.putParcelable(USER_PHOTO_TAG, bitmap);
     }
 
-    public void onClickEditProfile(View view){
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            drawer.openDrawer(GravityCompat.START);
+        }
+    }
+
+    public void onClickEditProfile(){
         Intent intent = new Intent(this, EditProfileActivity.class);
         startActivity(intent);
     }
 
-    public void onClickRequestRide(View view){
+    public void onClickRequestRide(){
         Intent intent = new Intent(this, RequestRideActivity.class);
-        intent.putExtra(RequestRideActivity.PLACE_REQUEST_TAG, RequestRideActivity.DEPARTURE_PLACE_REQUEST);
+        intent.putExtra(RequestRideActivity.FORM_TYPE_REQUEST_TAG, FormType.RequestRide);
+        intent.putExtra(RequestRideActivity.PLACE_REQUEST_TAG, 0);
         startActivity(intent);
     }
 
-    public void onClickOfferRide(View view){
+    public void onClickOfferRide(){
         Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra(MapActivity.TYPE_MAP_REQUEST, MapRequestEnum.MarkRoute);
         startActivity(intent);
     }
 
-    public void onClickLogOut(View view){
+    public void onClickCheckRequestRide(){
+    }
+
+    public void onClickCheckCompletedRides(){
+    }
+
+    public void onClickLogOut(){
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_edit_profile:
+                onClickEditProfile();
+                break;
+            case R.id.action_offer_ride:
+                onClickOfferRide();
+                break;
+            case R.id.action_request_ride:
+                onClickRequestRide();
+                break;
+            case R.id.action_check_open_requests:
+                onClickCheckRequestRide();
+                break;
+            case R.id.action_check_finished_rides:
+                onClickCheckCompletedRides();
+                break;
+            case R.id.action_logout:
+                onClickLogOut();
+                break;
+        }
+
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+
+        return true;
     }
 }

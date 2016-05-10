@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.Toast;
 
@@ -33,16 +31,14 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.asynctask.GetRouteAsyncTask;
 import br.uvv.carona.dialog.ConfirmRideOfferDialog;
 import br.uvv.carona.model.Place;
-import br.uvv.carona.model.RouteRide;
+import br.uvv.carona.model.Ride;
 import br.uvv.carona.model.route.RouteRequest;
 import br.uvv.carona.service.GeolocationService;
 import br.uvv.carona.util.EventBusEvents;
@@ -73,7 +69,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
     private Polyline mRoute;
     private List<Marker> mMarkers;
     private List<LatLng> mMarkersLatLng;
-    private RouteRide mNewRideRoute;
+    private Ride mNewRideRoute;
 
     private Boolean mSelectDepartureLocation = true;
 
@@ -89,7 +85,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
             this.mDepartureLatLng = savedInstanceState.getParcelable(DEPARTURE_TAG);
             this.mDestinationLatLng = savedInstanceState.getParcelable(DESTINATION_TAG);
             this.mMarkersLatLng = savedInstanceState.getParcelableArrayList(MARKERS_LATLNG_TAG);
-            this.mNewRideRoute = (RouteRide)savedInstanceState.getSerializable(DRAWED_ROUTE_TAG);
+            this.mNewRideRoute = (Ride)savedInstanceState.getSerializable(DRAWED_ROUTE_TAG);
         }
         this.mMarkers = new ArrayList<>();
 

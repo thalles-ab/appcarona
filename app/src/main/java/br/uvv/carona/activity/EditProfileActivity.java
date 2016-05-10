@@ -16,8 +16,8 @@ import br.uvv.carona.util.MapRequestEnum;
 
 
 public class EditProfileActivity extends BaseActivity {
-    private static final int GALLERY_ACTIVITY_CODE = 205;
     private static final String IMAGE_URI_TAG = "IMAGE_URI_TAG";
+    private static final int GALLERY_ACTIVITY_CODE = 205;
     private static final int LOCATION_REQUEST_HOUSE = 10;
     private static final int LOCATION_REQUEST_WORK = 11;
 
@@ -85,12 +85,12 @@ public class EditProfileActivity extends BaseActivity {
             } else if (requestCode == LOCATION_REQUEST_HOUSE) {
                 if (data != null) {
                     List<Place> places = (List<Place>)data.getSerializableExtra(MapActivity.PLACES_TAG);
-                    this.mHouseAddress.setText(places.get(0).address);
+                    this.mHouseAddress.setText(places.get(0).description);
                 }
             } else if (requestCode == LOCATION_REQUEST_WORK) {
                 if (data != null) {
                     List<Place> places = (List<Place>)data.getSerializableExtra(MapActivity.PLACES_TAG);
-                    this.mWorkAddress.setText(places.get(0).address);
+                    this.mWorkAddress.setText(places.get(0).description);
                 }
             }
         }

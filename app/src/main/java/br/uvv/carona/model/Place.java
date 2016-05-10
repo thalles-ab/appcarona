@@ -1,18 +1,15 @@
 package br.uvv.carona.model;
 
-/**
- * Created by CB1772 on 17/04/2016.
- */
+import br.uvv.carona.model.enums.TypePlace;
+
 public class Place extends BaseObject {
-    public String address;
+    public Student student;
     public double latitude;
     public double longitude;
+    public String description;
+    public TypePlace placeType;
 
     public Place() {
-    }
-
-    public Place(String address) {
-        this.address = address;
     }
 
     public Place(double latitude, double longitude) {
@@ -20,9 +17,12 @@ public class Place extends BaseObject {
         this.longitude = longitude;
     }
 
-    public Place(String address, double latitude, double longitude) {
-        this.address = address;
-        this.latitude = latitude;
-        this.longitude = longitude;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Place place = (Place) o;
+        return place.id == this.id;
     }
 }

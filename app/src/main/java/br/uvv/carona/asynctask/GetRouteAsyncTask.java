@@ -21,7 +21,8 @@ import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.httprequest.BaseHttpRequest;
 import br.uvv.carona.httprequest.util.HttpMethodUtil;
-import br.uvv.carona.model.RouteRide;
+import br.uvv.carona.model.Place;
+import br.uvv.carona.model.Ride;
 import br.uvv.carona.model.route.RouteRequest;
 import br.uvv.carona.model.route.RouteResult;
 import br.uvv.carona.util.EventBusEvents;
@@ -98,13 +99,19 @@ public class GetRouteAsyncTask extends BaseAsyncTask<RouteRequest, String> {
                         Type type = new TypeToken<List<RouteResult>>() {
                         }.getType();
                         List<RouteResult> results = AppPartiUVV.sGson.fromJson(routeArray.toString(), type);
-                        RouteRide routeRide = new RouteRide();
-                        routeRide.encodedPoints = results.get(0).overviewPolyLine.points;
-                        routeRide.startAddress = results.get(0).legs.get(0).startAddress;
-                        routeRide.startLocation = results.get(0).legs.get(0).startLocation;
+                        Ride routeRide = new Ride();
+                        routeRide.routeGoogleFormat = results.get(0).overviewPolyLine.points;
+                        Place start = new Place();
+                        start.description = results.get(0).legs.get(0).startAddress;
+                        start.latitude = results.get(0).legs.get(0).startLocation.lat;
+                        start.longitude = results.get(0).legs.get(0).startLocation.lng;
+                        routeRide.startPoint = start;
                         int legSize = results.get(0).legs.size() - 1;
-                        routeRide.endAddress = results.get(0).legs.get(legSize).endAddress;
-                        routeRide.endLocation = results.get(0).legs.get(legSize).endLocation;
+                        Place end = new Place();
+                        end.description = results.get(0).legs.get(legSize).endAddress;
+                        end.latitude = results.get(0).legs.get(legSize).endLocation.lat;
+                        end.longitude = results.get(0).legs.get(legSize).endLocation.lng;
+                        routeRide.endPoint = end;
                         EventBus.getDefault().post(new EventBusEvents.RouteEvent(routeRide));
                     }else{
                         this.mException = new Exception(AppPartiUVV.getStringText(R.string.msg_error_couldnt_get_route));

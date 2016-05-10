@@ -53,7 +53,7 @@ public class GeolocationService extends IntentService {
                     }
                     stringBuilder.append(addresses.get(0).getAddressLine(i));
                 }
-                placeA.address = stringBuilder.toString();
+                placeA.description = stringBuilder.toString();
             }
             places.add(placeA);
             if(latLngB != null){
@@ -65,7 +65,7 @@ public class GeolocationService extends IntentService {
                     for(int i = 0; i < mAL; i++){
                         stringBuilder.append(addressesB.get(0).getAddressLine(i));
                     }
-                    placeB.address = stringBuilder.toString();
+                    placeB.description = stringBuilder.toString();
                 }
                 places.add(placeB);
             }

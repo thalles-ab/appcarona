@@ -11,18 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import br.uvv.carona.R;
 import br.uvv.carona.activity.BaseActivity;
-import br.uvv.carona.model.RouteRide;
+import br.uvv.carona.model.Ride;
 
 /**
  * Created by CB1772 on 02/05/2016.
@@ -39,14 +38,14 @@ public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.On
     private SeekBar mNumberPassagers;
     private TextView mNumberPassagersCounter;
 
-    private RouteRide mRoute;
+    private Ride mRoute;
 
     /**
      * <p>Cria uma nova instância do dialogo de confirmação da oferta de carona.</p>
      * @param route possui os dados coletados para a carona, como os pontos de saída e destino, e a rota descrita no mapa.
      * @return
      */
-    public static ConfirmRideOfferDialog newInstance(RouteRide route){
+    public static ConfirmRideOfferDialog newInstance(Ride route){
         Bundle args = new Bundle();
         args.putSerializable(ROUTE_TAG, route);
         ConfirmRideOfferDialog fragment = new ConfirmRideOfferDialog();
@@ -85,10 +84,11 @@ public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.On
         this.mDateField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Calendar calendar = ConfirmRideOfferDialog.this.mRoute.validationCalendar;
+                final Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(ConfirmRideOfferDialog.this.mRoute.expirationDate.getTime());
                 Calendar current = Calendar.getInstance();
                 if(calendar.getTimeInMillis() < current.getTimeInMillis()){
-                    ConfirmRideOfferDialog.this.mRoute.validationCalendar.setTimeInMillis(current.getTimeInMillis());
+                    ConfirmRideOfferDialog.this.mRoute.expirationDate.setTime(current.getTimeInMillis());
                 }
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH);
@@ -108,11 +108,11 @@ public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.On
                         newCalendar.set(Calendar.SECOND, 0);
                         newCalendar.set(Calendar.MILLISECOND, 0);
                         if(current.getTimeInMillis() - newCalendar.getTimeInMillis() > 0){
-                            ConfirmRideOfferDialog.this.mRoute.validationCalendar.setTimeInMillis(current.getTimeInMillis());
+                            ConfirmRideOfferDialog.this.mRoute.expirationDate.setTime(current.getTimeInMillis());
                         }else{
-                            ConfirmRideOfferDialog.this.mRoute.validationCalendar.setTimeInMillis(newCalendar.getTimeInMillis());
+                            ConfirmRideOfferDialog.this.mRoute.expirationDate.setTime(newCalendar.getTimeInMillis());
                         }
-                        ConfirmRideOfferDialog.this.setTime(ConfirmRideOfferDialog.this.mRoute.validationCalendar);
+                        ConfirmRideOfferDialog.this.setTime(ConfirmRideOfferDialog.this.mRoute.expirationDate);
                     }
                 }, year, month, day);
                 current.set(Calendar.HOUR_OF_DAY, 0);
@@ -129,7 +129,8 @@ public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.On
         this.mTimeField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Calendar calendar = ConfirmRideOfferDialog.this.mRoute.validationCalendar;
+                final Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(ConfirmRideOfferDialog.this.mRoute.expirationDate.getTime());
                 int hour = calendar.get(Calendar.HOUR_OF_DAY);
                 int minu = calendar.get(Calendar.MINUTE);
                 TimePickerDialog timePickerDialog = new TimePickerDialog(v.getContext(), new TimePickerDialog.OnTimeSetListener() {
@@ -146,15 +147,17 @@ public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.On
                         newCalendar.set(Calendar.MINUTE, minute);
                         newCalendar.set(Calendar.SECOND, 0);
                         newCalendar.set(Calendar.MILLISECOND, 0);
+                        Calendar saveTime = Calendar.getInstance();
                         if(current.getTimeInMillis() - newCalendar.getTimeInMillis() > 0){
-                            Toast.makeText(view.getContext(), "Hora inválida", Toast.LENGTH_LONG).show();
-                            ConfirmRideOfferDialog.this.mRoute.validationCalendar.set(Calendar.HOUR_OF_DAY, current.get(Calendar.HOUR_OF_DAY));
-                            ConfirmRideOfferDialog.this.mRoute.validationCalendar.set(Calendar.MINUTE, current.get(Calendar.MINUTE) + 1);
+                            //TODO SHOW INVALID
+                            saveTime.set(Calendar.HOUR_OF_DAY, current.get(Calendar.HOUR_OF_DAY));
+                            saveTime.set(Calendar.MINUTE, current.get(Calendar.MINUTE) + 1);
                         }else {
-                            ConfirmRideOfferDialog.this.mRoute.validationCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                            ConfirmRideOfferDialog.this.mRoute.validationCalendar.set(Calendar.MINUTE, minute);
+                            saveTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                            saveTime.set(Calendar.MINUTE, minute);
                         }
-                        ConfirmRideOfferDialog.this.setTime(ConfirmRideOfferDialog.this.mRoute.validationCalendar);
+                        ConfirmRideOfferDialog.this.mRoute.expirationDate.setTime(saveTime.getTimeInMillis());
+                        ConfirmRideOfferDialog.this.setTime(ConfirmRideOfferDialog.this.mRoute.expirationDate);
                     }
                 }, hour, minu, true);
 
@@ -170,9 +173,9 @@ public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.On
         super.onActivityCreated(savedInstanceState);
 
         if(savedInstanceState == null){
-            this.mRoute = (RouteRide)getArguments().getSerializable(ROUTE_TAG);
+            this.mRoute = (Ride)getArguments().getSerializable(ROUTE_TAG);
         }else{
-            this.mRoute = (RouteRide)savedInstanceState.getSerializable(ROUTE_TAG);
+            this.mRoute = (Ride)savedInstanceState.getSerializable(ROUTE_TAG);
         }
 
         View scrollView = this.mDialog.findViewById(R.id.content_scroll);
@@ -193,20 +196,20 @@ public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.On
      * Preenche os campos do dialogo com as informações contidas em mRoute e seta como data default a data e hora atual
      */
     private void setRouteValuesOnScreen(){
-        this.mDepartureField.setText(this.mRoute.startAddress);
-        this.mDestinationField.setText(this.mRoute.endAddress);
+        this.mDepartureField.setText(this.mRoute.startPoint.description);
+        this.mDestinationField.setText(this.mRoute.endPoint.description);
 
-        if(this.mRoute.validationCalendar == null){
-            this.mRoute.validationCalendar = Calendar.getInstance();
+        if(this.mRoute.expirationDate == null){
+            this.mRoute.expirationDate = new Date();
         }
-        setTime(this.mRoute.validationCalendar);
+        setTime(this.mRoute.expirationDate);
     }
 
-    private void setTime(Calendar calendar){
+    private void setTime(Date date){
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        this.mDateField.setText(dateFormat.format(calendar.getTime()));
-        this.mTimeField.setText(timeFormat.format(calendar.getTime()));
+        this.mDateField.setText(dateFormat.format(date.getTime()));
+        this.mTimeField.setText(timeFormat.format(date.getTime()));
 
         this.mNumberPassagers.setOnSeekBarChangeListener(this);
         this.mNumberPassagers.setProgress(3);

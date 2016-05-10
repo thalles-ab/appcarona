@@ -3,7 +3,7 @@ package br.uvv.carona.util;
 import java.util.List;
 
 import br.uvv.carona.model.Place;
-import br.uvv.carona.model.RouteRide;
+import br.uvv.carona.model.Ride;
 
 public class EventBusEvents {
 
@@ -29,14 +29,14 @@ public class EventBusEvents {
     }
 
     public static class RouteEvent{
-        public List<RouteRide> routes;
-        public RouteRide route;
+        public List<Ride> routes;
+        public Ride route;
 
-        public RouteEvent(List<RouteRide> routes) {
+        public RouteEvent(List<Ride> routes) {
             this.routes = routes;
         }
 
-        public RouteEvent(RouteRide route) {
+        public RouteEvent(Ride route) {
             this.route = route;
         }
     }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/lbl_profile">
+        <menu>
+            <item android:id="@+id/action_edit_profile"
+                android:title="@string/lbl_edit_profile"/>
+        </menu>
+    </item>
+
+    <item android:title="@string/lbl_ride">
+        <menu>
+            <group android:checkableBehavior="none"
+                android:enabled="true"
+                android:menuCategory="container">
+                <item android:id="@+id/action_offer_ride"
+                    android:title="@string/lbl_offer_ride"/>
+                <item android:id="@+id/action_request_ride"
+                    android:title="@string/lbl_request_ride"/>
+                <item android:id="@+id/action_check_open_requests"
+                    android:title="@string/lbl_see_requests"/>
+                <item android:id="@+id/action_check_finished_rides"
+                    android:title="@string/lbl_see_completed_rides"/>
+            </group>
+        </menu>
+    </item>
+
+    <item android:id="@+id/action_logout"
+        android:title="@string/lbl_logout"/>
+
+</menu>

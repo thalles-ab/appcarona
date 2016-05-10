@@ -3,10 +3,17 @@
 
     <!-- Labels -->
     <string name="lbl_enter">Entrar</string>
+    <string name="lbl_profile">Perfil</string>
+    <string name="lbl_ride">Carona</string>
     <string name="lbl_edit_profile">Editar Perfil</string>
     <string name="lbl_request_ride">Solicitar Carona</string>
     <string name="lbl_offer_ride">Oferecer Carona</string>
+    <string name="lbl_see_requests">Pedidos em Aberto</string>
+    <string name="lbl_see_completed_rides">Caronas Finalizadas</string>
+    <string name="lbl_offered_rides">Caronas Ofertadas</string>
     <string name="lbl_logout">Sair</string>
+    <string name="lbl_map">Mapa</string>
+    <string name="lbl_ride_detail">Detalhes</string>
     <string name="lbl_person">Pessoa</string>
     <string name="lbl_cars">Carros</string>
     <string name="lbl_places">Locais</string>
@@ -80,11 +87,13 @@
         <item>@string/txt_uvv</item>
         <item>@string/txt_other</item>
     </string-array>
-    <string-array name="uvv_locations">
-        <item>@string/txt_uvv_boavista_tribunal</item>
-        <item>@string/txt_uvv_boavista_shopping</item>
-        <item>@string/txt_uvv_bio</item>
-        <item>@string/txt_uvv_praia_costa</item>
-        <item>@string/txt_uvv_shopping_boulevard</item>
-    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_teste">TesteActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

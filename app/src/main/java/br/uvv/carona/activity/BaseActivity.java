@@ -24,13 +24,18 @@ import java.util.List;
 import br.uvv.carona.R;
 import br.uvv.carona.util.EventBusEvents;
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     private ProgressDialog mProgressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -60,9 +65,14 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+//    abstract void treatError(EventBusEvents.ErrorEvent event);
+    protected void treatCommonErrors(EventBusEvents.ErrorEvent event){
+        this.mProgressDialog.dismiss();
+    }
+
     @Subscribe
     public void getErrorEvent(EventBusEvents.ErrorEvent event){
-        this.mProgressDialog.dismiss();
+        treatCommonErrors(event);
     }
 
     protected void openGallery(int code){
