@@ -74,8 +74,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void onClickOfferRide(){
-        Intent intent = new Intent(this, MapActivity.class);
-        intent.putExtra(MapActivity.TYPE_MAP_REQUEST, MapRequestEnum.MarkRoute);
+        Intent intent = new Intent(this, RequestRideActivity.class);
+        intent.putExtra(RequestRideActivity.FORM_TYPE_REQUEST_TAG, FormType.OfferRide);
+        intent.putExtra(RequestRideActivity.PLACE_REQUEST_TAG, 0);
         startActivity(intent);
     }
 

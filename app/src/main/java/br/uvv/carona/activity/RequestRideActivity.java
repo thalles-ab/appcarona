@@ -19,6 +19,7 @@ import java.util.List;
 import br.uvv.carona.R;
 import br.uvv.carona.model.Place;
 import br.uvv.carona.util.FormType;
+import br.uvv.carona.util.MapRequestEnum;
 
 public class RequestRideActivity extends BaseActivity {
     public static final String PLACE_REQUEST_TAG = ".PLACE_REQUEST_TAG";
@@ -112,7 +113,11 @@ public class RequestRideActivity extends BaseActivity {
                             //TODO SHOW ERROR
                         }else {
                             if (this.mForm == FormType.OfferRide) {
-                                //TODO REDIRECT TO MAP TO MAKE A ROUTE
+                                Intent intent = new Intent(this, MapActivity.class);
+                                intent.putExtra(MapActivity.DEPARTURE_TAG, this.mPlaceDeparture);
+                                intent.putExtra(MapActivity.DESTINATION_TAG, this.mPlaceDestination);
+                                intent.putExtra(MapActivity.TYPE_MAP_REQUEST, MapRequestEnum.MarkRoute);
+                                startActivity(intent);
                             } else {
                                 Intent intent = new Intent(this, CheckRideOffersActivity.class);
                                 intent.putExtra(CheckRideOffersActivity.DEPARTURE_PLACE_TAG, this.mPlaceDeparture);
@@ -150,10 +155,13 @@ public class RequestRideActivity extends BaseActivity {
         for(int i = 0; i < options.length; i++){
             Place p = new Place();
             p.description = options[i];
-            p.latitude = -20;
-            p.latitude -= (i / 20);
-            p.longitude = -40;
-            p.longitude -= (i / 20);
+            if(i%2 == 0) {
+                p.latitude = -20.3558589;
+                p.longitude = -40.3548503;
+            }else{
+                p.latitude = -20.3551569;
+                p.longitude = -40.2977617;
+            }
             p.id = (i+1)*17;
             this.mPlaces.add(p);
             RadioButton radioButton = new RadioButton(this);

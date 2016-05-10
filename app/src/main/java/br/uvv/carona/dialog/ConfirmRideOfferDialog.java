@@ -3,6 +3,12 @@ package br.uvv.carona.dialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -36,7 +42,6 @@ public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.On
     private TextView mDateField;
     private TextView mTimeField;
     private SeekBar mNumberPassagers;
-    private TextView mNumberPassagersCounter;
 
     private Ride mRoute;
 
@@ -65,7 +70,6 @@ public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.On
         this.mDestinationField = (TextView)this.mDialog.findViewById(R.id.rideDestinationAddress);
         this.mDateField = (TextView)this.mDialog.findViewById(R.id.rideDate);
         this.mTimeField = (TextView)this.mDialog.findViewById(R.id.rideHour);
-        this.mNumberPassagersCounter = (TextView)this.mDialog.findViewById(R.id.numberPassagersCounter);
         this.mNumberPassagers = (SeekBar)this.mDialog.findViewById(R.id.numberPassagersSB);
 
         this.mDialog.findViewById(R.id.cancel_action).setOnClickListener(new View.OnClickListener() {
@@ -233,7 +237,20 @@ public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.On
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        this.mNumberPassagersCounter.setText(Integer.toString(progress+1));
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.seek_thumb);
+        if(bitmap != null) {
+            Bitmap bmp = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+            Canvas c = new Canvas(bmp);
+            String text = Integer.toString(progress + 1);
+            Paint p = new Paint();
+            p.setTypeface(Typeface.DEFAULT_BOLD);
+            p.setTextSize(16);
+            p.setColor(0xFFFFFFFF);
+            int width = (int) p.measureText(text);
+            int yPos = (int) ((c.getHeight() / 2) - ((p.descent() + p.ascent()) / 2));
+            c.drawText(text, (bmp.getWidth() - width) / 2, yPos, p);
+            seekBar.setThumb(new BitmapDrawable(getResources(), bmp));
+        }
     }
 
     @Override

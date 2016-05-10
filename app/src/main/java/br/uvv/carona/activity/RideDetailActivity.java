@@ -74,12 +74,7 @@ public class RideDetailActivity extends BaseActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
-        if(this.mIsRideRequest){
-            actionBar.setTitle(R.string.lbl_request_ride);
-            actionBar.setSubtitle(R.string.lbl_ride_detail);
-        }else{
-            actionBar.setTitle(R.string.lbl_ride_detail);
-        }
+        actionBar.setTitle(R.string.lbl_ride);
     }
 
     @Override

@@ -53,8 +53,8 @@
     <dimen name="corner_photo">5dp</dimen>
     <dimen name="stroke_edit_text_bg">2dp</dimen>
     <dimen name="splash_image_size">150dp</dimen>
-    <dimen name="stroke_dialog">2dp</dimen>
-    <dimen name="corner_dialog">10dp</dimen>
-    <dimen name="corner_button_dialog">9dp</dimen>
+    <dimen name="stroke_dialog">1dp</dimen>
+    <dimen name="corner_dialog">3dp</dimen>
+    <dimen name="corner_button_dialog">2dp</dimen>
     <dimen name="profile_photo_size">230dp</dimen>
 </resources>

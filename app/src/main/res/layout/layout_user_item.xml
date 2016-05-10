@@ -14,8 +14,6 @@
             fresco:placeholderImage="@drawable/user_placeholder"
             fresco:placeholderImageScaleType="centerCrop"
             fresco:roundedCornerRadius="100dp"
-            fresco:roundingBorderWidth="@dimen/width_photo_border"
-            fresco:roundingBorderColor="@color/stc_photo"
             android:focusableInTouchMode="false"
             android:clickable="false"/>
 

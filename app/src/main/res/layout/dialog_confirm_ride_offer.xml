@@ -44,122 +44,93 @@
             android:layout_height="wrap_content"
             android:padding="10dp">
 
-            <TextView
-                android:id="@+id/rideDepartureLbl"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_departure"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/lbl_departure"
-                style="@style/Title"/>
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/rideDepartureAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/rideDepartureLbl"
-                style="@style/Widget.AppCompat.EditText"/>
+                <EditText
+                    android:id="@+id/rideDepartureAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/lbl_departure"
+                    android:editable="false"
+                    android:focusableInTouchMode="false"
+                    android:text="A" />
+            </android.support.design.widget.TextInputLayout>
 
-            <TextView
-                android:id="@+id/rideDestinationLbl"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_destination"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/rideDepartureAddress"
-                android:text="@string/lbl_destination"
-                style="@style/Title"/>
+                android:layout_below="@id/input_layout_departure">
 
-            <TextView
-                android:id="@+id/rideDestinationAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/rideDestinationLbl"
-                style="@style/Widget.AppCompat.EditText"/>
+                <EditText
+                    android:id="@+id/rideDestinationAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/lbl_destination"
+                    android:editable="false"
+                    android:focusableInTouchMode="false"
+                    android:text="B"/>
+            </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
                 android:id="@+id/rideDateTimeWrapper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_below="@id/rideDestinationAddress">
+                android:layout_below="@id/input_layout_destination">
 
-                <RelativeLayout
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5">
 
-                    <TextView
-                        android:id="@+id/rideDateLbl"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lbl_date"
-                        style="@style/Title" />
-
-                    <TextView
+                    <EditText
                         android:id="@+id/rideDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/rideDateLbl"
-                        android:hint="00/00/0000"
+                        android:singleLine="true"
+                        android:hint="@string/lbl_date"
                         android:focusableInTouchMode="false"
-                        style="@style/EditTextField" />
+                        android:editable="false"
+                        android:text="00/00/0000"/>
+                </android.support.design.widget.TextInputLayout>
 
-                </RelativeLayout>
-
-                <RelativeLayout
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5">
 
-                    <TextView
-                        android:id="@+id/rideHourLbl"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lbl_hour"
-                        style="@style/Title" />
-
-                    <TextView
+                    <EditText
                         android:id="@+id/rideHour"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/rideHourLbl"
+                        android:singleLine="true"
+                        android:hint="@string/lbl_hour"
                         android:focusableInTouchMode="false"
-                        android:hint="00:00"
-                        style="@style/EditTextField" />
-
-                </RelativeLayout>
+                        android:editable="false"
+                        android:text="00:00"/>
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
             <TextView
-                android:id="@+id/rideNumberMaxPassagers"
+                android:id="@+id/numberPassagersLbl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/rideDateTimeWrapper"
-                android:text="@string/lbl_num_passagers"
-                style="@style/Title"/>
+                android:textSize="13dp"
+                android:text="@string/lbl_num_passagers"/>
 
-            <LinearLayout
-                android:id="@+id/numberPassagersWrapper"
+            <SeekBar
+                android:id="@+id/numberPassagersSB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/rideNumberMaxPassagers"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <SeekBar
-                    android:id="@+id/numberPassagersSB"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.7"
-                    android:max="3"/>
-
-                <TextView
-                    android:id="@+id/numberPassagersCounter"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.3"
-                    android:hint="4"
-                    style="@style/EditTextField"/>
-
-            </LinearLayout>
+                android:layout_below="@id/numberPassagersLbl"
+                android:max="3"
+                android:layout_margin="5dp"/>
 
         </RelativeLayout>
 

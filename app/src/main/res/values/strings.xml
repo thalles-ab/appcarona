@@ -18,7 +18,7 @@
     <string name="lbl_cars">Carros</string>
     <string name="lbl_places">Locais</string>
     <string name="lbl_change_photo">Alterar foto</string>
-    <string name="lbl_add_car">Adicionar Carro</string>
+    <string name="lbl_add_location">Adicionar Localização</string>
     <string name="lbl_remove_car">Remover Carro</string>
     <string name="lbl_save_changes">Salvar Alterações</string>
     <string name="lbl_forgot_password">Esqueceu a Senha?</string>
@@ -34,6 +34,7 @@
     <string name="lbl_date">Data</string>
     <string name="lbl_hour">Hora</string>
     <string name="lbl_confirm_ride">Confirmação de Carona</string>
+    <string name="lbl_route">Rota</string>
 
     <!-- Hints -->
     <string name="hint_login">login</string>
@@ -65,13 +66,10 @@
     <string name="txt_current_location">Localização Atual</string>
     <string name="txt_house">Casa</string>
     <string name="txt_work_place">Trabalho</string>
-    <string name="txt_uvv">UVV</string>
     <string name="txt_other">Outro</string>
-    <string name="txt_uvv_boavista_tribunal">Campus Boa Vista - Entrada Em Frente ao Tribunal</string>
-    <string name="txt_uvv_boavista_shopping">Campus Boa Vista - Entrada Em Frente ao Shopping</string>
-    <string name="txt_uvv_bio">BioPráticas</string>
-    <string name="txt_uvv_praia_costa">Campus Praia da Costa</string>
-    <string name="txt_uvv_shopping_boulevard">Shopping Boulevard</string>
+    <string name="txt_uvv_boavista">UVV - Campus Boa Vista</string>
+    <string name="txt_uvv_praia_costa">UVV - Campus Praia da Costa</string>
+    <string name="txt_uvv_shopping_boulevard">UVV - Shopping Boulevard</string>
 
     <!-- Messages -->
     <string name="msg_error_get_address">Não foi possível adquirir o endereço da localização indicada.</string>
@@ -85,7 +83,9 @@
         <item>@string/txt_current_location</item>
         <item>@string/txt_house</item>
         <item>@string/txt_work_place</item>
-        <item>@string/txt_uvv</item>
+        <item>@string/txt_uvv_boavista</item>
+        <item>@string/txt_uvv_praia_costa</item>
+        <item>@string/txt_uvv_shopping_boulevard</item>
         <item>@string/txt_other</item>
     </string-array>
 

@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -63,15 +67,13 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
 
     private Marker mDepartureMarker;
     private Marker mDestinationMarker;
-    private LatLng mDepartureLatLng;
-    private LatLng mDestinationLatLng;
+    private Place mDeparturePlace;
+    private Place mDestinationPlace;
 
     private Polyline mRoute;
     private List<Marker> mMarkers;
     private List<LatLng> mMarkersLatLng;
     private Ride mNewRideRoute;
-
-    private Boolean mSelectDepartureLocation = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,19 +82,16 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
 
         if(savedInstanceState == null){
             this.mTypeMapRequest = (MapRequestEnum)getIntent().getSerializableExtra(TYPE_MAP_REQUEST);
+            this.mDeparturePlace = (Place)getIntent().getSerializableExtra(DEPARTURE_TAG);
+            this.mDestinationPlace = (Place)getIntent().getSerializableExtra(DESTINATION_TAG);
         }else{
             this.mTypeMapRequest = (MapRequestEnum)savedInstanceState.getSerializable(TYPE_MAP_REQUEST);
-            this.mDepartureLatLng = savedInstanceState.getParcelable(DEPARTURE_TAG);
-            this.mDestinationLatLng = savedInstanceState.getParcelable(DESTINATION_TAG);
+            this.mDeparturePlace = (Place)savedInstanceState.getSerializable(DEPARTURE_TAG);
+            this.mDestinationPlace = (Place)savedInstanceState.getSerializable(DESTINATION_TAG);
             this.mMarkersLatLng = savedInstanceState.getParcelableArrayList(MARKERS_LATLNG_TAG);
             this.mNewRideRoute = (Ride)savedInstanceState.getSerializable(DRAWED_ROUTE_TAG);
         }
         this.mMarkers = new ArrayList<>();
-
-        if(this.mTypeMapRequest != MapRequestEnum.MarkRoute){
-            this.findViewById(R.id.selectOptionWrapper).setVisibility(View.GONE);
-            this.mSelectDepartureLocation = true;
-        }
 
         this.mApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -102,6 +101,20 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
 
         this.mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         this.mMapFragment.getMapAsync(this);
+
+        setupActionBar();
+    }
+
+    private void setupActionBar(){
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+        if(this.mTypeMapRequest == MapRequestEnum.MarkRoute){
+            actionBar.setTitle(R.string.lbl_offer_ride);
+            actionBar.setSubtitle(R.string.lbl_route);
+        }else{
+            actionBar.setTitle(R.string.lbl_add_location);
+        }
     }
 
     @Override
@@ -115,21 +128,26 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(TYPE_MAP_REQUEST, this.mTypeMapRequest);
-        if(this.mDepartureMarker != null) {
-            outState.putParcelable(DEPARTURE_TAG, this.mDepartureMarker.getPosition());
-        }
-        if(this.mDestinationMarker != null) {
-            outState.putParcelable(DESTINATION_TAG, this.mDestinationMarker.getPosition());
-        }
-        if(this.mMarkers != null){
-            List<LatLng> positions = new ArrayList<>();
-            for(int i = 0; i < this.mMarkers.size(); i++){
-                positions.add(this.mMarkers.get(i).getPosition());
+        if(this.mTypeMapRequest == MapRequestEnum.MarkRoute){
+            outState.putSerializable(DEPARTURE_TAG, this.mDeparturePlace);
+            outState.putSerializable(DESTINATION_TAG, this.mDestinationPlace);
+            if(this.mMarkers != null){
+                List<LatLng> positions = new ArrayList<>();
+                for(int i = 0; i < this.mMarkers.size(); i++){
+                    positions.add(this.mMarkers.get(i).getPosition());
+                }
+                outState.putParcelableArrayList(MARKERS_LATLNG_TAG, (ArrayList)positions);
             }
-            outState.putParcelableArrayList(MARKERS_LATLNG_TAG, (ArrayList)positions);
-        }
-        if(this.mNewRideRoute != null){
-            outState.putSerializable(DRAWED_ROUTE_TAG, this.mNewRideRoute);
+            if(this.mNewRideRoute != null){
+                outState.putSerializable(DRAWED_ROUTE_TAG, this.mNewRideRoute);
+            }
+        }else {
+            if (this.mDepartureMarker != null) {
+                Place place = new Place();
+                place.latitude = this.mDepartureMarker.getPosition().latitude;
+                place.longitude = this.mDepartureMarker.getPosition().longitude;
+                outState.putSerializable(DEPARTURE_TAG, place);
+            }
         }
     }
 
@@ -146,6 +164,26 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_ride, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_confirm:
+                this.onConfirmPlaceClick();
+                return true;
+            case android.R.id.home:
+                this.onCancelClick();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onConnected(Bundle bundle) {
         if(this.mMap != null) {
             if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.M &&
@@ -155,7 +193,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
             } else {
                 LatLng userPosition = getCurrentLocationPosition();
                 if (userPosition != null) {
-                    this.goToLatLng(userPosition);
+                    this.goToLatLng(userPosition, 1);
                 }
             }
         }
@@ -190,19 +228,19 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
             this.mMap.setMyLocationEnabled(true);
             LatLng position = getCurrentLocationPosition();
             if(position!=null) {
-                this.goToLatLng(position);
+                this.goToLatLng(position, 1);
             }
         }
 
-        if(this.mDepartureLatLng != null) {
+        if(this.mDeparturePlace != null) {
             this.mDepartureMarker = this.mMap.addMarker(new MarkerOptions().draggable(false)
-                    .position(this.mDepartureLatLng)
+                    .position(new LatLng(this.mDeparturePlace.latitude, this.mDeparturePlace.longitude))
                     .anchor(0.5f, 1)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
         }
-        if(this.mDestinationLatLng != null) {
+        if(this.mDestinationPlace != null) {
             this.mDestinationMarker = this.mMap.addMarker(new MarkerOptions().draggable(false)
-                    .position(this.mDestinationLatLng)
+                    .position(new LatLng(this.mDestinationPlace.latitude, this.mDestinationPlace.longitude))
                     .anchor(0.5f, 1)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
         }
@@ -213,23 +251,29 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
                 }
             }
             if(this.mDepartureMarker != null && this.mDestinationMarker != null && this.mNewRideRoute == null){
-                this.findViewById(R.id.setWaypoints).setVisibility(View.VISIBLE);
                 makeRouteRequest();
             }else if(mNewRideRoute != null){
                 getRoute(new EventBusEvents.RouteEvent(mNewRideRoute));
-                this.findViewById(R.id.setWaypoints).setVisibility(View.VISIBLE);
-            }else{
-                this.findViewById(R.id.setWaypoints).setVisibility(View.GONE);
             }
         }
     }
-    public void goToLatLng(LatLng latLng){
+    public void goToLatLng(LatLng latLng, int duration){
         CameraPosition cameraPosition = this.mMap.getCameraPosition();
         cameraPosition = new CameraPosition.Builder()
                 .zoom(cameraPosition.zoom < 14.3f ? 15.2f : cameraPosition.zoom)
                 .target(latLng)
                 .build();
-        this.mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        this.mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), duration, new GoogleMap.CancelableCallback() {
+            @Override
+            public void onFinish() {
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
     }
     protected LatLng getCurrentLocationPosition() {
         Location location = LocationServices.FusedLocationApi.getLastLocation(mApiClient);
@@ -248,36 +292,16 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
     @Override
     public void onMapClick(LatLng latLng) {
         if(this.mTypeMapRequest != MapRequestEnum.SearchRideOffer) {
-            if (this.mSelectDepartureLocation == null) {
+            if (this.mTypeMapRequest == MapRequestEnum.MarkRoute) {
                 this.mMarkers.add(drawMarker(latLng, BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE), true));
-            } else {
-                if (this.mSelectDepartureLocation) {
-                    if (this.mDepartureMarker != null) {
-                        this.mDepartureMarker.remove();
-                        this.mDepartureMarker = null;
-                    }
-
-                    this.mDepartureMarker = drawMarker(latLng, BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN), true);
-                } else {
-                    if (this.mDestinationMarker != null) {
-                        this.mDestinationMarker.remove();
-                        this.mDestinationMarker = null;
-                    }
-
-                    this.mDestinationMarker = drawMarker(latLng, BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED), true);
-                }
-                int size = this.mMarkers.size();
-                for (int i = 0; i < size; i++) {
-                    mMarkers.get(i).remove();
-                }
-                this.mMarkers.clear();
-            }
-
-            if (this.mDepartureMarker != null && this.mDestinationMarker != null && this.mTypeMapRequest == MapRequestEnum.MarkRoute) {
-                this.findViewById(R.id.setWaypoints).setVisibility(View.VISIBLE);
                 makeRouteRequest();
             } else {
-                this.findViewById(R.id.setWaypoints).setVisibility(View.GONE);
+                if (this.mDepartureMarker != null) {
+                    this.mDepartureMarker.remove();
+                    this.mDepartureMarker = null;
+                }
+
+                this.mDepartureMarker = drawMarker(latLng, BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN), true);
             }
         }
     }
@@ -307,17 +331,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
         }
     }
 
-    public void onMarkByClick(View view){
-        if(view.getId() == R.id.selectDeparture){
-            this.mSelectDepartureLocation = true;
-        }else if(view.getId() == R.id.selectDestination){
-            this.mSelectDepartureLocation = false;
-        }else{
-            this.mSelectDepartureLocation = null;
-        }
-    }
-
-    public void onConfirmPlaceClick(View view){
+    public void onConfirmPlaceClick(){
         if(this.mDepartureMarker == null || (this.mDestinationMarker == null && this.mTypeMapRequest == MapRequestEnum.MarkRoute)){
             //TODO SHOW ERROR TO USER
             Toast.makeText(this, "Selecione todos os pontos necessários", Toast.LENGTH_LONG).show();
@@ -340,7 +354,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
         }
     }
 
-    public void onCancelClick(View view){
+    public void onCancelClick(){
         Intent result = new Intent();
         setResult(RESULT_CANCELED, result);
         finish();
