@@ -8,40 +8,80 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:padding="@dimen/padding_register_data_wrapper"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/fieldUserName"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_name"
-            style="@style/EditTextField"/>
+            android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/fieldUserRegistration"
+            <EditText
+                android:id="@+id/fieldUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:hint="@string/hint_name" />
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_matricula"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_registration"
-            android:inputType="number"
-            style="@style/EditTextField"/>
+            android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/fieldUserPassword"
+            <EditText
+                android:id="@+id/fieldUserRegistration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:inputType="number"
+                android:hint="@string/hint_matricula" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_phone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_password"
-            android:inputType="textPassword"
-            style="@style/EditTextField"/>
+            android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/fieldUserConfirmPassword"
+            <EditText
+                android:id="@+id/fieldUserPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:inputType="phone"
+                android:hint="@string/hint_phone" />
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_password"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_confirm_password"
-            android:inputType="textPassword"
-            style="@style/EditTextField"/>
+            android:layout_height="wrap_content">
 
+            <EditText
+                android:id="@+id/fieldUserPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:inputType="textPassword"
+                android:hint="@string/hint_password" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_confirmation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/fieldUserConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:inputType="textPassword"
+                android:hint="@string/hint_confirm_password" />
+        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/confirmRegister"

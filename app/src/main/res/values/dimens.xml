@@ -11,11 +11,14 @@
     <dimen name="margin_button">5dp</dimen>
     <dimen name="margin_user_photo">10dp</dimen>
     <dimen name="margin_btn_signup_horizontal">12dp</dimen>
-    <dimen name="margin_btn_signup_vertical">15dp</dimen>
+    <dimen name="margin_btn_signup_vertical">30dp</dimen>
     <dimen name="margin_btn_map">0dp</dimen>
     <dimen name="margin_dialog_button">0dp</dimen>
+    <dimen name="margin_card_view">5dp</dimen>
+
     <!-- Padding -->
     <dimen name="padding_y_edit_text_login_page">5dp</dimen>
+    <dimen name="padding_login_page">40dp</dimen>
     <dimen name="padding_x_edit_text_login_page">15dp</dimen>
     <dimen name="padding_home_page_user_data">15dp</dimen>
     <dimen name="padding_login_wrapper">15dp</dimen>
@@ -29,7 +32,7 @@
 
     <!-- Size, Width and Height -->
     <dimen name="width_login_fields">200dp</dimen>
-    <dimen name="size_login_page_logo">175dp</dimen>
+    <dimen name="size_login_page_logo">150dp</dimen>
     <dimen name="size_home_page_photo">100dp</dimen>
     <dimen name="size_user_photo">100dp</dimen>
     <dimen name="size_edit_profile_page_photo">100dp</dimen>
@@ -48,9 +51,10 @@
     <dimen name="corner_edit_text_bg">7dp</dimen>
     <dimen name="corner_button_bg">3dp</dimen>
     <dimen name="corner_photo">5dp</dimen>
-    <dimen name="stroke_edit_text_bg">1dp</dimen>
+    <dimen name="stroke_edit_text_bg">2dp</dimen>
     <dimen name="splash_image_size">150dp</dimen>
     <dimen name="stroke_dialog">2dp</dimen>
     <dimen name="corner_dialog">10dp</dimen>
     <dimen name="corner_button_dialog">9dp</dimen>
+    <dimen name="profile_photo_size">230dp</dimen>
 </resources>

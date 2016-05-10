@@ -104,8 +104,8 @@ public class RequestRideActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_ride, menu);
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu_ride, menu);
         return true;
     }
 

@@ -14,7 +14,7 @@
     <string name="lbl_add_car">Adicionar Carro</string>
     <string name="lbl_remove_car">Remover Carro</string>
     <string name="lbl_save_changes">Salvar Alterações</string>
-    <string name="lbl_forgot_password">Esqueci Senha</string>
+    <string name="lbl_forgot_password">Esqueceu a Senha?</string>
     <string name="lbl_signup_now">Cadastre-se</string>
     <string name="lbl_signup">Cadastrar</string>
     <string name="lbl_home">Home</string>
@@ -30,12 +30,13 @@
 
     <!-- Hints -->
     <string name="hint_login">login</string>
-    <string name="hint_password">senha</string>
-    <string name="hint_confirm_password">confirmar senha</string>
-    <string name="hint_name">nome</string>
-    <string name="hint_course">curso</string>
+    <string name="hint_matricula">Matrícula</string>
+    <string name="hint_password">Senha</string>
+    <string name="hint_confirm_password">Confirmar senha</string>
+    <string name="hint_name">Nome</string>
+    <string name="hint_course">Curso</string>
     <string name="hint_registration">matrícula</string>
-    <string name="hint_email">email</string>
+    <string name="hint_phone">Celular</string>
 
     <!-- Button Text -->
     <string name="btn_send">Enviar</string>

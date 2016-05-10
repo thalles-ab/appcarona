@@ -1,6 +1,7 @@
 package br.uvv.carona.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.EditText;
 
@@ -31,9 +32,18 @@ public class SignUpActivity extends BaseActivity {
      * @param view {@link View} no qual foi atribuído esta função no atributo {@link R.attr}
      */
     public void onClickSignUp(View view){
+
+        //TODO invalidar o textinputlayout e não o edittext
+        TextInputLayout nameInput = (TextInputLayout)this.findViewById(R.id.input_layout_name);
+        TextInputLayout registrationInput = (TextInputLayout)this.findViewById(R.id.input_layout_matricula);
+        TextInputLayout phoneInput = (TextInputLayout)this.findViewById(R.id.input_layout_phone);
+        TextInputLayout passwordInput = (TextInputLayout)this.findViewById(R.id.input_layout_password);
+        TextInputLayout confirmPasswordInput = (TextInputLayout)this.findViewById(R.id.input_layout_confirmation);
+
         EditText name = (EditText)this.findViewById(R.id.fieldUserName);
         EditText registration = (EditText)this.findViewById(R.id.fieldUserRegistration);
         EditText password = (EditText)this.findViewById(R.id.fieldUserPassword);
+        EditText phone = (EditText)this.findViewById(R.id.fieldUserPhone);
         EditText confirmPassword = (EditText)this.findViewById(R.id.fieldUserConfirmPassword);
 
         List<EditText> fields = new ArrayList<>();
