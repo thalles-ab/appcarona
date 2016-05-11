@@ -21,6 +21,7 @@
         android:layout_height="@dimen/size_login_page_logo"
         android:layout_margin="@dimen/margin_logo_login_page"
         android:layout_gravity="center"
+        android:src="@drawable/icone"
         android:layout_centerHorizontal="true"/>
 
     <android.support.design.widget.TextInputLayout
@@ -82,6 +83,7 @@
             android:layout_weight="1"
             android:text="@string/lbl_forgot_password"
             android:focusableInTouchMode="false"
+            android:gravity="right"
             android:onClick="onClickForgotPassword"/>
 
     </LinearLayout>

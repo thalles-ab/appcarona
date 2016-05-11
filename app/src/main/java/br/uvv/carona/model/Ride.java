@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import br.uvv.carona.model.enums.TypeDay;
+import br.uvv.carona.util.RideRequestStatus;
 
 public class Ride extends BaseObject {
     public Student student;
@@ -22,6 +23,7 @@ public class Ride extends BaseObject {
     public String routeGoogleFormat;
     public Place startPoint;
     public Place endPoint;
+    public RideRequestStatus status;
 
     public List<LatLng> getDecodedPoints(){
         return (TextUtils.isEmpty(this.routeGoogleFormat)) ? new ArrayList<LatLng>() : PolyUtil.decode(this.routeGoogleFormat);

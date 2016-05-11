@@ -2,7 +2,10 @@ package br.uvv.carona.application;
 
 import android.annotation.TargetApi;
 import android.app.Application;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
@@ -35,5 +38,11 @@ public class AppPartiUVV extends Application {
 
     public static String getStringText(@StringRes int id){
         return mApplication.getString(id);
+    }
+
+    public static boolean hasInternetConnection(){
+        ConnectivityManager cManager = (ConnectivityManager) mApplication.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cManager.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnected();
     }
 }

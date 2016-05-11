@@ -14,13 +14,20 @@ public class SplashScreenActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        Timer task = new Timer();
-        task.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        },2000);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(this.mErrorDialog == null || !this.mErrorDialog.getShowsDialog()){
+            Timer task = new Timer();
+            task.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+            },2000);
+        }
     }
 }

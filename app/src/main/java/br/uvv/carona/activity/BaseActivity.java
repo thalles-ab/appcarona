@@ -1,6 +1,7 @@
 package br.uvv.carona.activity;
 
-import android.annotation.TargetApi;
+import android.Manifest;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -8,7 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -22,11 +24,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.uvv.carona.R;
+import br.uvv.carona.application.AppPartiUVV;
+import br.uvv.carona.dialog.MessageDialog;
 import br.uvv.carona.util.EventBusEvents;
 
 public abstract class BaseActivity extends AppCompatActivity {
-
+    private static final int REQUEST_LOCATION_CODE = 10;
     private ProgressDialog mProgressDialog;
+
+    protected DialogFragment mErrorDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,11 +45,59 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        String[] request = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+        if (!AppPartiUVV.hasInternetConnection()) {
+            this.mErrorDialog = MessageDialog.newInstance(getString(R.string.msg_turn_on_internet_connection), new MessageDialog.OnDialogButtonClick() {
+                @Override
+                public void onConfirmClick(Dialog dialog) {
+                    dialog.dismiss();
+                    if(android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1){
+                        ActivityCompat.finishAffinity(dialog.getOwnerActivity());
+                    }else {
+                        dialog.getOwnerActivity().finishAffinity();
+                    }
+                }
+            });
+            this.mErrorDialog.show(getSupportFragmentManager(), "ERROR_NO_CONNECTION");
+        } else if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.M &&
+                !AppPartiUVV.hasPermission(request)) {
+            ActivityCompat.requestPermissions(this, request, REQUEST_LOCATION_CODE);
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
             onBackPressed();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == REQUEST_LOCATION_CODE) {
+            boolean temp = true;
+            for (int i = 0; i < grantResults.length; i++) {
+                temp = temp && grantResults[i] == PackageManager.PERMISSION_GRANTED;
+            }
+            if (temp){
+                if(this instanceof MapActivity){
+                    ((MapActivity)this).enableGoToUserLocation(true);
+                }
+            }else{
+                this.mErrorDialog = MessageDialog.newInstance(getString(R.string.msg_allow_location_request), new MessageDialog.OnDialogButtonClick() {
+                    @Override
+                    public void onConfirmClick(Dialog dialog) {
+                        dialog.dismiss();
+                        //TODO CLOSE APP
+                    }
+                });
+                this.mErrorDialog.show(getSupportFragmentManager(), "ERROR_NO_PERMISSION");
+            }
+        }
     }
 
     public void startProgressDialog(@StringRes int idString){

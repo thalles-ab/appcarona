@@ -9,7 +9,6 @@
         android:id="@+id/btn_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/padding_dialog_button_wrapper"
         android:layout_below="@+id/content_scroll">
 
         <Button
@@ -116,21 +115,33 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/numberPassagersLbl"
+            <LinearLayout
+                android:id="@+id/numberPassagersWrapper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/rideDateTimeWrapper"
-                android:textSize="13dp"
-                android:text="@string/lbl_num_passagers"/>
+                android:orientation="vertical"
+                android:layout_below="@id/rideDateTimeWrapper">
 
-            <SeekBar
-                android:id="@+id/numberPassagersSB"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/numberPassagersLbl"
-                android:max="3"
-                android:layout_margin="5dp"/>
+                <TextView
+                    android:id="@+id/numberPassagersLbl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:textColor="#797979"
+                    android:layout_marginLeft="9dp"
+                    android:text="@string/lbl_num_passagers"/>
+
+                <Spinner
+                    android:id="@+id/numberPassagersSB"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dropdown"
+                    android:entries="@array/qnt_passagers"
+                    android:padding="0dp"
+                    android:layout_marginLeft="1dp"
+                    android:gravity="bottom"/>
+
+            </LinearLayout>
 
         </RelativeLayout>
 

@@ -223,13 +223,9 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
         if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.M &&
                 !AppPartiUVV.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.ACCESS_COARSE_LOCATION)) {
-            //TODO Show Dialog and request
+            enableGoToUserLocation(false);
         } else {
-            this.mMap.setMyLocationEnabled(true);
-            LatLng position = getCurrentLocationPosition();
-            if(position!=null) {
-                this.goToLatLng(position, 1);
-            }
+            enableGoToUserLocation(true);
         }
 
         if(this.mDeparturePlace != null) {
@@ -254,6 +250,22 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
                 makeRouteRequest();
             }else if(mNewRideRoute != null){
                 getRoute(new EventBusEvents.RouteEvent(mNewRideRoute));
+            }
+        }
+    }
+    public void enableGoToUserLocation(boolean enable){
+        if(this.mMap != null){
+            if(enable) {
+                this.mMap.setMyLocationEnabled(true);
+                LatLng cameraPosition = this.mMap.getCameraPosition().target;
+                if (cameraPosition.latitude == 0 && cameraPosition.longitude == 0) {
+                    LatLng position = getCurrentLocationPosition();
+                    if (position != null) {
+                        this.goToLatLng(position, 1);
+                    }
+                }
+            }else{
+                this.mMap.setMyLocationEnabled(false);
             }
         }
     }
@@ -340,7 +352,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
                 if(this.mNewRideRoute == null){
                     //TODO ask to select
                 }else{
-                    ConfirmRideOfferDialog confirmRideOfferDialog = ConfirmRideOfferDialog.newInstance(this.mNewRideRoute);
+                    ConfirmRideOfferDialog confirmRideOfferDialog = ConfirmRideOfferDialog.newInstance(this.mNewRideRoute, false);
                     confirmRideOfferDialog.show(getSupportFragmentManager(), "crod");
                 }
             }else {

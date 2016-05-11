@@ -3,6 +3,7 @@ package br.uvv.carona.dialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -27,13 +29,15 @@ import java.util.Date;
 
 import br.uvv.carona.R;
 import br.uvv.carona.activity.BaseActivity;
+import br.uvv.carona.activity.CheckRideOffersActivity;
 import br.uvv.carona.model.Ride;
 
 /**
  * Created by CB1772 on 02/05/2016.
  */
-public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.OnSeekBarChangeListener {
+public class ConfirmRideOfferDialog extends DialogFragment {
     private static final String ROUTE_TAG = ".ROUTE_TAG";
+    private static final String IS_RIDE_REQUEST_TAG = ".IS_RIDE_REQUEST_TAG";
 
     private Dialog mDialog;
 
@@ -41,18 +45,20 @@ public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.On
     private TextView mDestinationField;
     private TextView mDateField;
     private TextView mTimeField;
-    private SeekBar mNumberPassagers;
+    private Spinner mNumberPassagers;
 
     private Ride mRoute;
+    private boolean mIsRideRequest;
 
     /**
      * <p>Cria uma nova instância do dialogo de confirmação da oferta de carona.</p>
      * @param route possui os dados coletados para a carona, como os pontos de saída e destino, e a rota descrita no mapa.
      * @return
      */
-    public static ConfirmRideOfferDialog newInstance(Ride route){
+    public static ConfirmRideOfferDialog newInstance(Ride route, boolean isRideRequest){
         Bundle args = new Bundle();
         args.putSerializable(ROUTE_TAG, route);
+        args.putBoolean(IS_RIDE_REQUEST_TAG, isRideRequest);
         ConfirmRideOfferDialog fragment = new ConfirmRideOfferDialog();
         fragment.setArguments(args);
         return fragment;
@@ -70,7 +76,7 @@ public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.On
         this.mDestinationField = (TextView)this.mDialog.findViewById(R.id.rideDestinationAddress);
         this.mDateField = (TextView)this.mDialog.findViewById(R.id.rideDate);
         this.mTimeField = (TextView)this.mDialog.findViewById(R.id.rideHour);
-        this.mNumberPassagers = (SeekBar)this.mDialog.findViewById(R.id.numberPassagersSB);
+        this.mNumberPassagers = (Spinner)this.mDialog.findViewById(R.id.numberPassagersSB);
 
         this.mDialog.findViewById(R.id.cancel_action).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +87,14 @@ public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.On
         this.mDialog.findViewById(R.id.confirm_action).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Start server call
+                if(mIsRideRequest){
+                    Intent intent = new Intent(v.getContext(), CheckRideOffersActivity.class);
+                    intent.putExtra(CheckRideOffersActivity.DEPARTURE_PLACE_TAG, mRoute.startPoint);
+                    intent.putExtra(CheckRideOffersActivity.DESTINATION_PLACE_TAG, mRoute.endPoint);
+                    startActivity(intent);
+                }else{
+                    //TODO Start server call
+                }
             }
         });
 
@@ -91,7 +104,7 @@ public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.On
                 final Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(ConfirmRideOfferDialog.this.mRoute.expirationDate.getTime());
                 Calendar current = Calendar.getInstance();
-                if(calendar.getTimeInMillis() < current.getTimeInMillis()){
+                if (calendar.getTimeInMillis() < current.getTimeInMillis()) {
                     ConfirmRideOfferDialog.this.mRoute.expirationDate.setTime(current.getTimeInMillis());
                 }
                 int year = calendar.get(Calendar.YEAR);
@@ -111,9 +124,9 @@ public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.On
                         newCalendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE));
                         newCalendar.set(Calendar.SECOND, 0);
                         newCalendar.set(Calendar.MILLISECOND, 0);
-                        if(current.getTimeInMillis() - newCalendar.getTimeInMillis() > 0){
+                        if (current.getTimeInMillis() - newCalendar.getTimeInMillis() > 0) {
                             ConfirmRideOfferDialog.this.mRoute.expirationDate.setTime(current.getTimeInMillis());
-                        }else{
+                        } else {
                             ConfirmRideOfferDialog.this.mRoute.expirationDate.setTime(newCalendar.getTimeInMillis());
                         }
                         ConfirmRideOfferDialog.this.setTime(ConfirmRideOfferDialog.this.mRoute.expirationDate);
@@ -152,11 +165,11 @@ public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.On
                         newCalendar.set(Calendar.SECOND, 0);
                         newCalendar.set(Calendar.MILLISECOND, 0);
                         Calendar saveTime = Calendar.getInstance();
-                        if(current.getTimeInMillis() - newCalendar.getTimeInMillis() > 0){
+                        if (current.getTimeInMillis() - newCalendar.getTimeInMillis() > 0) {
                             //TODO SHOW INVALID
                             saveTime.set(Calendar.HOUR_OF_DAY, current.get(Calendar.HOUR_OF_DAY));
                             saveTime.set(Calendar.MINUTE, current.get(Calendar.MINUTE) + 1);
-                        }else {
+                        } else {
                             saveTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                             saveTime.set(Calendar.MINUTE, minute);
                         }
@@ -178,7 +191,8 @@ public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.On
 
         if(savedInstanceState == null){
             this.mRoute = (Ride)getArguments().getSerializable(ROUTE_TAG);
-        }else{
+            this.mIsRideRequest = getArguments().getBoolean(IS_RIDE_REQUEST_TAG);
+        }else {
             this.mRoute = (Ride)savedInstanceState.getSerializable(ROUTE_TAG);
         }
 
@@ -186,6 +200,12 @@ public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.On
         ViewGroup.LayoutParams lp = scrollView.getLayoutParams();
         lp.height = (int)(((BaseActivity)getActivity()).getSizeDevice().heightPixels * 0.65);
         scrollView.setLayoutParams(lp);
+
+        if(this.mIsRideRequest){
+            this.mDialog.findViewById(R.id.numberPassagersWrapper).setVisibility(View.GONE);
+        }else{
+            this.mDialog.findViewById(R.id.numberPassagersWrapper).setVisibility(View.VISIBLE);
+        }
 
         setRouteValuesOnScreen();
     }
@@ -214,9 +234,6 @@ public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.On
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
         this.mDateField.setText(dateFormat.format(date.getTime()));
         this.mTimeField.setText(timeFormat.format(date.getTime()));
-
-        this.mNumberPassagers.setOnSeekBarChangeListener(this);
-        this.mNumberPassagers.setProgress(3);
     }
 
     @Override
@@ -233,33 +250,5 @@ public class ConfirmRideOfferDialog extends DialogFragment implements SeekBar.On
         int width = activity.getSizeDevice().widthPixels - (activity.dpToPx(20) * 2);
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         this.mDialog.getWindow().setLayout(width, height);
-    }
-
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.seek_thumb);
-        if(bitmap != null) {
-            Bitmap bmp = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-            Canvas c = new Canvas(bmp);
-            String text = Integer.toString(progress + 1);
-            Paint p = new Paint();
-            p.setTypeface(Typeface.DEFAULT_BOLD);
-            p.setTextSize(16);
-            p.setColor(0xFFFFFFFF);
-            int width = (int) p.measureText(text);
-            int yPos = (int) ((c.getHeight() / 2) - ((p.descent() + p.ascent()) / 2));
-            c.drawText(text, (bmp.getWidth() - width) / 2, yPos, p);
-            seekBar.setThumb(new BitmapDrawable(getResources(), bmp));
-        }
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-
     }
 }

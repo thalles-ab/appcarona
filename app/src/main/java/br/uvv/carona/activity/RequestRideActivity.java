@@ -17,7 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.uvv.carona.R;
+import br.uvv.carona.dialog.ConfirmRideOfferDialog;
 import br.uvv.carona.model.Place;
+import br.uvv.carona.model.Ride;
 import br.uvv.carona.util.FormType;
 import br.uvv.carona.util.MapRequestEnum;
 
@@ -119,10 +121,14 @@ public class RequestRideActivity extends BaseActivity {
                                 intent.putExtra(MapActivity.TYPE_MAP_REQUEST, MapRequestEnum.MarkRoute);
                                 startActivity(intent);
                             } else {
-                                Intent intent = new Intent(this, CheckRideOffersActivity.class);
-                                intent.putExtra(CheckRideOffersActivity.DEPARTURE_PLACE_TAG, this.mPlaceDeparture);
-                                intent.putExtra(CheckRideOffersActivity.DESTINATION_PLACE_TAG, this.mPlaceDestination);
-                                startActivity(intent);
+                                Ride ride = new Ride();
+                                ride.startPoint = this.mPlaceDeparture;
+                                ride.endPoint = this.mPlaceDestination;
+                                ConfirmRideOfferDialog.newInstance(ride, true).show(getSupportFragmentManager(), ".RequestConfirm");
+//                                Intent intent = new Intent(this, CheckRideOffersActivity.class);
+//                                intent.putExtra(CheckRideOffersActivity.DEPARTURE_PLACE_TAG, this.mPlaceDeparture);
+//                                intent.putExtra(CheckRideOffersActivity.DESTINATION_PLACE_TAG, this.mPlaceDestination);
+//                                startActivity(intent);
                             }
                         }
                     }
