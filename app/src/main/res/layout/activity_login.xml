@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:inputType="number"
-            android:hint="@string/hint_matricula" />
+            android:hint="@string/hint_registration" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
