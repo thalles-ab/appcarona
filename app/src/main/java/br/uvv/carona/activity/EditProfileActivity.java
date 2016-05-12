@@ -3,6 +3,10 @@ package br.uvv.carona.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -23,6 +27,7 @@ public class EditProfileActivity extends BaseActivity {
 
     private SimpleDraweeView mPhoto;
     private Uri mLastImageUri;
+    private Toolbar mToolbar;
 
     private TextView mHouseAddress;
     private TextView mWorkAddress;
@@ -33,7 +38,7 @@ public class EditProfileActivity extends BaseActivity {
         setContentView(R.layout.activity_edit_profile);
 
         mPhoto = (SimpleDraweeView)findViewById(R.id.userPhoto);
-
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         if(savedInstanceState == null){
 
         }else{
@@ -41,12 +46,26 @@ public class EditProfileActivity extends BaseActivity {
             mPhoto.setImageURI(mLastImageUri);
         }
 
-        this.mHouseAddress = (TextView)findViewById(R.id.userHomeAddress);
-        this.mWorkAddress = (TextView)findViewById(R.id.userWorkAddress);
-
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.lbl_edit_profile);
+        getSupportActionBar().setTitle("Fulano da Silva");
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_profile, menu);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_save_profile:
+                //TODO Atualizar perfil
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -63,13 +82,8 @@ public class EditProfileActivity extends BaseActivity {
         Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra(MapActivity.TYPE_MAP_REQUEST, MapRequestEnum.AddPlace);
         int requestCode;
-        if(view.getId() == R.id.changeHomeAddress){
-            requestCode = LOCATION_REQUEST_HOUSE;
-        }else if(view.getId() == R.id.changeWorkPlaceAddress){
-            requestCode = LOCATION_REQUEST_WORK;
-        }else{
+
             requestCode = 0;
-        }
         startActivityForResult(intent, requestCode);
     }
 
@@ -82,17 +96,11 @@ public class EditProfileActivity extends BaseActivity {
                     mLastImageUri = Uri.parse(data.getDataString());
                     mPhoto.setImageURI(mLastImageUri);
                 }
-            } else if (requestCode == LOCATION_REQUEST_HOUSE) {
-                if (data != null) {
-                    List<Place> places = (List<Place>)data.getSerializableExtra(MapActivity.PLACES_TAG);
-                    this.mHouseAddress.setText(places.get(0).description);
-                }
-            } else if (requestCode == LOCATION_REQUEST_WORK) {
-                if (data != null) {
-                    List<Place> places = (List<Place>)data.getSerializableExtra(MapActivity.PLACES_TAG);
-                    this.mWorkAddress.setText(places.get(0).description);
-                }
             }
         }
+    }
+
+    public void onClickUploadPhoto(View view) {
+        //TODO upload foto para o servidor
     }
 }

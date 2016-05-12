@@ -32,7 +32,7 @@
             android:name=".activity.SignUpActivity"
             android:label="@string/lbl_signup" />
         <activity android:name=".activity.HomeActivity" />
-        <activity android:name=".activity.EditProfileActivity" />
+        <activity android:name=".activity.EditProfileActivity" android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activity.MapActivity" />
 

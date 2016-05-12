@@ -35,16 +35,17 @@
     <string name="lbl_hour">Hora</string>
     <string name="lbl_confirm_ride">Confirmação de Carona</string>
     <string name="lbl_route">Rota</string>
+    <string name="lbl_personal_info">Dados Pessoais</string>
 
     <!-- Hints -->
     <string name="hint_login">login</string>
-    <string name="hint_matricula">Matrícula</string>
     <string name="hint_password">Senha</string>
     <string name="hint_confirm_password">Confirmar senha</string>
     <string name="hint_name">Nome</string>
     <string name="hint_course">Curso</string>
-    <string name="hint_registration">matrícula</string>
+    <string name="hint_registration">Matrícula</string>
     <string name="hint_phone">Celular</string>
+    <string name="hint_email">E-mail</string>
 
     <!-- Button Text -->
     <string name="btn_send">Enviar</string>
