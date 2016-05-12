@@ -39,6 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_home_page_user_data"
                 android:hint="@string/hint_name"
+                android:textSize="16sp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"/>
 

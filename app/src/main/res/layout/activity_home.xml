@@ -16,27 +16,10 @@
         android:paddingRight="@dimen/padding_home_page_user_data"
         android:paddingLeft="@dimen/padding_home_page_user_data">
 
-        <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/requests"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/userDataWrapper"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Pedidos"
-                android:layout_marginBottom="7dp"
-                android:layout_marginTop="10dp"
-                android:textStyle="bold"
-                android:textSize="15sp"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/requests"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-        </LinearLayout>
+            android:layout_height="match_parent"/>
 
     </RelativeLayout>
 

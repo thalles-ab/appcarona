@@ -162,11 +162,11 @@ public class RequestRideActivity extends BaseActivity {
             Place p = new Place();
             p.description = options[i];
             if(i%2 == 0) {
-                p.latitude = -20.3558589;
-                p.longitude = -40.3548503;
+                p.latitude = -20.354790;
+                p.longitude = -40.340644;
             }else{
-                p.latitude = -20.3551569;
-                p.longitude = -40.2977617;
+                p.latitude = -20.347074;
+                p.longitude = -40.311568;
             }
             p.id = (i+1)*17;
             this.mPlaces.add(p);

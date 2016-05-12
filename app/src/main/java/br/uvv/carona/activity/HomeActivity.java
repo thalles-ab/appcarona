@@ -43,7 +43,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        getSupportActionBar().setTitle(R.string.lbl_home);
+        getSupportActionBar().setTitle("Pedidos");
 
         this.mOpenRequests = (RecyclerView)findViewById(R.id.requests);
         List<Ride> rides = new ArrayList<>();
@@ -68,6 +68,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         }else{
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dehaze_white_24dp);
         }
+        navigationView.setCheckedItem(navigationView.indexOfChild(navigationView.findViewById(R.id.action_check_open_requests)));
 
         mUser = new Student();
         mUser.name = "Julio Almeida";

@@ -9,7 +9,6 @@ import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -186,11 +185,9 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
     @Override
     public void onConnected(Bundle bundle) {
         if(this.mMap != null) {
-            if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.M &&
-                    !AppPartiUVV.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                //TODO Show Dialog and request
-            } else {
+            if ((android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.M &&
+                    AppPartiUVV.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION)) || android.os.Build.VERSION.SDK_INT != Build.VERSION_CODES.M) {
                 LatLng userPosition = getCurrentLocationPosition();
                 if (userPosition != null) {
                     this.goToLatLng(userPosition, 1);
@@ -231,14 +228,14 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
         if(this.mDeparturePlace != null) {
             this.mDepartureMarker = this.mMap.addMarker(new MarkerOptions().draggable(false)
                     .position(new LatLng(this.mDeparturePlace.latitude, this.mDeparturePlace.longitude))
-                    .anchor(0.5f, 1)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    .anchor(0.5f, 0.62f)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ride_start)));
         }
         if(this.mDestinationPlace != null) {
             this.mDestinationMarker = this.mMap.addMarker(new MarkerOptions().draggable(false)
                     .position(new LatLng(this.mDestinationPlace.latitude, this.mDestinationPlace.longitude))
-                    .anchor(0.5f, 1)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                    .anchor(0.5f, 0.62f)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ride_end)));
         }
         if(this.mTypeMapRequest == MapRequestEnum.MarkRoute){
             if(this.mMarkersLatLng != null){
@@ -249,7 +246,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
             if(this.mDepartureMarker != null && this.mDestinationMarker != null && this.mNewRideRoute == null){
                 makeRouteRequest();
             }else if(mNewRideRoute != null){
-                getRoute(new EventBusEvents.RouteEvent(mNewRideRoute));
+                getRoute(new EventBusEvents.RideEvent(mNewRideRoute));
             }
         }
     }
@@ -391,7 +388,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
     }
 
     @Subscribe
-    public void getRoute(EventBusEvents.RouteEvent event){
+    public void getRoute(EventBusEvents.RideEvent event){
         this.mNewRideRoute = event.route;
         List<LatLng> routePoints = this.mNewRideRoute.getDecodedPoints();
         this.mRoute = this.mMap.addPolyline(new PolylineOptions()

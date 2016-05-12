@@ -16,6 +16,7 @@ import java.util.List;
 
 import br.uvv.carona.R;
 import br.uvv.carona.activity.RideDetailActivity;
+import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
 
 /**
@@ -23,9 +24,13 @@ import br.uvv.carona.model.Ride;
  */
 public class RideOfferRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<Ride> mOffers;
+    private Place mDeparture;
+    private Place mDestination;
 
-    public RideOfferRecyclerAdapter(List<Ride> offers){
+    public RideOfferRecyclerAdapter(List<Ride> offers, Place departure, Place destination){
         this.mOffers = offers;
+        this.mDeparture = departure;
+        this.mDestination = destination;
     }
 
     @Override
@@ -50,6 +55,8 @@ public class RideOfferRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 Intent i = new Intent(v.getContext(), RideDetailActivity.class);
                 i.putExtra(RideDetailActivity.IS_NEW_REQUEST_TAG, true);
                 i.putExtra(RideDetailActivity.RIDE_TAG, offer);
+                i.putExtra(RideDetailActivity.PLACE_DEP_TAG, mDeparture);
+                i.putExtra(RideDetailActivity.PLACE_DES_TAG, mDestination);
                 v.getContext().startActivity(i);
             }
         });

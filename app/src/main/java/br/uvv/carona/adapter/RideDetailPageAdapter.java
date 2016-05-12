@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import br.uvv.carona.R;
 import br.uvv.carona.fragment.RideDetailFragment;
 import br.uvv.carona.fragment.RideMapFragment;
+import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
 
 /**
@@ -19,11 +20,15 @@ public class RideDetailPageAdapter extends FragmentPagerAdapter {
     public static final int MAP = 1;
     private Context mContext;
     private Ride mRide;
+    private Place mDeparture;
+    private Place mDestination;
 
-    public RideDetailPageAdapter(Context context, FragmentManager fm, Ride ride) {
+    public RideDetailPageAdapter(Context context, FragmentManager fm, Ride ride, Place departure, Place destination) {
         super(fm);
         this.mContext = context;
         this.mRide = ride;
+        this.mDeparture = departure;
+        this.mDestination = destination;
     }
 
     public Fragment getItem(int pos) {
@@ -31,7 +36,7 @@ public class RideDetailPageAdapter extends FragmentPagerAdapter {
             case MEMBERS_AND_DETAILS:
                 return new RideDetailFragment().newInstance(this.mRide);
             case MAP:
-                return new RideMapFragment().newInstance(this.mRide);
+                return new RideMapFragment().newInstance(this.mRide, this.mDeparture, this.mDestination);
         }
         return null;
     }

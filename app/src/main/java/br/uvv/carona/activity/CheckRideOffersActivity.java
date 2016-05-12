@@ -48,8 +48,11 @@ public class CheckRideOffersActivity extends BaseActivity {
             this.mOffers = (List<Ride>)savedInstanceState.getSerializable(OFFERS_LIST_TAG);
         }
 
+        Place departure = (Place)getIntent().getSerializableExtra(DEPARTURE_PLACE_TAG);
+        Place destination = (Place)getIntent().getSerializableExtra(DESTINATION_PLACE_TAG);
+
         this.mRecyclerView = (RecyclerView)findViewById(R.id.offersList);
-        this.mRecyclerAdapter = new RideOfferRecyclerAdapter(this.mOffers);
+        this.mRecyclerAdapter = new RideOfferRecyclerAdapter(this.mOffers, departure, destination);
         this.mRecyclerView.setAdapter(this.mRecyclerAdapter);
         this.mRecyclerView.setLayoutManager(linearLayoutManager);
 

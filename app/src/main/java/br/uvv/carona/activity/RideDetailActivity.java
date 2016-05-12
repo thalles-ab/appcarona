@@ -33,12 +33,15 @@ import java.util.List;
 import br.uvv.carona.R;
 import br.uvv.carona.adapter.RideDetailPageAdapter;
 import br.uvv.carona.adapter.RideMembersRecyclerAdapter;
+import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
 import br.uvv.carona.model.Student;
 
 public class RideDetailActivity extends BaseActivity {
     public static final String IS_NEW_REQUEST_TAG = ".IS_NEW_REQUEST_TAG";
     public static final String RIDE_TAG = ".RIDE_TAG";
+    public static final String PLACE_DEP_TAG = ".PLACE_DEP_TAG";
+    public static final String PLACE_DES_TAG = ".PLACE_DES_TAG";
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -46,6 +49,8 @@ public class RideDetailActivity extends BaseActivity {
 
     private boolean mIsRideRequest;
     private Ride mRide;
+    private Place mDeparture;
+    private Place mDestination;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,13 +60,15 @@ public class RideDetailActivity extends BaseActivity {
         if (savedInstanceState == null){
             this.mRide = (Ride)getIntent().getSerializableExtra(RIDE_TAG);
             this.mIsRideRequest = getIntent().getBooleanExtra(IS_NEW_REQUEST_TAG, false);
+            this.mDeparture = (Place)getIntent().getSerializableExtra(PLACE_DEP_TAG);
+            this.mDestination = (Place)getIntent().getSerializableExtra(PLACE_DES_TAG);
         }else{
             this.mRide = (Ride)savedInstanceState.getSerializable(RIDE_TAG);
             this.mIsRideRequest = savedInstanceState.getBoolean(IS_NEW_REQUEST_TAG);
         }
 
         this.mViewPager = (ViewPager)findViewById(R.id.view_pager);
-        this.mViewPagerAdapter = new RideDetailPageAdapter(this, getSupportFragmentManager(), this.mRide);
+        this.mViewPagerAdapter = new RideDetailPageAdapter(this, getSupportFragmentManager(), this.mRide, this.mDeparture, this.mDestination);
         this.mViewPager.setAdapter(this.mViewPagerAdapter);
         this.mTabLayout = (TabLayout) findViewById(R.id.tabs);
         this.mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);

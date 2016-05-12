@@ -30,6 +30,7 @@ import java.util.Date;
 import br.uvv.carona.R;
 import br.uvv.carona.activity.BaseActivity;
 import br.uvv.carona.activity.CheckRideOffersActivity;
+import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
 
 /**
@@ -37,6 +38,8 @@ import br.uvv.carona.model.Ride;
  */
 public class ConfirmRideOfferDialog extends DialogFragment {
     private static final String ROUTE_TAG = ".ROUTE_TAG";
+    private static final String PLACE_DEP_TAG = ".PLACE_DEP_TAG";
+    private static final String PLACE_DES_TAG = ".PLACE_DES_TAG";
     private static final String IS_RIDE_REQUEST_TAG = ".IS_RIDE_REQUEST_TAG";
 
     private Dialog mDialog;
