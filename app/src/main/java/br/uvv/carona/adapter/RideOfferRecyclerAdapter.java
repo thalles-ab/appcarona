@@ -70,7 +70,8 @@ public class RideOfferRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     public class RideOfferViewHolder extends RecyclerView.ViewHolder{
         public SimpleDraweeView driverPhoto;
         public TextView driverName;
-        public TextView rideEstimateTime;
+        public TextView rideTime;
+        public TextView rideDate;
         public RelativeLayout wrapper;
 
         public RideOfferViewHolder(View itemView) {
@@ -78,7 +79,8 @@ public class RideOfferRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
             this.driverPhoto = (SimpleDraweeView)itemView.findViewById(R.id.driverPhoto);
             this.driverName = (TextView)itemView.findViewById(R.id.driverName);
-            this.rideEstimateTime = (TextView)itemView.findViewById(R.id.estimateTime);
+            this.rideTime = (TextView)itemView.findViewById(R.id.ride_time);
+            this.rideDate = (TextView)itemView.findViewById(R.id.ride_date);
             this.wrapper = (RelativeLayout)itemView.findViewById(R.id.ride_wrapper);
         }
     }

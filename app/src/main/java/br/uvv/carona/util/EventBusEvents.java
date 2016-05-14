@@ -4,9 +4,8 @@ import java.util.List;
 
 import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
-import br.uvv.carona.model.RideRequest;
+import br.uvv.carona.model.RideSolicitation;
 import br.uvv.carona.model.Student;
-import br.uvv.carona.model.StudentInfo;
 
 public class EventBusEvents {
 
@@ -61,14 +60,14 @@ public class EventBusEvents {
     }
 
     public static class RideRequestEvent{
-        public RideRequest request;
-        public List<RideRequest> requests;
+        public RideSolicitation request;
+        public List<RideSolicitation> requests;
 
-        public RideRequestEvent(RideRequest request) {
+        public RideRequestEvent(RideSolicitation request) {
             this.request = request;
         }
 
-        public RideRequestEvent(List<RideRequest> requests) {
+        public RideRequestEvent(List<RideSolicitation> requests) {
             this.requests = requests;
         }
     }

@@ -15,9 +15,6 @@ import java.util.List;
 import br.uvv.carona.R;
 import br.uvv.carona.model.Student;
 
-/**
- * Created by CB1772 on 08/05/2016.
- */
 public class RideMembersRecyclerAdapter extends RecyclerView.Adapter {
     List<Student> mMembers;
 

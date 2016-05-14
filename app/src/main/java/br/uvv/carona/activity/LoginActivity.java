@@ -76,15 +76,15 @@ public class LoginActivity extends BaseActivity {
     @Subscribe
     public void onLoginResult(EventBusEvents.LoginEvent event){
         AppPartiUVV.saveToken(event.token);
-        new GetUserInfoAsyncTask().execute();
-
         Intent intent = new Intent(this, HomeActivity.class);
+        this.stopProgressDialog();
         startActivity(intent);
     }
 
     @Subscribe
     @Override
     public void onErrorEvent(EventBusEvents.ErrorEvent event) {
+        this.stopProgressDialog();
         treatCommonErrors(event);
     }
 

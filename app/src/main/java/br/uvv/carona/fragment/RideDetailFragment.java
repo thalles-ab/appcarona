@@ -13,14 +13,10 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
 import br.uvv.carona.R;
 import br.uvv.carona.adapter.RideMembersRecyclerAdapter;
 import br.uvv.carona.model.Ride;
-import br.uvv.carona.model.Student;
+import br.uvv.carona.util.DateFormatUtil;
 
 public class RideDetailFragment extends Fragment {
     private static final String FRAG_RIDE_DETAIL_TAG = ".FRAG_RIDE_DETAIL_TAG";
@@ -88,9 +84,8 @@ public class RideDetailFragment extends Fragment {
         }
         this.mDriverName.setText(this.mRide.student.name);
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
         if(this.mRide.expirationDate != null){
-            this.mRideTime.setText(simpleDateFormat.format(this.mRide.expirationDate));
+            this.mRideTime.setText(DateFormatUtil.formatHourView.format(this.mRide.expirationDate));
         }
 
         if(this.mRide.student.allowCellphone) {

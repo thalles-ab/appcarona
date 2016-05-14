@@ -75,7 +75,8 @@ public class CheckRideOffersActivity extends BaseActivity {
     @Subscribe
     @Override
     public void onErrorEvent(EventBusEvents.ErrorEvent event) {
-
+        this.stopProgressDialog();
+        treatCommonErrors(event);
     }
 
     private void addRoute(String name, String photoUrl){

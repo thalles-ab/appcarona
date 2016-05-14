@@ -77,9 +77,7 @@ public class NewLocationConfirmDialog extends DialogFragment implements View.OnC
             }else {
                 ((TextInputLayout)this.mDialog.findViewById(R.id.input_layout_departure)).setErrorEnabled(false);
                 this.mPlace.description = description;
-                List<Place> places = new ArrayList<>();
-                places.add(this.mPlace);
-                ((MapActivity) this.mDialog.getOwnerActivity()).sendResult(places);
+                ((MapActivity) this.mDialog.getOwnerActivity()).sendResult(this.mPlace);
                 this.mDialog.dismiss();
             }
         }

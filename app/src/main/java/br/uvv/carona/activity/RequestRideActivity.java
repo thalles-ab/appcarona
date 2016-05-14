@@ -31,6 +31,7 @@ import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.dialog.ConfirmRideOfferDialog;
 import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
+import br.uvv.carona.service.GeolocationService;
 import br.uvv.carona.util.EventBusEvents;
 import br.uvv.carona.util.FormType;
 import br.uvv.carona.util.MapRequestEnum;
@@ -42,6 +43,7 @@ public class RequestRideActivity extends BaseActivity implements ConnectionCallb
     public static final String DESTINATION_PLACE_TAG = ".DESTINATION_PLACE_TAG";
     public static final String RADIO_SELECTION_TAG = ".DEPARTURE_PLACE_TAG";
     public static final String PLACES_TAG = ".PLACES_TAG";
+    public static final int REQUEST_NEW_PLACE_CODE = 10;
 
     private RadioGroup mOptions;
     private GoogleApiClient mApiClient;
@@ -157,50 +159,24 @@ public class RequestRideActivity extends BaseActivity implements ConnectionCallb
                             if (location == null) {
                                 //TODO
                                 Log.i("GET_LOC", "Couldn't get current location");
-                                ok = false;
                             } else {
+                                Intent intent = new Intent(this, GeolocationService.class);
                                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                                place.latitude = latLng.latitude;
-                                place.longitude = latLng.longitude;
-                                Log.i("LOC", place.latitude + " - " + place.longitude);
-                                ok = true;
+                                intent.putExtra(GeolocationService.LAT_LNG_A_TAG, latLng);
+                                startService(intent);
                             }
                         }else{
                             //TODO
-                            ok = false;
-                            Log.i("GET_LOC", "User didn't allow get current location");
                         }
+                        ok = false;
                     }else if(place.description.equals(getString(R.string.txt_other))){
-                        //TODO
+                        Intent intent = new Intent(this, MapActivity.class);
+                        intent.putExtra(MapActivity.TYPE_MAP_REQUEST, MapRequestEnum.OtherPlace);
+                        startActivityForResult(intent,REQUEST_NEW_PLACE_CODE);
                         ok = false;
                     }
                     if(ok) {
-                        if (this.mCurrentStep == 0) {
-                            this.mPlaceDeparture = place;
-                            Intent intent = new Intent(this, RequestRideActivity.class);
-                            intent.putExtra(DEPARTURE_PLACE_TAG, this.mPlaceDeparture);
-                            intent.putExtra(PLACE_REQUEST_TAG, 1);
-                            intent.putExtra(FORM_TYPE_REQUEST_TAG, this.mForm);
-                            startActivity(intent);
-                        } else {
-                            this.mPlaceDestination = place;
-                            if (this.mPlaceDeparture.equals(this.mPlaceDestination)) {
-                                //TODO SHOW ERROR
-                            } else {
-                                if (this.mForm == FormType.OfferRide) {
-                                    Intent intent = new Intent(this, MapActivity.class);
-                                    intent.putExtra(MapActivity.DEPARTURE_TAG, this.mPlaceDeparture);
-                                    intent.putExtra(MapActivity.DESTINATION_TAG, this.mPlaceDestination);
-                                    intent.putExtra(MapActivity.TYPE_MAP_REQUEST, MapRequestEnum.MarkRoute);
-                                    startActivity(intent);
-                                } else {
-                                    Ride ride = new Ride();
-                                    ride.startPoint = this.mPlaceDeparture;
-                                    ride.endPoint = this.mPlaceDestination;
-                                    ConfirmRideOfferDialog.newInstance(ride, true).show(getSupportFragmentManager(), ".RequestConfirm");
-                                }
-                            }
-                        }
+                        goToNextStep(place);
                     }
                 }
                 return true;
@@ -208,23 +184,60 @@ public class RequestRideActivity extends BaseActivity implements ConnectionCallb
         return super.onOptionsItemSelected(item);
     }
 
+    private void goToNextStep(Place place){
+        if (this.mCurrentStep == 0) {
+            this.mPlaceDeparture = place;
+            Intent intent = new Intent(this, RequestRideActivity.class);
+            intent.putExtra(DEPARTURE_PLACE_TAG, this.mPlaceDeparture);
+            intent.putExtra(PLACE_REQUEST_TAG, 1);
+            intent.putExtra(FORM_TYPE_REQUEST_TAG, this.mForm);
+            startActivity(intent);
+        } else {
+            this.mPlaceDestination = place;
+            if (this.mPlaceDeparture.equals(this.mPlaceDestination)) {
+                //TODO SHOW ERROR
+            } else {
+                if (this.mForm == FormType.OfferRide) {
+                    Intent intent = new Intent(this, MapActivity.class);
+                    intent.putExtra(MapActivity.DEPARTURE_TAG, this.mPlaceDeparture);
+                    intent.putExtra(MapActivity.DESTINATION_TAG, this.mPlaceDestination);
+                    intent.putExtra(MapActivity.TYPE_MAP_REQUEST, MapRequestEnum.MarkRoute);
+                    startActivity(intent);
+                } else {
+                    Ride ride = new Ride();
+                    ride.startPoint = this.mPlaceDeparture;
+                    ride.endPoint = this.mPlaceDestination;
+                    ConfirmRideOfferDialog.newInstance(ride, true).show(getSupportFragmentManager(), ".RequestConfirm");
+                }
+            }
+        }
+    }
+
     @Subscribe
     @Override
     public void onErrorEvent(EventBusEvents.ErrorEvent event) {
         treatCommonErrors(event);
+        this.stopProgressDialog();
     }
 
     @Subscribe
     public void onGetPlaces(EventBusEvents.PlaceEvent event){
-        String[] options = getResources().getStringArray(R.array.locations);
-        for(int i = 0; i < options.length; i++){
-            Place p = new Place();
-            p.description = options[i];
-            p.id = -1 * (i+1);
-            event.places.add(p);
+        if(event.place == null) {
+            String[] options = getResources().getStringArray(R.array.locations);
+            for (int i = 0; i < options.length; i++) {
+                Place p = new Place();
+                p.description = options[i];
+                p.id = -1 * (i + 1);
+                event.places.add(p);
+            }
+            this.stopProgressDialog();
+            setUpContent(event.places, -1);
+        }else{
+            Place place = event.place;
+            place.id = -1;
+            this.stopProgressDialog();
+            goToNextStep(place);
         }
-        setUpContent(event.places, -1);
-        this.stopProgressDialog();
     }
 
     @Override
@@ -255,6 +268,19 @@ public class RequestRideActivity extends BaseActivity implements ConnectionCallb
         if(selectedPosition != -1){
             int id = this.mOptions.getChildAt(selectedPosition).getId();
             this.mOptions.check(id);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            if(data != null){
+                if(requestCode == REQUEST_NEW_PLACE_CODE){
+                    Place place = (Place)data.getSerializableExtra(MapActivity.PLACE_TAG);
+                    goToNextStep(place);
+                }
+            }
         }
     }
 

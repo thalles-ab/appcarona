@@ -4,12 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,24 +12,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 import br.uvv.carona.R;
 import br.uvv.carona.activity.BaseActivity;
 import br.uvv.carona.activity.CheckRideOffersActivity;
-import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
+import br.uvv.carona.util.DateFormatUtil;
 
-/**
- * Created by CB1772 on 02/05/2016.
- */
 public class ConfirmRideOfferDialog extends DialogFragment {
     private static final String ROUTE_TAG = ".ROUTE_TAG";
     private static final String PLACE_DEP_TAG = ".PLACE_DEP_TAG";
@@ -233,10 +222,8 @@ public class ConfirmRideOfferDialog extends DialogFragment {
     }
 
     private void setTime(Date date){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        this.mDateField.setText(dateFormat.format(date.getTime()));
-        this.mTimeField.setText(timeFormat.format(date.getTime()));
+        this.mDateField.setText(DateFormatUtil.formatDateView.format(date.getTime()));
+        this.mTimeField.setText(DateFormatUtil.formatHourView.format(date.getTime()));
     }
 
     @Override

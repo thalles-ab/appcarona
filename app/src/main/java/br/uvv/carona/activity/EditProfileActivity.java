@@ -74,7 +74,8 @@ public class EditProfileActivity extends BaseActivity {
     @Subscribe
     @Override
     public void onErrorEvent(EventBusEvents.ErrorEvent event) {
-
+        this.stopProgressDialog();
+        treatCommonErrors(event);
     }
 
     @Override
