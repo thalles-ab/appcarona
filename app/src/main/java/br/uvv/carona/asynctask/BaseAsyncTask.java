@@ -5,6 +5,7 @@ import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 
+import br.uvv.carona.model.BaseObject;
 import br.uvv.carona.util.EventBusEvents;
 
 /**
@@ -18,6 +19,8 @@ public class BaseAsyncTask<Params, T> extends AsyncTask<Params, T, T> {
         return null;
     }
 
+
+    //TODO tartar erros do baseObject
     @Override
     protected void onPostExecute(T t) {
         super.onPostExecute(t);
@@ -27,5 +30,10 @@ public class BaseAsyncTask<Params, T> extends AsyncTask<Params, T, T> {
             }
             EventBus.getDefault().post(new EventBusEvents.ErrorEvent(mException.getMessage()));
         }
+    }
+
+    public boolean success(T t){
+        BaseObject ob = (BaseObject) t;
+        return mException == null && (ob.erros == null || ob.erros.isEmpty());
     }
 }

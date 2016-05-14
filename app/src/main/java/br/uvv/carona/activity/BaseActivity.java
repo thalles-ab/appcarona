@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import java.util.List;
 import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.dialog.MessageDialog;
+import br.uvv.carona.util.BaseTextWatcher;
 import br.uvv.carona.util.EventBusEvents;
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -206,16 +208,18 @@ public abstract class BaseActivity extends AppCompatActivity {
         fields.add(field);
         return checkEditTextEmpty(fields);
     }
+
     protected boolean checkEditTextEmpty(@NonNull List<EditText> fields){
         if(fields.size() == 0){
             Log.e("CheckEditText", "Must have at least one edittext field");
             return true;
         }else{
             boolean answer = false;
-            for (int i = 0; i < fields.size(); i++){
-                if(TextUtils.isEmpty(fields.get(i).getText())){
+            for (EditText editText : fields){
+                editText.addTextChangedListener(new BaseTextWatcher(editText));
+                if(TextUtils.isEmpty(editText.getText().toString().trim())){
                     answer = true;
-                    fields.get(i).setError(getString(R.string.error_fill_field));
+                    editText.setError(getString(R.string.error_fill_field));
                 }
             }
             return answer;

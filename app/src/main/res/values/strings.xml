@@ -25,6 +25,7 @@
     <string name="lbl_forgot_password">Esqueceu a Senha?</string>
     <string name="lbl_signup_now">Cadastre-se</string>
     <string name="lbl_signup">Cadastrar</string>
+    <string name="lbl_register">Cadastro</string>
     <string name="lbl_home">Home</string>
     <string name="lbl_house">Casa</string>
     <string name="lbl_work_place">Trabalho</string>
@@ -64,6 +65,7 @@
     <string name="error_fill_field">Preencha este campo.</string>
     <string name="error_empty_field">Este campo é obrigatório.</string>
     <string name="error_password_not_equal">As senhas não são iguais</string>
+    <string name="error_password_less_than_six">Senha deve ter no mínimo 6 caracteres</string>
 
     <!-- Texts -->
     <string name="txt_select">Selecione</string>
@@ -104,4 +106,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <integer name="input_max_length">255</integer>
+
 </resources>

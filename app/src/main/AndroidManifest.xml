@@ -29,6 +29,7 @@
             android:name=".activity.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:name=".activity.SignUpActivity"
             android:label="@string/lbl_signup" />
         <activity android:name=".activity.HomeActivity" />

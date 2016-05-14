@@ -22,7 +22,7 @@ public class GetUserInfoAsyncTask extends BaseAsyncTask<Integer, Student> {
             }else{
                 url.append(params[0]);
             }
-            return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequest(HttpMethodUtil.GET, url.toString(), null, null), Student.class);
+            return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequestWithAuthorization(HttpMethodUtil.GET, url.toString(), null, null), Student.class);
         }catch (Exception e){
             this.mException = e;
         }
