@@ -16,9 +16,18 @@ import java.net.URL;
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.httprequest.util.HttpMethodUtil;
 
-public class BaseHttpRequest {
+public class BaseHttpRequest{
 
-    public static String createRequest(HttpMethodUtil method, String url, String authorization, Object object) throws Exception{
+    public static String createRequestWithAuthorization(HttpMethodUtil method, String url, String authorization, Object object) throws Exception{
+        return getRequest(method,url, authorization, object);
+    }
+
+
+    public static String createRequest(HttpMethodUtil method, String url, Object object) throws Exception{
+        return getRequest(method,url, null, object);
+    }
+
+    private static String getRequest(HttpMethodUtil method, String url, String authorization, Object object) throws Exception{
         String response = "";
         String params = "";
         HttpURLConnection connection = null;
@@ -99,7 +108,8 @@ public class BaseHttpRequest {
         return response.equals("") ? null : response;
     }
 
-    public static String readIt(InputStream stream) throws IOException {
+
+    private static String readIt(InputStream stream) throws IOException {
         BufferedReader r = new BufferedReader(new InputStreamReader(stream));
         StringBuilder total = new StringBuilder();
         String line;

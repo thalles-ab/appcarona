@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import br.uvv.carona.model.enums.TypeDay;
+import br.uvv.carona.model.enums.TypeSituation;
 
 public class Ride extends BaseObject {
     public Student student;
@@ -20,6 +21,7 @@ public class Ride extends BaseObject {
     public String routeGoogleFormat;
     public Place startPoint;
     public Place endPoint;
+    public TypeSituation situation;
 
     public Ride() {
         this.students = new ArrayList<>();

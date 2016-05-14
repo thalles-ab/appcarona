@@ -24,17 +24,18 @@ import br.uvv.carona.R;
 import br.uvv.carona.activity.RideDetailActivity;
 import br.uvv.carona.fragment.RideSolicitationsFragment;
 import br.uvv.carona.model.RideSolicitation;
+import br.uvv.carona.model.enums.TypeSituation;
 import br.uvv.carona.util.DateFormatUtil;
 
 /**
  * Created by CB1772 on 10/05/2016.
  */
-public class RideRequestStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RideSolicitationStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<RideSolicitation> mRequests;
     private Context mContext;
     private int mTypeRequest;
 
-    public RideRequestStatusAdapter(List<RideSolicitation> offers, Context context, int typeRequest){
+    public RideSolicitationStatusAdapter(List<RideSolicitation> offers, Context context, int typeRequest){
         this.mRequests = offers;
         this.mContext = context;
         this.mTypeRequest = typeRequest;
@@ -63,7 +64,7 @@ public class RideRequestStatusAdapter extends RecyclerView.Adapter<RecyclerView.
                 options.setAnchorView(v);
                 options.setWidth(AppBarLayout.LayoutParams.WRAP_CONTENT);
                 final ArrayAdapter<String> adapter;
-                if(RideRequestStatusAdapter.this.mTypeRequest == RideSolicitationsFragment.TYPE_REQUEST_MADE){
+                if(RideSolicitationStatusAdapter.this.mTypeRequest == RideSolicitationsFragment.TYPE_REQUEST_MADE){
                     String[] optionsTxt = {mContext.getString(R.string.lbl_see_ride),
                             mContext.getString(R.string.lbl_cancel_request)};
                     adapter = new ArrayAdapter(v.getContext(), R.layout.layout_ride_request_option_item, optionsTxt);
@@ -110,19 +111,24 @@ public class RideRequestStatusAdapter extends RecyclerView.Adapter<RecyclerView.
             }
         }
 
-        switch (request.status){
-            case Accepted:
-                viewHolder.rideRequestStatus.setText("Aceito");
-                viewHolder.rideRequestStatus.setBackgroundResource(R.drawable.bg_ride_status_accepted);
-                break;
-            case Refused:
-                viewHolder.rideRequestStatus.setText("Recusado");
-                viewHolder.rideRequestStatus.setBackgroundResource(R.drawable.bg_ride_status_refused);
-                break;
-            case Waiting:
-                viewHolder.rideRequestStatus.setText("Aguardando");
-                viewHolder.rideRequestStatus.setBackgroundResource(R.drawable.bg_ride_status_waiting);
-                break;
+        if(request.ride.situation == TypeSituation.Enable) {
+            switch (request.status) {
+                case Accepted:
+                    viewHolder.rideRequestStatus.setText("Aceito");
+                    viewHolder.rideRequestStatus.setBackgroundResource(R.drawable.bg_ride_status_accepted);
+                    break;
+                case Refused:
+                    viewHolder.rideRequestStatus.setText("Recusado");
+                    viewHolder.rideRequestStatus.setBackgroundResource(R.drawable.bg_ride_status_refused);
+                    break;
+                case Waiting:
+                    viewHolder.rideRequestStatus.setText("Aguardando");
+                    viewHolder.rideRequestStatus.setBackgroundResource(R.drawable.bg_ride_status_waiting);
+                    break;
+            }
+        }else{
+            viewHolder.rideRequestStatus.setText("Carona\nCancelada");
+            viewHolder.rideRequestStatus.setBackgroundResource(R.drawable.bg_ride_status_refused);
         }
     }
 

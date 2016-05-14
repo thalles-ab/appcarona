@@ -3,8 +3,6 @@ package br.uvv.carona.activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.EditText;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -84,7 +82,7 @@ public class CheckRideOffersActivity extends BaseActivity {
         Student s = new Student();
         s.name = name;
         s.photo = photoUrl;
-        s.cellphone = "(27)91234-1234";
+        s.cellPhone = "(27)91234-1234";
         r.student = s;
         Place a = new Place();
         a.latitude = -20.3558589;

@@ -19,7 +19,7 @@ import java.util.List;
 
 import br.uvv.carona.R;
 import br.uvv.carona.activity.BaseActivity;
-import br.uvv.carona.adapter.RideRequestStatusAdapter;
+import br.uvv.carona.adapter.RideSolicitationStatusAdapter;
 import br.uvv.carona.model.Ride;
 import br.uvv.carona.model.RideSolicitation;
 import br.uvv.carona.model.Student;
@@ -34,7 +34,7 @@ public class RideSolicitationsFragment extends Fragment {
     public static final int TYPE_REQUEST_RECEIVED = 1;
 
     private RecyclerView mOpenRequests;
-    private RideRequestStatusAdapter mAdapter;
+    private RideSolicitationStatusAdapter mAdapter;
 
     private int mTypeRequest;
     private List<RideSolicitation> mRequests;
@@ -84,7 +84,7 @@ public class RideSolicitationsFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.mAdapter = new RideRequestStatusAdapter(this.mRequests, this.getContext(), this.mTypeRequest);
+        this.mAdapter = new RideSolicitationStatusAdapter(this.mRequests, this.getContext(), this.mTypeRequest);
         this.mOpenRequests.setAdapter(this.mAdapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());

@@ -6,6 +6,6 @@ public class Student extends BaseObject {
     public String password;
     public String photo;
     public String email;
-    public String cellphone;
+    public String cellPhone;
     public boolean allowCellphone;
 }

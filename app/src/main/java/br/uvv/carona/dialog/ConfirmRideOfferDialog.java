@@ -22,6 +22,7 @@ import java.util.Date;
 import br.uvv.carona.R;
 import br.uvv.carona.activity.BaseActivity;
 import br.uvv.carona.activity.CheckRideOffersActivity;
+import br.uvv.carona.asynctask.NewRideOfferAsyncTask;
 import br.uvv.carona.model.Ride;
 import br.uvv.carona.util.DateFormatUtil;
 
@@ -85,7 +86,7 @@ public class ConfirmRideOfferDialog extends DialogFragment {
                     intent.putExtra(CheckRideOffersActivity.DESTINATION_PLACE_TAG, mRoute.endPoint);
                     startActivity(intent);
                 }else{
-                    //TODO Start server call
+                    new NewRideOfferAsyncTask().execute(mRoute);
                 }
             }
         });

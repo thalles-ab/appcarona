@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -27,7 +28,9 @@ import java.util.List;
 import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.dialog.MessageDialog;
+import br.uvv.carona.util.BaseTextWatcher;
 import br.uvv.carona.util.EventBusEvents;
+import br.uvv.carona.view.PhoneEditText;
 
 public abstract class BaseActivity extends AppCompatActivity {
     private static final int REQUEST_LOCATION_CODE = 10;
@@ -81,11 +84,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 @Override
                 public void onConfirmClick(Dialog dialog) {
                     dialog.dismiss();
-                    if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-                        ActivityCompat.finishAffinity(dialog.getOwnerActivity());
-                    } else {
-                        dialog.getOwnerActivity().finishAffinity();
-                    }
+                    ActivityCompat.finishAffinity(dialog.getOwnerActivity());
                 }
             });
         } else if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.M &&
@@ -157,7 +156,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void stopProgressDialog(){
-        if(this.isProgressDialogShowing()){
+        if( this.mProgressDialog!= null && this.isProgressDialogShowing()){
             this.mProgressDialog.dismiss();
             this.mProgressDialogMessage = null;
         }
@@ -206,16 +205,22 @@ public abstract class BaseActivity extends AppCompatActivity {
         fields.add(field);
         return checkEditTextEmpty(fields);
     }
+
     protected boolean checkEditTextEmpty(@NonNull List<EditText> fields){
         if(fields.size() == 0){
             Log.e("CheckEditText", "Must have at least one edittext field");
             return true;
         }else{
             boolean answer = false;
-            for (int i = 0; i < fields.size(); i++){
-                if(TextUtils.isEmpty(fields.get(i).getText())){
+            for (EditText editText : fields){
+                editText.addTextChangedListener(new BaseTextWatcher(editText));
+                String text = editText.getText().toString();
+                if(editText instanceof PhoneEditText){
+                    text = ((PhoneEditText)editText).getCleanText().toString();
+                }
+                if(TextUtils.isEmpty(text.trim())){
                     answer = true;
-                    fields.get(i).setError(getString(R.string.error_fill_field));
+                    editText.setError(getString(R.string.error_fill_field));
                 }
             }
             return answer;

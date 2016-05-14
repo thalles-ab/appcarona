@@ -2,6 +2,7 @@ package br.uvv.carona.asynctask;
 
 import org.greenrobot.eventbus.EventBus;
 
+import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.httprequest.BaseHttpRequest;
 import br.uvv.carona.httprequest.util.HttpMethodUtil;
 import br.uvv.carona.httprequest.util.WSResources;
@@ -13,7 +14,7 @@ public class NewRideOfferAsyncTask extends BaseAsyncTask<Ride, Void> {
     @Override
     protected Void doInBackground(Ride... params) {
         try{
-//            BaseHttpRequest.createRequest(HttpMethodUtil.POST, WSResources.RIDE, params[0]);
+            BaseHttpRequest.createRequestWithAuthorization(HttpMethodUtil.POST, WSResources.RIDE, AppPartiUVV.getToken(), params[0]);
         }catch (Exception e){
             this.mException = e;
         }
