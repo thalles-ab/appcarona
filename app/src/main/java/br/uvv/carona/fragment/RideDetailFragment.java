@@ -14,8 +14,6 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import br.uvv.carona.R;
 import br.uvv.carona.adapter.RideMembersRecyclerAdapter;
