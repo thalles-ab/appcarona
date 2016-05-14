@@ -114,7 +114,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Subscribe
     @Override
-    void onErrorEvent(EventBusEvents.ErrorEvent event) {
+    public void onErrorEvent(EventBusEvents.ErrorEvent event) {
         treatCommonErrors(event);
     }
 

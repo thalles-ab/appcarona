@@ -74,7 +74,7 @@ public class CheckRideOffersActivity extends BaseActivity {
 
     @Subscribe
     @Override
-    void onErrorEvent(EventBusEvents.ErrorEvent event) {
+    public void onErrorEvent(EventBusEvents.ErrorEvent event) {
 
     }
 
@@ -83,7 +83,7 @@ public class CheckRideOffersActivity extends BaseActivity {
         Student s = new Student();
         s.name = name;
         s.photo = photoUrl;
-        s.cellPhone = "(27)91234-1234";
+        s.cellphone = "(27)91234-1234";
         r.student = s;
         Place a = new Place();
         a.latitude = -20.3558589;

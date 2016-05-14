@@ -34,15 +34,15 @@ public class EventBusEvents {
         }
     }
 
-    public static class PlaceAddressEvent{
+    public static class PlaceEvent {
         public Place place;
         public List<Place> places;
 
-        public PlaceAddressEvent(Place place){
+        public PlaceEvent(Place place){
             this.place = place;
         }
 
-        public PlaceAddressEvent(List<Place> places) {
+        public PlaceEvent(List<Place> places) {
             this.places = places;
         }
     }

@@ -121,7 +121,6 @@ public class GetRouteAsyncTask extends BaseAsyncTask<RouteRequest, String> {
                 }
             } catch (JSONException e) {
                 this.mException = e;
-                Log.e("ERROR REQUEST", e.getMessage());
             }
         }
         super.onPostExecute(result);

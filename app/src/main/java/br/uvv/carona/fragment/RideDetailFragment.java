@@ -93,6 +93,8 @@ public class RideDetailFragment extends Fragment {
             this.mRideTime.setText(simpleDateFormat.format(this.mRide.expirationDate));
         }
 
-        this.mDriverPhone.setText(this.mRide.student.cellPhone);
+        if(this.mRide.student.allowCellphone) {
+            this.mDriverPhone.setText(this.mRide.student.cellphone);
+        }
     }
 }

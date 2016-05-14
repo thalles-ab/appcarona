@@ -1,16 +1,24 @@
 package br.uvv.carona.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -19,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.uvv.carona.R;
+import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.dialog.ConfirmRideOfferDialog;
 import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
@@ -26,7 +35,7 @@ import br.uvv.carona.util.EventBusEvents;
 import br.uvv.carona.util.FormType;
 import br.uvv.carona.util.MapRequestEnum;
 
-public class RequestRideActivity extends BaseActivity {
+public class RequestRideActivity extends BaseActivity implements ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     public static final String PLACE_REQUEST_TAG = ".PLACE_REQUEST_TAG";
     public static final String FORM_TYPE_REQUEST_TAG = ".FORM_TYPE_REQUEST_TAG";
     public static final String DEPARTURE_PLACE_TAG = ".DEPARTURE_PLACE_TAG";
@@ -35,7 +44,7 @@ public class RequestRideActivity extends BaseActivity {
     public static final String PLACES_TAG = ".PLACES_TAG";
 
     private RadioGroup mOptions;
-    private Button mConfirm;
+    private GoogleApiClient mApiClient;
 
     private int mCurrentStep;
     private FormType mForm;
@@ -59,6 +68,19 @@ public class RequestRideActivity extends BaseActivity {
                 this.mPlaceDeparture = (Place)getIntent().getSerializableExtra(DEPARTURE_PLACE_TAG);
             }
             selectionPosition = -1;
+
+            String[] options = getResources().getStringArray(R.array.locations);
+            for(int i = 0; i < options.length; i++){
+                Place p = new Place();
+                p.id = -1 * (i+1);
+                if(this.mPlaceDeparture == null || this.mPlaceDeparture.id != p.id){
+                    p.description = options[i];
+                    p.latitude = 0;
+                    p.longitude = 0;
+                    this.mPlaces.add(p);
+                }
+            }
+            //TODO MAKE CALL TO SERVER
         }else{
             this.mCurrentStep = savedInstanceState.getInt(PLACE_REQUEST_TAG);
             this.mForm = (FormType)savedInstanceState.getSerializable(FORM_TYPE_REQUEST_TAG);
@@ -68,8 +90,28 @@ public class RequestRideActivity extends BaseActivity {
             selectionPosition = savedInstanceState.getInt(RADIO_SELECTION_TAG);
         }
 
+        this.mApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+
         setUpActionBar();
-        setUpContent(selectionPosition);
+        setUpContent(this.mPlaces, selectionPosition);
+    }
+
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        this.mApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        this.mApiClient.disconnect();
     }
 
     private void setUpActionBar(){
@@ -105,33 +147,58 @@ public class RequestRideActivity extends BaseActivity {
                 }else {
                     View v = this.findViewById(id);
                     int index = this.mOptions.indexOfChild(v);
-                    if (this.mCurrentStep == 0) {
-                        this.mPlaceDeparture = this.mPlaces.get(index);
-                        Intent intent = new Intent(this, RequestRideActivity.class);
-                        intent.putExtra(DEPARTURE_PLACE_TAG, this.mPlaceDeparture);
-                        intent.putExtra(PLACE_REQUEST_TAG, 1);
-                        intent.putExtra(FORM_TYPE_REQUEST_TAG, this.mForm);
-                        startActivity(intent);
-                    }else{
-                        this.mPlaceDestination = this.mPlaces.get(index);
-                        if(this.mPlaceDeparture.equals(this.mPlaceDestination)){
-                            //TODO SHOW ERROR
-                        }else {
-                            if (this.mForm == FormType.OfferRide) {
-                                Intent intent = new Intent(this, MapActivity.class);
-                                intent.putExtra(MapActivity.DEPARTURE_TAG, this.mPlaceDeparture);
-                                intent.putExtra(MapActivity.DESTINATION_TAG, this.mPlaceDestination);
-                                intent.putExtra(MapActivity.TYPE_MAP_REQUEST, MapRequestEnum.MarkRoute);
-                                startActivity(intent);
+                    Place place = this.mPlaces.get(index);
+                    boolean ok = true;
+                    if(place.description.equals(getString(R.string.txt_current_location))){
+                        if((android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.M &&
+                                AppPartiUVV.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION,
+                                        Manifest.permission.ACCESS_COARSE_LOCATION)) || android.os.Build.VERSION.SDK_INT != Build.VERSION_CODES.M) {
+                            Location location = LocationServices.FusedLocationApi.getLastLocation(mApiClient);
+                            if (location == null) {
+                                //TODO
+                                Log.i("GET_LOC", "Couldn't get current location");
+                                ok = false;
                             } else {
-                                Ride ride = new Ride();
-                                ride.startPoint = this.mPlaceDeparture;
-                                ride.endPoint = this.mPlaceDestination;
-                                ConfirmRideOfferDialog.newInstance(ride, true).show(getSupportFragmentManager(), ".RequestConfirm");
-//                                Intent intent = new Intent(this, CheckRideOffersActivity.class);
-//                                intent.putExtra(CheckRideOffersActivity.DEPARTURE_PLACE_TAG, this.mPlaceDeparture);
-//                                intent.putExtra(CheckRideOffersActivity.DESTINATION_PLACE_TAG, this.mPlaceDestination);
-//                                startActivity(intent);
+                                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                                place.latitude = latLng.latitude;
+                                place.longitude = latLng.longitude;
+                                Log.i("LOC", place.latitude + " - " + place.longitude);
+                                ok = true;
+                            }
+                        }else{
+                            //TODO
+                            ok = false;
+                            Log.i("GET_LOC", "User didn't allow get current location");
+                        }
+                    }else if(place.description.equals(getString(R.string.txt_other))){
+                        //TODO
+                        ok = false;
+                    }
+                    if(ok) {
+                        if (this.mCurrentStep == 0) {
+                            this.mPlaceDeparture = place;
+                            Intent intent = new Intent(this, RequestRideActivity.class);
+                            intent.putExtra(DEPARTURE_PLACE_TAG, this.mPlaceDeparture);
+                            intent.putExtra(PLACE_REQUEST_TAG, 1);
+                            intent.putExtra(FORM_TYPE_REQUEST_TAG, this.mForm);
+                            startActivity(intent);
+                        } else {
+                            this.mPlaceDestination = place;
+                            if (this.mPlaceDeparture.equals(this.mPlaceDestination)) {
+                                //TODO SHOW ERROR
+                            } else {
+                                if (this.mForm == FormType.OfferRide) {
+                                    Intent intent = new Intent(this, MapActivity.class);
+                                    intent.putExtra(MapActivity.DEPARTURE_TAG, this.mPlaceDeparture);
+                                    intent.putExtra(MapActivity.DESTINATION_TAG, this.mPlaceDestination);
+                                    intent.putExtra(MapActivity.TYPE_MAP_REQUEST, MapRequestEnum.MarkRoute);
+                                    startActivity(intent);
+                                } else {
+                                    Ride ride = new Ride();
+                                    ride.startPoint = this.mPlaceDeparture;
+                                    ride.endPoint = this.mPlaceDestination;
+                                    ConfirmRideOfferDialog.newInstance(ride, true).show(getSupportFragmentManager(), ".RequestConfirm");
+                                }
                             }
                         }
                     }
@@ -143,8 +210,21 @@ public class RequestRideActivity extends BaseActivity {
 
     @Subscribe
     @Override
-    void onErrorEvent(EventBusEvents.ErrorEvent event) {
+    public void onErrorEvent(EventBusEvents.ErrorEvent event) {
+        treatCommonErrors(event);
+    }
 
+    @Subscribe
+    public void onGetPlaces(EventBusEvents.PlaceEvent event){
+        String[] options = getResources().getStringArray(R.array.locations);
+        for(int i = 0; i < options.length; i++){
+            Place p = new Place();
+            p.description = options[i];
+            p.id = -1 * (i+1);
+            event.places.add(p);
+        }
+        setUpContent(event.places, -1);
+        this.stopProgressDialog();
     }
 
     @Override
@@ -163,30 +243,33 @@ public class RequestRideActivity extends BaseActivity {
         outState.putSerializable(DESTINATION_PLACE_TAG, this.mPlaceDestination);
     }
 
-    private void setUpContent(int selectedPosition){
+    private void setUpContent(List<Place> places, int selectedPosition){
         this.mOptions = (RadioGroup)findViewById(R.id.optionsGroup);
-
-        String[] options = getResources().getStringArray(R.array.locations);
-        for(int i = 0; i < options.length; i++){
-            Place p = new Place();
-            p.description = options[i];
-            if(i%2 == 0) {
-                p.latitude = -20.354790;
-                p.longitude = -40.340644;
-            }else{
-                p.latitude = -20.347074;
-                p.longitude = -40.311568;
-            }
-            p.id = (i+1)*17;
-            this.mPlaces.add(p);
+        this.mPlaces = places;
+        for(int i = 0; i < this.mPlaces.size(); i++){
+            Place place = this.mPlaces.get(i);
             RadioButton radioButton = new RadioButton(this);
-            radioButton.setText(this.mPlaces.get(i).description);
-            radioButton.setTag("QWEQ" + i);
+            radioButton.setText(place.description);
             this.mOptions.addView(radioButton);
         }
         if(selectedPosition != -1){
             int id = this.mOptions.getChildAt(selectedPosition).getId();
             this.mOptions.check(id);
         }
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 }

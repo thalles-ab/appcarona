@@ -59,6 +59,8 @@ public class RideMapFragment extends Fragment implements GoogleApiClient.Connect
             }
         }else{
             this.mRide = (Ride)savedInstanceState.getSerializable(FRAG_RIDE_TAG);
+            this.mDeparture = (Place)savedInstanceState.getSerializable(FRAG_DEP_TAG);
+            this.mDestination = (Place)savedInstanceState.getSerializable(FRAG_DES_TAG);
         }
     }
 
@@ -77,6 +79,10 @@ public class RideMapFragment extends Fragment implements GoogleApiClient.Connect
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(FRAG_RIDE_TAG, this.mRide);
+        if(this.mDeparture != null) {
+            outState.putSerializable(FRAG_DEP_TAG, this.mDeparture);
+            outState.putSerializable(FRAG_DES_TAG, this.mDestination);
+        }
     }
 
     @Override
@@ -117,11 +123,13 @@ public class RideMapFragment extends Fragment implements GoogleApiClient.Connect
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
         this.mMap.addPolyline(new PolylineOptions().addAll(this.mRide.getDecodedPoints()).color(getResources().getColor(R.color.route_color)));
 
-        this.mMap.addMarker(new MarkerOptions().anchor(0.5f, 1)
-                .position(new LatLng(this.mDeparture.latitude, this.mDeparture.longitude))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        this.mMap.addMarker(new MarkerOptions().anchor(0.5f, 1)
-                .position(new LatLng(this.mDestination.latitude, this.mDestination.longitude))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+        if(this.mDeparture != null) {
+            this.mMap.addMarker(new MarkerOptions().anchor(0.5f, 1)
+                    .position(new LatLng(this.mDeparture.latitude, this.mDeparture.longitude))
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            this.mMap.addMarker(new MarkerOptions().anchor(0.5f, 1)
+                    .position(new LatLng(this.mDestination.latitude, this.mDestination.longitude))
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+        }
     }
 }

@@ -4,7 +4,6 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -13,7 +12,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -77,7 +75,7 @@ public class GeolocationService extends IntentService {
         if(places == null || places.size() == 0){
             EventBus.getDefault().post(new EventBusEvents.ErrorEvent(message));
         } else{
-            EventBus.getDefault().post(new EventBusEvents.PlaceAddressEvent(places));
+            EventBus.getDefault().post(new EventBusEvents.PlaceEvent(places));
         }
     }
 }

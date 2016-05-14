@@ -120,7 +120,6 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
         this.mApiClient.connect();
     }
 
@@ -159,7 +158,6 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
     @Override
     protected void onStop() {
         super.onStop();
-        EventBus.getDefault().unregister(this);
         this.mApiClient.disconnect();
     }
 
@@ -185,8 +183,8 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
 
     @Subscribe
     @Override
-    void onErrorEvent(EventBusEvents.ErrorEvent event) {
-
+    public void onErrorEvent(EventBusEvents.ErrorEvent event) {
+        treatCommonErrors(event);
     }
 
     @Override
@@ -384,7 +382,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
     }
 
     @Subscribe
-    public void getPlaceAddress(EventBusEvents.PlaceAddressEvent event){
+    public void getPlaceAddress(EventBusEvents.PlaceEvent event){
         NewLocationConfirmDialog.newInstance(event.places.get(0)).show(getSupportFragmentManager(), "CONFIRM_NEW_PLACE");
     }
 

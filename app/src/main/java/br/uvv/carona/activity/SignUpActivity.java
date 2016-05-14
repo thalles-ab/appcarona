@@ -26,7 +26,7 @@ public class SignUpActivity extends BaseActivity {
 
     @Subscribe
     @Override
-    void onErrorEvent(EventBusEvents.ErrorEvent event) {
+    public void onErrorEvent(EventBusEvents.ErrorEvent event) {
 
     }
 

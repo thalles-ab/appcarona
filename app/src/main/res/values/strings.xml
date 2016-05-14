@@ -86,11 +86,6 @@
 
     <!-- Options -->
     <string-array name="locations">
-        <item>@string/txt_uvv_boavista</item>
-        <item>@string/txt_uvv_praia_costa</item>
-        <item>@string/txt_uvv_shopping_boulevard</item>
-        <item>@string/txt_house</item>
-        <item>@string/txt_work_place</item>
         <item>@string/txt_current_location</item>
         <item>@string/txt_other</item>
     </string-array>
@@ -99,11 +94,6 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -22,7 +22,7 @@ public class SplashScreenActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(this.mErrorDialog == null || !this.mErrorDialog.getShowsDialog()){
+        if(!this.isShowingError){
             Timer task = new Timer();
             task.schedule(new TimerTask() {
                 @Override
@@ -36,7 +36,7 @@ public class SplashScreenActivity extends BaseActivity {
 
     @Subscribe
     @Override
-    void onErrorEvent(EventBusEvents.ErrorEvent event) {
+    public void onErrorEvent(EventBusEvents.ErrorEvent event) {
 
     }
 }

@@ -31,13 +31,28 @@ import br.uvv.carona.util.EventBusEvents;
 
 public abstract class BaseActivity extends AppCompatActivity {
     private static final int REQUEST_LOCATION_CODE = 10;
+    private static final String IS_SHOWING_ERROR_TAG = ".IS_SHOWING_ERROR";
+    private static final String IS_SHOWING_PROGRESS_DIALOG_TAG = ".IS_SHOWING_PROGRESS_DIALOG";
+    private static final String MESSAGE_PROGRESS_DIALOG_TAG = ".MESSAGE_PROGRESS_DIALOG";
+    private String mProgressDialogMessage;
     private ProgressDialog mProgressDialog;
 
-    protected DialogFragment mErrorDialog;
+    protected boolean isShowingError = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(savedInstanceState == null){
+            this.isShowingError = false;
+        }else{
+            this.isShowingError = savedInstanceState.getBoolean(IS_SHOWING_ERROR_TAG);
+            boolean showingProgress = savedInstanceState.getBoolean(IS_SHOWING_PROGRESS_DIALOG_TAG);
+            if(showingProgress){
+                this.mProgressDialogMessage = savedInstanceState.getString(MESSAGE_PROGRESS_DIALOG_TAG);
+                startProgressDialog(this.mProgressDialogMessage);
+            }
+        }
     }
 
     @Override
@@ -49,6 +64,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putBoolean(IS_SHOWING_ERROR_TAG, this.isShowingError);
+        boolean isShowing = isProgressDialogShowing();
+        outState.putBoolean(IS_SHOWING_PROGRESS_DIALOG_TAG, isShowing);
+        if(isShowing){
+            outState.putString(MESSAGE_PROGRESS_DIALOG_TAG, this.mProgressDialogMessage);
+        }
     }
 
     @Override
@@ -56,18 +77,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onResume();
         String[] request = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
         if (!AppPartiUVV.hasInternetConnection()) {
-            this.mErrorDialog = MessageDialog.newInstance(getString(R.string.msg_turn_on_internet_connection), new MessageDialog.OnDialogButtonClick() {
+            showError(getString(R.string.msg_turn_on_internet_connection), new MessageDialog.OnDialogButtonClick() {
                 @Override
                 public void onConfirmClick(Dialog dialog) {
                     dialog.dismiss();
-                    if(android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1){
+                    if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
                         ActivityCompat.finishAffinity(dialog.getOwnerActivity());
-                    }else {
+                    } else {
                         dialog.getOwnerActivity().finishAffinity();
                     }
                 }
             });
-            this.mErrorDialog.show(getSupportFragmentManager(), "ERROR_NO_CONNECTION");
         } else if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.M &&
                 !AppPartiUVV.hasPermission(request)) {
             ActivityCompat.requestPermissions(this, request, REQUEST_LOCATION_CODE);
@@ -101,24 +121,34 @@ public abstract class BaseActivity extends AppCompatActivity {
                     ((MapActivity)this).enableGoToUserLocation(true);
                 }
             }else{
-                this.mErrorDialog = MessageDialog.newInstance(getString(R.string.msg_allow_location_request), new MessageDialog.OnDialogButtonClick() {
+                showError(getString(R.string.msg_allow_location_request), new MessageDialog.OnDialogButtonClick() {
                     @Override
                     public void onConfirmClick(Dialog dialog) {
                         dialog.dismiss();
-                        //TODO CLOSE APP
+                        //TODO
+//                        if(android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1){
+//                            ActivityCompat.finishAffinity(dialog.getOwnerActivity());
+//                        }else {
+//                            dialog.getOwnerActivity().finishAffinity();
+//                        }
                     }
                 });
-                this.mErrorDialog.show(getSupportFragmentManager(), "ERROR_NO_PERMISSION");
             }
         }
     }
 
     public void startProgressDialog(@StringRes int idString){
+        String message = getString(idString);
+        startProgressDialog(message);
+    }
+
+    public void startProgressDialog(String message){
         if(this.mProgressDialog == null){
             this.mProgressDialog = new ProgressDialog(this);
             this.mProgressDialog.setCancelable(false);
         }
-        this.mProgressDialog.setMessage(getString(idString));
+        this.mProgressDialogMessage = message;
+        this.mProgressDialog.setMessage(this.mProgressDialogMessage);
         this.mProgressDialog.show();
     }
 
@@ -129,17 +159,26 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void stopProgressDialog(){
         if(this.isProgressDialogShowing()){
             this.mProgressDialog.dismiss();
+            this.mProgressDialogMessage = null;
         }
     }
 
-    abstract void onErrorEvent(EventBusEvents.ErrorEvent event);
+    public abstract void onErrorEvent(EventBusEvents.ErrorEvent event);
     protected void treatCommonErrors(EventBusEvents.ErrorEvent event){
-        this.mProgressDialog.dismiss();
+        this.stopProgressDialog();
     }
 
-    @Subscribe
-    public void getErrorEvent(EventBusEvents.ErrorEvent event){
-        treatCommonErrors(event);
+    protected void showError(String message, final MessageDialog.OnDialogButtonClick onDialogButtonClick){
+        if(!this.isShowingError){
+            this.isShowingError = true;
+            MessageDialog.newInstance(message, new MessageDialog.OnDialogButtonClick() {
+                @Override
+                public void onConfirmClick(Dialog dialog) {
+                    BaseActivity.this.isShowingError = false;
+                    onDialogButtonClick.onConfirmClick(dialog);
+                }
+            }).show(getSupportFragmentManager(), "ERROR_DIALOG");
+        }
     }
 
     protected void openGallery(int code){
