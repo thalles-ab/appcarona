@@ -20,7 +20,7 @@ public class BaseAsyncTask<Params, T> extends AsyncTask<Params, T, T> {
     }
 
 
-    //TODO tartar erros do baseObject
+    //TODO tratar erros do baseObject
     @Override
     protected void onPostExecute(T t) {
         super.onPostExecute(t);

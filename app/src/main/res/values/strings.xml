@@ -26,6 +26,7 @@
     <string name="lbl_signup_now">Cadastre-se</string>
     <string name="lbl_signup">Cadastrar</string>
     <string name="lbl_register">Cadastro</string>
+    <string name="lbl_signing_up">Cadastrando...</string>
     <string name="lbl_home">Home</string>
     <string name="lbl_house">Casa</string>
     <string name="lbl_work_place">Trabalho</string>
@@ -45,7 +46,7 @@
     <string name="hint_login">login</string>
     <string name="hint_password">Senha</string>
     <string name="hint_confirm_password">Confirmar senha</string>
-    <string name="hint_name">Nome</string>
+    <string name="hint_name">Nome Completo</string>
     <string name="hint_course">Curso</string>
     <string name="hint_registration">Matrícula</string>
     <string name="hint_phone">Celular</string>
@@ -65,6 +66,8 @@
     <string name="error_fill_field">Preencha este campo.</string>
     <string name="error_empty_field">Este campo é obrigatório.</string>
     <string name="error_password_not_equal">As senhas não são iguais</string>
+    <string name="error_invalid_email">E-mail inválido</string>
+    <string name="error_invalid_phone">Celular inválido</string>
     <string name="error_password_less_than_six">Senha deve ter no mínimo 6 caracteres</string>
 
     <!-- Texts -->
@@ -108,5 +111,6 @@
     <string name="action_settings">Settings</string>
 
     <integer name="input_max_length">255</integer>
+    <integer name="input_register_max_length">9</integer>
 
 </resources>

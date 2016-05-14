@@ -1,9 +1,7 @@
 package br.uvv.carona.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 
@@ -14,13 +12,15 @@ import java.util.List;
 
 import br.uvv.carona.R;
 import br.uvv.carona.asynctask.CreateUserAsyncTask;
+import br.uvv.carona.model.Student;
 import br.uvv.carona.util.EventBusEvents;
+import br.uvv.carona.view.PhoneEditText;
 
 public class SignUpActivity extends BaseActivity {
 
     private EditText mUserName;
     private EditText mUserRegistration;
-    private EditText mUserPhone;
+    private PhoneEditText mUserPhone;
     private EditText mUserEmail;
     private EditText mUserPassword;
     private EditText mUserPasswordConfirmation;
@@ -33,7 +33,7 @@ public class SignUpActivity extends BaseActivity {
 
         mUserName = (EditText)this.findViewById(R.id.fieldUserName);
         mUserRegistration = (EditText)this.findViewById(R.id.fieldUserRegistration);
-        mUserPhone= (EditText)this.findViewById(R.id.fieldUserPhone);
+        mUserPhone= (PhoneEditText)this.findViewById(R.id.fieldUserPhone);
         mUserEmail = (EditText)this.findViewById(R.id.fieldUserEmail);
         mUserPassword = (EditText)this.findViewById(R.id.fieldUserPassword);
         mUserPasswordConfirmation = (EditText)this.findViewById(R.id.fieldUserConfirmPassword);
@@ -70,14 +70,35 @@ public class SignUpActivity extends BaseActivity {
      */
     public void onClickSignUp(View view){
         if(!checkEditTextEmpty(mFields)){
-            if(isPasswordValid()){
-                //TODO chamar async
+            if(isUserFormValid()){
+                startProgressDialog(R.string.lbl_signing_up);
+                new CreateUserAsyncTask().execute(getStudent());
             }
         }
     }
+    @Subscribe
+    public void onError(EventBusEvents.ErrorEvent event){
+        stopProgressDialog();
 
-    private boolean isPasswordValid(){
+    }
+
+    private Student getStudent(){
+        Student student = new Student();
+        student.name = mUserName.getText().toString().trim();
+        student.code = mUserRegistration.getText().toString().trim();
+        student.email = mUserEmail.getText().toString().trim();
+        student.cellPhone = mUserPhone.getCleanText();
+        student.password = mUserPassword.getText().toString().trim();
+        return student;
+    }
+
+    private boolean isUserFormValid(){
         boolean valid = true;
+        if(mUserPhone.getCleanText().length() < 8){
+            mUserPhone.setError(getString(R.string.error_invalid_phone));
+            valid = false;
+        }
+
         if(mUserPassword.getText().length() < 6){
             mUserPassword.setError(getString(R.string.error_password_less_than_six));
             valid = false;
@@ -86,6 +107,12 @@ public class SignUpActivity extends BaseActivity {
             mUserPasswordConfirmation.setError(getString(R.string.error_password_not_equal));
             valid = false;
         }
+
+        if(!Patterns.EMAIL_ADDRESS.matcher(mUserEmail.getText().toString().trim()).matches()){
+            mUserEmail.setError(getString(R.string.error_invalid_email));
+            valid = false;
+        }
+
         return valid;
     }
 }

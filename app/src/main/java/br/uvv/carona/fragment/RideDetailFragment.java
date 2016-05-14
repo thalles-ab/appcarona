@@ -14,13 +14,10 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import br.uvv.carona.R;
 import br.uvv.carona.adapter.RideMembersRecyclerAdapter;
 import br.uvv.carona.model.Ride;
-import br.uvv.carona.model.Student;
 
 public class RideDetailFragment extends Fragment {
     private static final String FRAG_RIDE_DETAIL_TAG = ".FRAG_RIDE_DETAIL_TAG";
@@ -94,7 +91,7 @@ public class RideDetailFragment extends Fragment {
         }
 
         if(this.mRide.student.allowCellphone) {
-            this.mDriverPhone.setText(this.mRide.student.cellphone);
+            this.mDriverPhone.setText(this.mRide.student.cellPhone);
         }
     }
 }

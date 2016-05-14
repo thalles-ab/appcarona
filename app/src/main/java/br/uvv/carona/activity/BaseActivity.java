@@ -30,6 +30,7 @@ import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.dialog.MessageDialog;
 import br.uvv.carona.util.BaseTextWatcher;
 import br.uvv.carona.util.EventBusEvents;
+import br.uvv.carona.view.PhoneEditText;
 
 public abstract class BaseActivity extends AppCompatActivity {
     private static final int REQUEST_LOCATION_CODE = 10;
@@ -83,11 +84,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 @Override
                 public void onConfirmClick(Dialog dialog) {
                     dialog.dismiss();
-                    if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-                        ActivityCompat.finishAffinity(dialog.getOwnerActivity());
-                    } else {
-                        dialog.getOwnerActivity().finishAffinity();
-                    }
+                    ActivityCompat.finishAffinity(dialog.getOwnerActivity());
                 }
             });
         } else if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.M &&
@@ -159,7 +156,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void stopProgressDialog(){
-        if(this.isProgressDialogShowing()){
+        if( this.mProgressDialog!= null && this.isProgressDialogShowing()){
             this.mProgressDialog.dismiss();
             this.mProgressDialogMessage = null;
         }
@@ -217,7 +214,11 @@ public abstract class BaseActivity extends AppCompatActivity {
             boolean answer = false;
             for (EditText editText : fields){
                 editText.addTextChangedListener(new BaseTextWatcher(editText));
-                if(TextUtils.isEmpty(editText.getText().toString().trim())){
+                String text = editText.getText().toString();
+                if(editText instanceof PhoneEditText){
+                    text = ((PhoneEditText)editText).getCleanText().toString();
+                }
+                if(TextUtils.isEmpty(text.trim())){
                     answer = true;
                     editText.setError(getString(R.string.error_fill_field));
                 }
