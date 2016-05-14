@@ -111,10 +111,10 @@ public class RideMapFragment extends Fragment implements GoogleApiClient.Connect
         });
         this.mMap.addMarker(new MarkerOptions().anchor(0.5f, 0.8f)
                 .position(new LatLng(this.mRide.startPoint.latitude, this.mRide.startPoint.longitude))
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ride_start)));
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
         this.mMap.addMarker(new MarkerOptions().anchor(0.5f, 1)
                 .position(new LatLng(this.mRide.endPoint.latitude, this.mRide.endPoint.longitude))
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ride_end)));
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
         this.mMap.addPolyline(new PolylineOptions().addAll(this.mRide.getDecodedPoints()).color(getResources().getColor(R.color.route_color)));
 
         this.mMap.addMarker(new MarkerOptions().anchor(0.5f, 1)

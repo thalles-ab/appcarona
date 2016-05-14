@@ -26,6 +26,10 @@ public class AppPartiUVV extends Application {
         mApplication = this;
     }
 
+    public static void saveToken(String token){
+
+    }
+
     @TargetApi(Build.VERSION_CODES.M)
     public static boolean hasPermission(String... permissions){
         boolean hasPermission = true;

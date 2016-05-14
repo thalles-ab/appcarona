@@ -25,6 +25,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.awt.font.TextAttribute;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ import br.uvv.carona.adapter.RideMembersRecyclerAdapter;
 import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
 import br.uvv.carona.model.Student;
+import br.uvv.carona.util.EventBusEvents;
 
 public class RideDetailActivity extends BaseActivity {
     public static final String IS_NEW_REQUEST_TAG = ".IS_NEW_REQUEST_TAG";
@@ -101,6 +104,12 @@ public class RideDetailActivity extends BaseActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Subscribe
+    @Override
+    void onErrorEvent(EventBusEvents.ErrorEvent event) {
+
     }
 
     @Override

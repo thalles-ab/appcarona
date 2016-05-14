@@ -5,10 +5,13 @@ import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.EditText;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import br.uvv.carona.R;
+import br.uvv.carona.util.EventBusEvents;
 
 public class SignUpActivity extends BaseActivity {
 
@@ -19,6 +22,12 @@ public class SignUpActivity extends BaseActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Subscribe
+    @Override
+    void onErrorEvent(EventBusEvents.ErrorEvent event) {
+
     }
 
     /**

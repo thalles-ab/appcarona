@@ -11,10 +11,10 @@ import br.uvv.carona.util.EventBusEvents;
 /**
  * Created by CB1772 on 12/05/2016.
  */
-public class LoginAsyncTask extends BaseAsyncTask<Student, StudentInfo> {
+public class LoginAsyncTask extends BaseAsyncTask<Student, String> {
 
     @Override
-    protected StudentInfo doInBackground(Student... params) {
+    protected String doInBackground(Student... params) {
         try{
             //TODO WEBSERVER CALL
             StudentInfo studentInfo = new StudentInfo();
@@ -22,7 +22,7 @@ public class LoginAsyncTask extends BaseAsyncTask<Student, StudentInfo> {
             studentInfo.expirationToken.setTime(studentInfo.expirationToken.getTime()+72000000);
             studentInfo.student = params[0];
             studentInfo.token = "asdasdas4a5sdas4dAsf";
-            return studentInfo;
+            return "asdasdas4a5sdas4dAsf";
         }catch (Exception e){
             this.mException = e;
         }
@@ -30,7 +30,7 @@ public class LoginAsyncTask extends BaseAsyncTask<Student, StudentInfo> {
     }
 
     @Override
-    protected void onPostExecute(StudentInfo studentInfo) {
+    protected void onPostExecute(String studentInfo) {
         boolean success = studentInfo != null && this.mException == null;
         if(success){
             EventBus.getDefault().post(new EventBusEvents.LoginEvent(studentInfo));

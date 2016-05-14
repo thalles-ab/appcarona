@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
@@ -37,6 +38,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -65,6 +72,12 @@ public abstract class BaseActivity extends AppCompatActivity {
                 !AppPartiUVV.hasPermission(request)) {
             ActivityCompat.requestPermissions(this, request, REQUEST_LOCATION_CODE);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -119,7 +132,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-//    abstract void treatError(EventBusEvents.ErrorEvent event);
+    abstract void onErrorEvent(EventBusEvents.ErrorEvent event);
     protected void treatCommonErrors(EventBusEvents.ErrorEvent event){
         this.mProgressDialog.dismiss();
     }

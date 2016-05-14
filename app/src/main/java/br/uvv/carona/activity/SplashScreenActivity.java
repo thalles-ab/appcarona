@@ -3,10 +3,13 @@ package br.uvv.carona.activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
 import br.uvv.carona.R;
+import br.uvv.carona.util.EventBusEvents;
 
 public class SplashScreenActivity extends BaseActivity {
 
@@ -29,5 +32,11 @@ public class SplashScreenActivity extends BaseActivity {
                 }
             },2000);
         }
+    }
+
+    @Subscribe
+    @Override
+    void onErrorEvent(EventBusEvents.ErrorEvent event) {
+
     }
 }

@@ -12,10 +12,13 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.List;
 
 import br.uvv.carona.R;
 import br.uvv.carona.model.Place;
+import br.uvv.carona.util.EventBusEvents;
 import br.uvv.carona.util.MapRequestEnum;
 
 
@@ -66,6 +69,12 @@ public class EditProfileActivity extends BaseActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Subscribe
+    @Override
+    void onErrorEvent(EventBusEvents.ErrorEvent event) {
+
     }
 
     @Override

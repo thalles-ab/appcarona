@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +18,7 @@ import br.uvv.carona.adapter.RideOfferRecyclerAdapter;
 import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
 import br.uvv.carona.model.Student;
+import br.uvv.carona.util.EventBusEvents;
 
 public class CheckRideOffersActivity extends BaseActivity {
     public static final String DEPARTURE_PLACE_TAG = ".DEPARTURE_PLACE_TAG";
@@ -67,6 +70,12 @@ public class CheckRideOffersActivity extends BaseActivity {
         super.onSaveInstanceState(outState);
         outState.putSerializable(OFFERS_LIST_TAG, (Serializable) this.mOffers);
         outState.putParcelable(OFFERS_ADAPTER_TAG, this.mRecyclerView.getLayoutManager().onSaveInstanceState());
+    }
+
+    @Subscribe
+    @Override
+    void onErrorEvent(EventBusEvents.ErrorEvent event) {
+
     }
 
     private void addRoute(String name, String photoUrl){

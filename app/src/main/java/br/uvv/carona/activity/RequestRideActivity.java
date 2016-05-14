@@ -12,6 +12,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ import br.uvv.carona.R;
 import br.uvv.carona.dialog.ConfirmRideOfferDialog;
 import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
+import br.uvv.carona.util.EventBusEvents;
 import br.uvv.carona.util.FormType;
 import br.uvv.carona.util.MapRequestEnum;
 
@@ -136,6 +139,12 @@ public class RequestRideActivity extends BaseActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Subscribe
+    @Override
+    void onErrorEvent(EventBusEvents.ErrorEvent event) {
+
     }
 
     @Override

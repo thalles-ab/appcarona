@@ -6,10 +6,11 @@
     <string name="lbl_profile">Perfil</string>
     <string name="lbl_ride">Carona</string>
     <string name="lbl_edit_profile">Editar Perfil</string>
+    <string name="lbl_edit_places">Editar Locais</string>
     <string name="lbl_request_ride">Solicitar Carona</string>
     <string name="lbl_offer_ride">Oferecer Carona</string>
-    <string name="lbl_see_requests">Pedidos em Aberto</string>
-    <string name="lbl_see_completed_rides">Caronas Finalizadas</string>
+    <string name="lbl_see_requests_received">Pedidos Recebidos</string>
+    <string name="lbl_see_requests_made">Pedidos Realizados</string>
     <string name="lbl_offered_rides">Caronas Ofertadas</string>
     <string name="lbl_logout">Sair</string>
     <string name="lbl_map">Mapa</string>
@@ -36,6 +37,8 @@
     <string name="lbl_confirm_ride">Confirmação de Carona</string>
     <string name="lbl_route">Rota</string>
     <string name="lbl_personal_info">Dados Pessoais</string>
+    <string name="lbl_address">Endereço</string>
+    <string name="lbl_description">Descrição</string>
 
     <!-- Hints -->
     <string name="hint_login">login</string>

@@ -5,6 +5,7 @@ import java.util.List;
 import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
 import br.uvv.carona.model.RideRequest;
+import br.uvv.carona.model.Student;
 import br.uvv.carona.model.StudentInfo;
 
 public class EventBusEvents {
@@ -22,6 +23,14 @@ public class EventBusEvents {
 
         public ErrorEvent(String message){
             this.message = message;
+        }
+    }
+
+    public static class UserEvent{
+        public Student student;
+
+        public UserEvent(Student student){
+            this.student = student;
         }
     }
 
@@ -65,10 +74,10 @@ public class EventBusEvents {
     }
 
     public static class LoginEvent{
-        public StudentInfo info;
+        public String token;
 
-        public LoginEvent(StudentInfo info){
-            this.info = info;
+        public LoginEvent(String token){
+            this.token = token;
         }
     }
 

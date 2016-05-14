@@ -40,6 +40,7 @@ import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.asynctask.GetRouteAsyncTask;
 import br.uvv.carona.dialog.ConfirmRideOfferDialog;
+import br.uvv.carona.dialog.NewLocationConfirmDialog;
 import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
 import br.uvv.carona.model.route.RouteRequest;
@@ -182,6 +183,12 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
         return super.onOptionsItemSelected(item);
     }
 
+    @Subscribe
+    @Override
+    void onErrorEvent(EventBusEvents.ErrorEvent event) {
+
+    }
+
     @Override
     public void onConnected(Bundle bundle) {
         if(this.mMap != null) {
@@ -229,13 +236,13 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
             this.mDepartureMarker = this.mMap.addMarker(new MarkerOptions().draggable(false)
                     .position(new LatLng(this.mDeparturePlace.latitude, this.mDeparturePlace.longitude))
                     .anchor(0.5f, 0.62f)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ride_start)));
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
         }
         if(this.mDestinationPlace != null) {
             this.mDestinationMarker = this.mMap.addMarker(new MarkerOptions().draggable(false)
                     .position(new LatLng(this.mDestinationPlace.latitude, this.mDestinationPlace.longitude))
                     .anchor(0.5f, 0.62f)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ride_end)));
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
         }
         if(this.mTypeMapRequest == MapRequestEnum.MarkRoute){
             if(this.mMarkersLatLng != null){
@@ -369,7 +376,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
         finish();
     }
 
-    private void sendResult(List<Place> places){
+    public void sendResult(List<Place> places){
         Intent result = new Intent();
         result.putExtra(PLACES_TAG, (Serializable) places);
         setResult(RESULT_OK, result);
@@ -378,13 +385,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
 
     @Subscribe
     public void getPlaceAddress(EventBusEvents.PlaceAddressEvent event){
-        //TODO verify event's content
-        if (this.mTypeMapRequest == MapRequestEnum.AddPlace) {
-
-        } else if (this.mTypeMapRequest == MapRequestEnum.MarkRoute) {
-
-        }
-        sendResult(event.places);
+        NewLocationConfirmDialog.newInstance(event.places.get(0)).show(getSupportFragmentManager(), "CONFIRM_NEW_PLACE");
     }
 
     @Subscribe

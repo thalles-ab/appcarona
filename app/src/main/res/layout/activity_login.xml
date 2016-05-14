@@ -30,7 +30,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/loginField"
+            android:id="@+id/input_field_registry"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/passwordField"
+            android:id="@+id/input_field_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"

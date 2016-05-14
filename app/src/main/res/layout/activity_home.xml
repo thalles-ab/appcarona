@@ -9,19 +9,10 @@
     tools:openDrawer="start"
     tools:context=".activity.HomeActivity">
 
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/fragment_wrapper"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:paddingRight="@dimen/padding_home_page_user_data"
-        android:paddingLeft="@dimen/padding_home_page_user_data">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/requests"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-    </RelativeLayout>
+        android:layout_height="match_parent"/>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"

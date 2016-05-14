@@ -9,7 +9,14 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import br.uvv.carona.R;
+import br.uvv.carona.application.AppPartiUVV;
+import br.uvv.carona.asynctask.GetUserInfoAsyncTask;
+import br.uvv.carona.asynctask.LoginAsyncTask;
+import br.uvv.carona.model.Student;
+import br.uvv.carona.util.EventBusEvents;
 
 public class LoginActivity extends BaseActivity {
 
@@ -17,14 +24,7 @@ public class LoginActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-//        setLoginWrapperSize();
-
-        // BY PASS
-//        Intent intent = new Intent(this, HomeActivity.class);
-//        startActivity(intent);
     }
-
 
     /**
      * Verifica se todos os campos de login foram preenchidos e inicia
@@ -34,16 +34,18 @@ public class LoginActivity extends BaseActivity {
     public void onClickLogin(View view){
         TextInputLayout inputLogin = (TextInputLayout)findViewById(R.id.input_layout_matricula);
         TextInputLayout inputPassword = (TextInputLayout)findViewById(R.id.input_layout_password);
-        EditText loginField = (EditText) findViewById(R.id.loginField);
-        EditText passwordField = (EditText) findViewById(R.id.passwordField);
+        EditText loginField = (EditText) findViewById(R.id.input_field_registry);
+        EditText passwordField = (EditText) findViewById(R.id.input_field_password);
+        String login = loginField.getText().toString();
+        String password = passwordField.getText().toString();
         boolean nothingIsWrong = true;
-        if(TextUtils.isEmpty(loginField.getText())){
+        if(TextUtils.isEmpty(login)){
             inputLogin.setError(getString(R.string.error_empty_field));
             nothingIsWrong = false;
         }else{
             inputLogin.setErrorEnabled(false);
         }
-        if(TextUtils.isEmpty(passwordField.getText())){
+        if(TextUtils.isEmpty(password)){
             inputPassword.setError(getString(R.string.error_empty_field));
             nothingIsWrong = false;
         }else{
@@ -51,15 +53,15 @@ public class LoginActivity extends BaseActivity {
         }
 
         if(nothingIsWrong){
-            //TODO login event
-
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
+            Student student = new Student();
+            student.code = login;
+            student.password = password;
+            new LoginAsyncTask().execute(student);
         }
     }
 
     public void onClickForgotPassword(View view){
-
+        //TODO
     }
 
     /**
@@ -70,4 +72,20 @@ public class LoginActivity extends BaseActivity {
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
     }
+
+    @Subscribe
+    public void onLoginResult(EventBusEvents.LoginEvent event){
+        AppPartiUVV.saveToken(event.token);
+        new GetUserInfoAsyncTask().execute();
+
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+    }
+
+    @Subscribe
+    @Override
+    void onErrorEvent(EventBusEvents.ErrorEvent event) {
+        treatCommonErrors(event);
+    }
+
 }
