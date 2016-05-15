@@ -20,7 +20,7 @@ import org.greenrobot.eventbus.Subscribe;
 import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.asynctask.GetUserInfoAsyncTask;
-import br.uvv.carona.fragment.RideSolicitationsFragment;
+import br.uvv.carona.fragment.RideStatusFragment;
 import br.uvv.carona.model.Student;
 import br.uvv.carona.util.EventBusEvents;
 import br.uvv.carona.util.FormType;
@@ -150,17 +150,23 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(requestRideIntent);
                 break;
             case R.id.action_check_requests_made:
-                RideSolicitationsFragment fragmentMade = RideSolicitationsFragment.newInstance(RideSolicitationsFragment.TYPE_REQUEST_MADE);
+                RideStatusFragment fragmentMade = RideStatusFragment.newInstance(RideStatusFragment.TYPE_REQUEST_MADE);
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.fragment_wrapper, fragmentMade).commit();
                 break;
             case R.id.action_check_requests_received:
-                RideSolicitationsFragment fragmentReceived = RideSolicitationsFragment.newInstance(RideSolicitationsFragment.TYPE_REQUEST_RECEIVED);
+                RideStatusFragment fragmentReceived = RideStatusFragment.newInstance(RideStatusFragment.TYPE_REQUEST_RECEIVED);
                 FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
                 ft2.replace(R.id.fragment_wrapper, fragmentReceived).commit();
                 break;
             case R.id.action_edit_places:
-                //TODO
+                Intent editPlacesIntent = new Intent(this, EditPlacesActivity.class);
+                startActivity(editPlacesIntent);
+                break;
+            case R.id.action_check_offered_rides:
+                RideStatusFragment fragmentRides = RideStatusFragment.newInstance(RideStatusFragment.TYPE_ACTIVE_RIDE);
+                FragmentTransaction ft3 = getSupportFragmentManager().beginTransaction();
+                ft3.replace(R.id.fragment_wrapper, fragmentRides).commit();
                 break;
             case R.id.action_logout:
                 AppPartiUVV.saveToken(null);

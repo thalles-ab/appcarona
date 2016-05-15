@@ -26,7 +26,7 @@ public class BaseAsyncTask<Params, T> extends AsyncTask<Params, T, T> {
         super.onPostExecute(t);
         if(this.mException != null){
             if(this.mException.getMessage() != null) {
-                Log.e("GET_ROUTE", this.mException.getMessage());
+                Log.e("ERROR", this.mException.getMessage());
             }
 
             //TODO
