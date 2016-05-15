@@ -129,5 +129,6 @@
     <integer name="input_register_min_length">9</integer>
     <integer name="input_phone_max_length">12</integer>
     <integer name="phone_min_length">10</integer>
+    <integer name="password_min_length">6</integer>
 
 </resources>

@@ -136,7 +136,7 @@ public class SignUpActivity extends BaseActivity {
             valid = false;
         }
 
-        if(mUserPassword.getText().length() < 6){
+        if(mUserPassword.getText().length() < getResources().getInteger(R.integer.password_min_length)){
             mUserPassword.setError(getString(R.string.error_password_less_than_six));
             valid = false;
         }else if(!mUserPassword.getText().toString().equals(mUserPasswordConfirmation.getText().toString())){
