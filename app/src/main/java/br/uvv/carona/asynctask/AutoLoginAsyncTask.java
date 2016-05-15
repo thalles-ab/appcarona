@@ -23,7 +23,7 @@ public class AutoLoginAsyncTask extends BaseAsyncTask<String, BaseObject> {
 
     @Override
     protected void onPostExecute(BaseObject studentInfo) {
-        boolean success = studentInfo != null && this.mException == null;
+        boolean success = studentInfo == null && this.mException == null;
         if(success){
             EventBus.getDefault().post(new EventBusEvents.SuccessEvent(true));
         }

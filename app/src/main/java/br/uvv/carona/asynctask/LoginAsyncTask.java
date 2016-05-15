@@ -5,6 +5,7 @@ import org.greenrobot.eventbus.EventBus;
 import br.uvv.carona.model.Student;
 import br.uvv.carona.model.StudentInfo;
 import br.uvv.carona.service.LoginService;
+import br.uvv.carona.service.StudentService;
 import br.uvv.carona.util.EventBusEvents;
 
 /**
@@ -15,7 +16,8 @@ public class LoginAsyncTask extends BaseAsyncTask<Student, StudentInfo> {
     @Override
     protected StudentInfo doInBackground(Student... params) {
         try{
-            return LoginService.login(params[0]);
+            StudentInfo student = LoginService.login(params[0]);
+            return student;
         }catch (Exception e){
             this.mException = e;
         }

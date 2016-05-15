@@ -3,10 +3,12 @@ package br.uvv.carona.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,16 +23,20 @@ import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.asynctask.GetUserInfoAsyncTask;
 import br.uvv.carona.fragment.RideStatusFragment;
+import br.uvv.carona.fragment.RideSolicitationsFragment;
+import br.uvv.carona.httprequest.util.WSResources;
 import br.uvv.carona.model.Student;
 import br.uvv.carona.util.EventBusEvents;
 import br.uvv.carona.util.FormType;
 
 public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
-    private static final String USER_LOGGED_TAG = ".USER_LOGGED_TAG";
+    public static final String EXTRA_USER= "EXTRA_USER";
 
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private FrameLayout mFragmentWrapper;
+    private SimpleDraweeView mUserPhoto;
+    private TextView mUserName;
 
     private Student mUser;
 
@@ -45,6 +51,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         this.mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         this.mNavigationView.setNavigationItemSelectedListener(this);
         this.mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        this.mUserPhoto = (SimpleDraweeView) mNavigationView.getHeaderView(0).findViewById(R.id.user_photo);
+        this.mUserName = (TextView) mNavigationView.getHeaderView(0).findViewById(R.id.user_name);
+
+
         if(this.mDrawerLayout.isDrawerOpen(GravityCompat.START)){
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         }else{
@@ -75,9 +85,28 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 Log.i("DRAWER", "CHANGED");
             }
         });
+        if(savedInstanceState == null){
+            this.mUser = AppPartiUVV.getStudent();
+        }else{
+            this.mUser = (Student) savedInstanceState.getSerializable(EXTRA_USER);
+        }
+        setUserInfo();
+        disableNavigationViewScrollbars(mNavigationView);
+    }
 
-        if(this.mUser == null){
-            new GetUserInfoAsyncTask().execute();
+    private void disableNavigationViewScrollbars(NavigationView navigationView) {
+        if (navigationView != null) {
+            NavigationMenuView navigationMenuView = (NavigationMenuView) navigationView.getChildAt(0);
+            if (navigationMenuView != null) {
+                navigationMenuView.setVerticalScrollBarEnabled(false);
+            }
+        }
+    }
+
+    private void setUserInfo(){
+        mUserName.setText(mUser.name);
+        if(!TextUtils.isEmpty(mUser.photo)){
+            mUserPhoto.setImageURI(Uri.parse(WSResources.BASE_UPLOAD_URL + mUser.photo));
         }
     }
 
@@ -85,7 +114,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if(this.mUser != null){
-            outState.putSerializable(USER_LOGGED_TAG, this.mUser);
+            outState.putSerializable(EXTRA_USER, this.mUser);
         }
     }
 
@@ -105,16 +134,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Subscribe
-    public void onGetUserResult(EventBusEvents.UserEvent event){
-        mUser = event.student;
-        if(this.mUser.photo != null) {
-            ((SimpleDraweeView) this.mNavigationView.getHeaderView(0).findViewById(R.id.user_photo)).setImageURI(Uri.parse(this.mUser.photo));
-        }
-        ((TextView)this.mNavigationView.getHeaderView(0).findViewById(R.id.user_name)).setText(this.mUser.name);
-        this.stopProgressDialog();
-    }
-
-    @Subscribe
     @Override
     public void onErrorEvent(EventBusEvents.ErrorEvent event) {
         this.stopProgressDialog();
@@ -131,10 +150,18 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mUser = AppPartiUVV.getStudent();
+        setUserInfo();
+    }
+
+    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_edit_profile:
                 Intent editProfileIntent = new Intent(this, EditProfileActivity.class);
+                editProfileIntent.putExtra(EXTRA_USER, mUser);
                 startActivity(editProfileIntent);
                 break;
             case R.id.action_offer_ride:
@@ -175,9 +202,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 finish();
                 break;
         }
-
         this.mDrawerLayout.closeDrawer(GravityCompat.START);
-
         return true;
     }
 }

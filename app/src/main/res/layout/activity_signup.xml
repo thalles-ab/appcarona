@@ -71,7 +71,6 @@
             android:layout_height="wrap_content">
 
             <br.uvv.carona.view.PhoneEditText
-                android:maxLength="@integer/input_max_length"
                 android:id="@+id/fieldUserPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

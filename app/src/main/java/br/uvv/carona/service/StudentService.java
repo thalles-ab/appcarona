@@ -17,6 +17,14 @@ public class StudentService {
     }
 
     public static BaseObject updateStudent(Student student) throws Exception {
-        return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequest(HttpMethodUtil.PUT, WSResources.URL_STUDENT, student), BaseObject.class);
+        return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequestWithAuthorization(HttpMethodUtil.PUT, WSResources.URL_STUDENT, AppPartiUVV.getToken(), student), BaseObject.class);
+    }
+
+    public static Student getStudent(Long id) throws Exception {
+        String param = null;
+        if(id > 0){
+            param = "id=" + id;
+        }
+        return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequestWithAuthorization(HttpMethodUtil.GET, WSResources.URL_STUDENT, AppPartiUVV.getToken(), param), Student.class);
     }
 }

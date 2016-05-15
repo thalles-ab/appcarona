@@ -55,6 +55,9 @@
     <string name="lbl_refuse_solicitation">Recusar pedido</string>
     <string name="lbl_accept_solicitation">Aceitar pedido</string>
     <string name="lbl_see_ride">Ver Carona</string>
+    <string name="lbl_select_source">Selecione a origem:</string>
+    <string name="lbl_updating_photo">Atualizando foto...</string>
+    <string name="lbl_updating_profile">Atualizando perfil...</string>
     <string name="lbl_edit_place_description">Editar nome do lugar</string>
     <string name="lbl_edit_place">Editar Local</string>
 
@@ -86,6 +89,10 @@
     <string name="error_invalid_phone">Celular inválido</string>
     <string name="error_invalid_registration">Matrícula deve conter 9 digitos</string>
     <string name="error_password_less_than_six">Senha deve ter no mínimo 6 caracteres</string>
+
+
+    <!-- Successs -->
+    <string name="success_profile_updated">Seu perfil foi atualizado</string>
 
     <!-- Texts -->
     <string name="txt_select">Selecione</string>

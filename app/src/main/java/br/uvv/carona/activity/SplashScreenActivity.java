@@ -12,7 +12,7 @@ import java.util.TimerTask;
 import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.asynctask.AutoLoginAsyncTask;
-import br.uvv.carona.asynctask.LoginAsyncTask;
+import br.uvv.carona.asynctask.GetUserInfoAsyncTask;
 import br.uvv.carona.util.EventBusEvents;
 
 public class SplashScreenActivity extends BaseActivity {
@@ -40,7 +40,12 @@ public class SplashScreenActivity extends BaseActivity {
 
     @Subscribe
     public void onSuccessEvent(EventBusEvents.SuccessEvent event){
-        stopProgressDialog();
+        new GetUserInfoAsyncTask().execute(new Long(0));
+    }
+
+    @Subscribe
+    public void onEventGetUser(EventBusEvents.UserEvent event){
+        AppPartiUVV.persistUser(event.student);
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
     }

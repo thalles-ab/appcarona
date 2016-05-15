@@ -17,6 +17,7 @@
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
+            fresco:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             fresco:layout_scrollFlags="scroll|exitUntilCollapsed"
@@ -66,69 +67,65 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lbl_personal_info"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/profile_user_name_lt"
+                        android:id="@+id/input_layout_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <EditText
-                            android:id="@+id/profile_user_name"
+                            android:inputType="text"
+                            android:id="@+id/fieldUserName"
+                            android:maxLength="@integer/input_max_length"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/hint_name"
-                            android:maxLines="1"/>
-
+                            android:singleLine="true"
+                            android:hint="@string/hint_name" />
                     </android.support.design.widget.TextInputLayout>
 
+
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/profile_user_registration_lt"
+                        android:id="@+id/input_layout_matricula"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <EditText
-                            android:id="@+id/profile_user_registration"
+                            android:maxLength="@integer/input_register_min_length"
+                            android:id="@+id/fieldUserRegistration"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:singleLine="true"
                             android:inputType="number"
-                            android:hint="@string/hint_registration"
-                            android:maxLines="1"/>
-
+                            android:hint="@string/hint_registration" />
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/profile_user_email_lt"
+                        android:id="@+id/input_layout_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <EditText
-                            android:id="@+id/profile_user_email"
+                            android:maxLength="@integer/input_max_length"
+                            android:id="@+id/fieldUserEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:singleLine="true"
                             android:inputType="textWebEmailAddress"
-                            android:hint="@string/hint_email"
-                            android:maxLines="1"/>
-
+                            android:hint="@string/hint_email" />
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/profile_user_phone_lt"
+                        android:id="@+id/input_layout_phone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <EditText
-                            android:id="@+id/profile_user_phone"
+                        <br.uvv.carona.view.PhoneEditText
+                            android:maxLength="@integer/input_max_length"
+                            android:id="@+id/fieldUserPhone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:singleLine="true"
                             android:inputType="phone"
-                            android:hint="@string/hint_phone"
-                            android:maxLines="1"/>
-
+                            android:hint="@string/hint_phone" />
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
 
