@@ -19,4 +19,8 @@ public class StudentService {
     public static BaseObject updateStudent(Student student) throws Exception {
         return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequest(HttpMethodUtil.PUT, WSResources.URL_STUDENT, student), BaseObject.class);
     }
+
+    public static Student getStudent(Student student) throws Exception {
+        return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequest(HttpMethodUtil.PUT, WSResources.URL_STUDENT, student), Student.class);
+    }
 }

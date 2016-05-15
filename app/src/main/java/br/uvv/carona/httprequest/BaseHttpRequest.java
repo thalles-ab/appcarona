@@ -1,20 +1,30 @@
 package br.uvv.carona.httprequest;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.URLConnection;
 
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.httprequest.util.HttpMethodUtil;
+import br.uvv.carona.model.Student;
 
 public class BaseHttpRequest{
 
@@ -30,12 +40,20 @@ public class BaseHttpRequest{
     private static String getRequest(HttpMethodUtil method, String url, String authorization, Object object) throws Exception{
         String response = "";
         String params = "";
+        final String boundary = Long.toString(System.currentTimeMillis());
+        final String twoHyphens = "--";
+        final String end = "\r\n";
+        int maxBufferSize = 1*1024*1024;
         HttpURLConnection connection = null;
         try {
             URL urlink = new URL(url);
             connection = (HttpURLConnection)urlink.openConnection();
-            connection.addRequestProperty("Content-Type",
-                    "application/json");
+            if(object instanceof Student && ((Student) object).file != null && ((Student) object).file.exists()){
+                connection.addRequestProperty("Content-Type", "multipart/form-data;boundary="+ boundary);
+            }else {
+                connection.addRequestProperty("Content-Type",
+                        "application/json");
+            }
             if(!TextUtils.isEmpty(authorization)){
                 connection.addRequestProperty("Authorization", authorization);
             }
@@ -67,12 +85,50 @@ public class BaseHttpRequest{
             connection.setDoOutput(doOutput);
 
             if(doOutput){
-                params = AppPartiUVV.sGson.toJson(object);
-                connection.setFixedLengthStreamingMode(
-                        params.getBytes().length);
-                PrintWriter out = new PrintWriter(connection.getOutputStream());
-                out.print(params);
-                out.close();
+                if(object instanceof Student && ((Student) object).file != null && ((Student) object).file.exists()){
+                    Student student = (Student) object;
+                    File file = student.file;
+                    DataOutputStream dataOS = new DataOutputStream(connection.getOutputStream());
+                    dataOS.writeBytes(twoHyphens + boundary + end);
+                    dataOS.writeBytes("Content-Disposition: form-data; name=\"fileUpload\"; filename=\"" + file.getName() + "\"" + end);
+                    dataOS.writeBytes("Content-Type: " + URLConnection.guessContentTypeFromName(file.getName()) + end);
+                    dataOS.writeBytes("Content-Transfer-Encoding: binary" + end);
+                    dataOS.writeBytes(end);
+
+                    Bitmap bmp = BitmapFactory.decodeFile(file.getPath());
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    bmp.compress(Bitmap.CompressFormat.PNG, 50, bos);
+                    InputStream inputStream = new ByteArrayInputStream(bos.toByteArray());
+//                    FileInputStream inputStream = new FileInputStream(file);
+                    int bytesAvailable = inputStream.available();
+                    int bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                    byte[] buffer = new byte[bufferSize];
+                    int bytesRead = inputStream.read(buffer, 0, bufferSize);
+                    while(bytesRead > 0) {
+                        dataOS.write(buffer, 0, bufferSize);
+                        bytesAvailable = inputStream.available();
+                        bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                        bytesRead = inputStream.read(buffer, 0, bufferSize);
+                    }
+                    dataOS.writeBytes(end);
+                    dataOS.writeBytes(twoHyphens + boundary + end);
+                    dataOS.writeBytes("Content-Disposition: form-data; name=\"id\"" + end);
+                    dataOS.writeBytes("Content-Type: text/plain" + end);
+                    dataOS.writeBytes(end);
+                    dataOS.writeBytes(String.valueOf(student.id));
+                    dataOS.writeBytes(end);
+                    dataOS.writeBytes(twoHyphens + boundary + twoHyphens + end);
+                    inputStream.close();
+                    dataOS.flush();
+                    dataOS.close();
+                }else {
+                    params = AppPartiUVV.sGson.toJson(object);
+                    connection.setFixedLengthStreamingMode(
+                            params.getBytes().length);
+                    PrintWriter out = new PrintWriter(connection.getOutputStream());
+                    out.print(params);
+                    out.close();
+                }
             }
 
             connection.connect();

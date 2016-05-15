@@ -54,6 +54,7 @@
     <string name="lbl_refuse_request">Recusar pedido</string>
     <string name="lbl_accept_request">Aceitar pedido</string>
     <string name="lbl_see_ride">Ver Carona</string>
+    <string name="lbl_select_source">Selecione a origem:</string>
 
     <!-- Hints -->
     <string name="hint_login">login</string>
