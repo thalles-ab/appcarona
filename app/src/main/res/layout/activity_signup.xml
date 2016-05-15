@@ -41,7 +41,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:maxLength="@integer/input_register_max_length"
+                android:maxLength="@integer/input_register_min_length"
                 android:id="@+id/fieldUserRegistration"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

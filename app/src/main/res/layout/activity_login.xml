@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".activity.LoginActivity">
 
     <LinearLayout
@@ -33,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:maxLength="@integer/input_register_max_length"
+            android:maxLength="@integer/input_register_min_length"
             android:inputType="number"
             android:hint="@string/hint_registration" />
     </android.support.design.widget.TextInputLayout>
