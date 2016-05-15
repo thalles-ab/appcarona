@@ -3,10 +3,12 @@ package br.uvv.carona.application;
 import android.annotation.TargetApi;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 

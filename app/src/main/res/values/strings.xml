@@ -50,9 +50,10 @@
     <string name="lbl_passagers">Passageiros</string>
     <string name="lbl_passager">Passageiro</string>
     <string name="lbl_save">salvar</string>
-    <string name="lbl_cancel_request">Cancelar pedido</string>
-    <string name="lbl_refuse_request">Recusar pedido</string>
-    <string name="lbl_accept_request">Aceitar pedido</string>
+    <string name="lbl_cancel_solicitation">Cancelar pedido</string>
+    <string name="lbl_cancel_offer">Cancelar carona</string>
+    <string name="lbl_refuse_solicitation">Recusar pedido</string>
+    <string name="lbl_accept_solicitation">Aceitar pedido</string>
     <string name="lbl_see_ride">Ver Carona</string>
 
     <!-- Hints -->
@@ -93,6 +94,10 @@
     <string name="txt_uvv_praia_costa">UVV - Campus Praia da Costa</string>
     <string name="txt_uvv_shopping_boulevard">UVV - Shopping Boulevard</string>
     <string name="txt_today">Hoje</string>
+    <string name="txt_accepted">Aceito</string>
+    <string name="txt_denied">Recusado</string>
+    <string name="txt_waiting_response">Aguardando</string>
+    <string name="txt_cancelled">Cancelado</string>
 
     <!-- Messages -->
     <string name="msg_error_get_address">Não foi possível adquirir o endereço da localização indicada.</string>
