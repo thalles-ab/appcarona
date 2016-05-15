@@ -11,7 +11,6 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.uvv.carona.BuildConfig;
 import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.asynctask.CreateUserAsyncTask;
@@ -127,8 +126,13 @@ public class SignUpActivity extends BaseActivity {
 
     private boolean isUserFormValid(){
         boolean valid = true;
-        if(mUserPhone.getCleanText().length() < 8){
+        if(mUserPhone.getCleanText().length() < getResources().getInteger(R.integer.phone_min_length)){
             mUserPhone.setError(getString(R.string.error_invalid_phone));
+            valid = false;
+        }
+
+        if(mUserRegistration.getText().toString().trim().length() < getResources().getInteger(R.integer.input_register_min_length)){
+            mUserRegistration.setError(getString(R.string.error_invalid_registration));
             valid = false;
         }
 

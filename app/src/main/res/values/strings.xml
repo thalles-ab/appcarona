@@ -81,6 +81,7 @@
     <string name="error_password_not_equal">As senhas não são iguais</string>
     <string name="error_invalid_email">E-mail inválido</string>
     <string name="error_invalid_phone">Celular inválido</string>
+    <string name="error_invalid_registration">Matrícula deve conter 9 digitos</string>
     <string name="error_password_less_than_six">Senha deve ter no mínimo 6 caracteres</string>
 
     <!-- Texts -->
@@ -123,7 +124,10 @@
 
     <string name="action_settings">Settings</string>
 
+    <!-- Integers -->
     <integer name="input_max_length">255</integer>
-    <integer name="input_register_max_length">9</integer>
+    <integer name="input_register_min_length">9</integer>
+    <integer name="input_phone_max_length">12</integer>
+    <integer name="phone_min_length">10</integer>
 
 </resources>
