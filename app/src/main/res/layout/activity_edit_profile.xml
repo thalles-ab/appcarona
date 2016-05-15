@@ -17,6 +17,7 @@
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
+            fresco:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             fresco:layout_scrollFlags="scroll|exitUntilCollapsed"
