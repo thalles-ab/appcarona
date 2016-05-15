@@ -45,6 +45,7 @@ public class EventBusEvents {
     public static class PlaceEvent {
         public Place place;
         public List<Place> places;
+        public int callerId = -1;
 
         public PlaceEvent(Place place){
             this.place = place;
@@ -52,6 +53,16 @@ public class EventBusEvents {
 
         public PlaceEvent(List<Place> places) {
             this.places = places;
+        }
+
+        public PlaceEvent(Place place, int callerId){
+            this.place = place;
+            this.callerId = callerId;
+        }
+
+        public PlaceEvent(List<Place> places, int callerId) {
+            this.places = places;
+            this.callerId = callerId;
         }
     }
 

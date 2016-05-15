@@ -15,9 +15,6 @@ import java.io.Serializable;
 import br.uvv.carona.R;
 import br.uvv.carona.activity.BaseActivity;
 
-/**
- * Created by CB1772 on 11/05/2016.
- */
 public class MessageDialog extends DialogFragment {
     private static final String MESSAGE_TAG = ".MESSAGE_TAG";
     private static final String ON_DIALOG_BTN_CLICK = ".ON_DIALOG_BTN_CLICK";

@@ -32,6 +32,8 @@
     <dimen name="padding_request_ride_wrapper">15dp</dimen>
     <dimen name="padding_dialog_button_wrapper">@dimen/stroke_dialog</dimen>
     <dimen name="padding_profile_page">30dp</dimen>
+    <dimen name="padding_place_item_a">5dp</dimen>
+    <dimen name="padding_place_item_b">10dp</dimen>
 
     <!-- Size, Width and Height -->
     <dimen name="width_login_fields">200dp</dimen>

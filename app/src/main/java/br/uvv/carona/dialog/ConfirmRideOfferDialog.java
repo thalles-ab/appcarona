@@ -10,18 +10,22 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import br.uvv.carona.R;
 import br.uvv.carona.activity.BaseActivity;
 import br.uvv.carona.activity.CheckRideOffersActivity;
+import br.uvv.carona.activity.MapActivity;
 import br.uvv.carona.asynctask.NewRideOfferAsyncTask;
 import br.uvv.carona.model.Ride;
 import br.uvv.carona.util.DateFormatUtil;
@@ -39,6 +43,7 @@ public class ConfirmRideOfferDialog extends DialogFragment {
     private TextView mDateField;
     private TextView mTimeField;
     private Spinner mNumberPassagers;
+    private ArrayAdapter<Integer> mAdapter;
 
     private Ride mRoute;
     private boolean mIsRideRequest;
@@ -70,6 +75,12 @@ public class ConfirmRideOfferDialog extends DialogFragment {
         this.mDateField = (TextView)this.mDialog.findViewById(R.id.rideDate);
         this.mTimeField = (TextView)this.mDialog.findViewById(R.id.rideHour);
         this.mNumberPassagers = (Spinner)this.mDialog.findViewById(R.id.numberPassagersSB);
+        int[] itens = getResources().getIntArray(R.array.qnt_passagers);
+        List<Integer> items = new ArrayList<>();
+        for(int i : itens){
+            items.add(i);
+        }
+        this.mAdapter = new ArrayAdapter<>(getContext(), R.layout.layout_ride_solicitation_option_item, items);
 
         this.mDialog.findViewById(R.id.cancel_action).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +97,12 @@ public class ConfirmRideOfferDialog extends DialogFragment {
                     intent.putExtra(CheckRideOffersActivity.DESTINATION_PLACE_TAG, mRoute.endPoint);
                     startActivity(intent);
                 }else{
-                    new NewRideOfferAsyncTask().execute(mRoute);
+                    ((MapActivity)getActivity()).startProgressDialog(R.string.msg_sending_ride);
+                    int p = mNumberPassagers.getSelectedItemPosition();
+                    Integer text = mAdapter.getItem(p);
+                    Integer qnt = text;
+//                    mRoute.quantityPassengers = 1;
+//                    new NewRideOfferAsyncTask().execute(mRoute);
                 }
             }
         });

@@ -55,6 +55,8 @@
     <string name="lbl_refuse_solicitation">Recusar pedido</string>
     <string name="lbl_accept_solicitation">Aceitar pedido</string>
     <string name="lbl_see_ride">Ver Carona</string>
+    <string name="lbl_edit_place_description">Editar nome do lugar</string>
+    <string name="lbl_edit_place">Editar Local</string>
 
     <!-- Hints -->
     <string name="hint_login">login</string>
@@ -101,6 +103,9 @@
     <string name="txt_cancelled">Cancelado</string>
 
     <!-- Messages -->
+    <string name="msg_sending_ride">Enviando carona&#8230;</string>
+    <string name="msg_saving_place">Salvando local&#8230;</string>
+    <string name="msg_getting_places">Buscando locais salvos&#8230;</string>
     <string name="msg_error_get_address">Não foi possível adquirir o endereço da localização indicada.</string>
     <string name="msg_error_couldnt_get_route">Não foi possível adquirir a rota para os pontos indicados.\nPor favor, tente novamente.</string>
     <string name="msg_getting_route">Buscando rota&#8230;</string>
@@ -113,12 +118,12 @@
         <item>@string/txt_current_location</item>
         <item>@string/txt_other</item>
     </string-array>
-    <string-array name="qnt_passagers">
+    <integer-array name="qnt_passagers">
         <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
-    </string-array>
+    </integer-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

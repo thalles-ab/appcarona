@@ -29,19 +29,19 @@ import br.uvv.carona.model.Student;
 import br.uvv.carona.model.enums.TypeSituation;
 import br.uvv.carona.util.DateFormatUtil;
 
-public class RideSolicitationStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RideStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<RideSolicitation> mSolicitations;
     private List<Ride> mRides;
     private Context mContext;
     private int mTypeSolicitation;
 
-    public RideSolicitationStatusAdapter(List<RideSolicitation> offers, Context context, int typeSolicitation){
+    public RideStatusAdapter(List<RideSolicitation> offers, Context context, int typeSolicitation){
         this.mSolicitations = offers;
         this.mContext = context;
         this.mTypeSolicitation = typeSolicitation;
     }
 
-    public RideSolicitationStatusAdapter(List<Ride> offers, Context context){
+    public RideStatusAdapter(List<Ride> offers, Context context){
         this.mRides = offers;
         this.mContext = context;
         this.mTypeSolicitation = RideStatusFragment.TYPE_ACTIVE_RIDE;
@@ -93,7 +93,7 @@ public class RideSolicitationStatusAdapter extends RecyclerView.Adapter<Recycler
                             String text = adapter.getItem(position);
                             if(text.equals(mContext.getString(R.string.lbl_see_ride))){
                                 Intent intent = new Intent(v.getContext(), RideDetailActivity.class);
-                                intent.putExtra(RideDetailActivity.IS_NEW_REQUEST_TAG, true);
+                                intent.putExtra(RideDetailActivity.IS_NEW_REQUEST_TAG, false);
                                 intent.putExtra(RideDetailActivity.RIDE_TAG, ride);
                                 v.getContext().startActivity(intent);
                             }else{
@@ -113,7 +113,7 @@ public class RideSolicitationStatusAdapter extends RecyclerView.Adapter<Recycler
                     options.setAnchorView(v);
                     options.setWidth(AppBarLayout.LayoutParams.WRAP_CONTENT);
                     final ArrayAdapter<String> adapter;
-                    if (RideSolicitationStatusAdapter.this.mTypeSolicitation == RideStatusFragment.TYPE_REQUEST_MADE) {
+                    if (RideStatusAdapter.this.mTypeSolicitation == RideStatusFragment.TYPE_REQUEST_MADE) {
                         String[] optionsTxt = {mContext.getString(R.string.lbl_see_ride),
                                 mContext.getString(R.string.lbl_cancel_offer)};
                         adapter = new ArrayAdapter(v.getContext(), R.layout.layout_ride_solicitation_option_item, optionsTxt);

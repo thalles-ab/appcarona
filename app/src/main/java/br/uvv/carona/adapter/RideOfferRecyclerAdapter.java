@@ -2,6 +2,7 @@ package br.uvv.carona.adapter;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -72,7 +73,7 @@ public class RideOfferRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         public TextView driverName;
         public TextView rideTime;
         public TextView rideDate;
-        public RelativeLayout wrapper;
+        public CardView wrapper;
 
         public RideOfferViewHolder(View itemView) {
             super(itemView);
@@ -81,7 +82,7 @@ public class RideOfferRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             this.driverName = (TextView)itemView.findViewById(R.id.driverName);
             this.rideTime = (TextView)itemView.findViewById(R.id.ride_time);
             this.rideDate = (TextView)itemView.findViewById(R.id.ride_date);
-            this.wrapper = (RelativeLayout)itemView.findViewById(R.id.ride_wrapper);
+            this.wrapper = (CardView)itemView.findViewById(R.id.ride_wrapper);
         }
     }
 }

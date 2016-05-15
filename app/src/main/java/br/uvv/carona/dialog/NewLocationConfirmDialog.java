@@ -10,12 +10,17 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import br.uvv.carona.R;
 import br.uvv.carona.activity.MapActivity;
+import br.uvv.carona.asynctask.SavePlaceAsyncTask;
 import br.uvv.carona.model.Place;
+import br.uvv.carona.util.EventBusEvents;
 
 public class NewLocationConfirmDialog extends DialogFragment implements View.OnClickListener{
     private static final String PLACE_TAG = ".PLACE_TAG";
@@ -63,6 +68,23 @@ public class NewLocationConfirmDialog extends DialogFragment implements View.OnC
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        if(this.mPlace != null) {
+            String address = this.mPlace.description;
+            this.mAddressField.setText(address);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(PLACE_TAG, this.mPlace);
     }
 
     @Override
@@ -72,14 +94,26 @@ public class NewLocationConfirmDialog extends DialogFragment implements View.OnC
         }else{
             String description = this.mDescriptionField.getText().toString();
             if(TextUtils.isEmpty(description)){
-                ((TextInputLayout)this.mDialog.findViewById(R.id.input_layout_departure)).setErrorEnabled(true);
-                ((TextInputLayout)this.mDialog.findViewById(R.id.input_layout_departure)).setError("");
+                mDescriptionField.setError(getString(R.string.error_fill_field));
             }else {
-                ((TextInputLayout)this.mDialog.findViewById(R.id.input_layout_departure)).setErrorEnabled(false);
                 this.mPlace.description = description;
-                ((MapActivity) this.mDialog.getOwnerActivity()).sendResult(this.mPlace);
-                this.mDialog.dismiss();
+                ((MapActivity) this.mDialog.getOwnerActivity()).startProgressDialog(R.string.msg_saving_place);
+                new SavePlaceAsyncTask().execute(this.mPlace);
             }
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onSuccessEvent(EventBusEvents.SuccessEvent event){
+        if(event.success){
+            ((MapActivity) this.mDialog.getOwnerActivity()).sendResult(this.mPlace);
+            this.mDialog.dismiss();
         }
     }
 }

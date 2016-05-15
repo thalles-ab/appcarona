@@ -28,6 +28,7 @@ import java.util.List;
 
 import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
+import br.uvv.carona.asynctask.GetUserPlacesAsyncTask;
 import br.uvv.carona.dialog.ConfirmRideOfferDialog;
 import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
@@ -36,14 +37,14 @@ import br.uvv.carona.util.EventBusEvents;
 import br.uvv.carona.util.FormType;
 import br.uvv.carona.util.MapRequestEnum;
 
-public class RequestRideActivity extends BaseActivity implements ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-    public static final String PLACE_REQUEST_TAG = ".PLACE_REQUEST_TAG";
-    public static final String FORM_TYPE_REQUEST_TAG = ".FORM_TYPE_REQUEST_TAG";
-    public static final String DEPARTURE_PLACE_TAG = ".DEPARTURE_PLACE_TAG";
-    public static final String DESTINATION_PLACE_TAG = ".DESTINATION_PLACE_TAG";
-    public static final String RADIO_SELECTION_TAG = ".DEPARTURE_PLACE_TAG";
-    public static final String PLACES_TAG = ".PLACES_TAG";
-    public static final int REQUEST_NEW_PLACE_CODE = 10;
+public class RequestRideStep2Activity extends BaseActivity implements ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+    public static final String PLACE_REQUEST_TAG = ".PLACE_REQUEST_DESTINATION_TAG";
+    public static final String FORM_TYPE_REQUEST_TAG = ".FORM_TYPE_REQUEST_DESTINATION_TAG";
+    public static final String DEPARTURE_PLACE_TAG = ".DEPARTURE_PLACE_DESTINATION_TAG";
+    public static final String DESTINATION_PLACE_TAG = ".DESTINATION_DESTINATION_PLACE_TAG";
+    public static final String RADIO_SELECTION_TAG = ".DEPARTURE_DESTINATION_PLACE_TAG";
+    public static final String PLACES_TAG = ".PLACES_DESTINATION_TAG";
+    public static final int REQUEST_NEW_PLACE_CODE = 11;
 
     private RadioGroup mOptions;
     private GoogleApiClient mApiClient;
@@ -61,7 +62,7 @@ public class RequestRideActivity extends BaseActivity implements ConnectionCallb
 
         int selectionPosition;
         if(savedInstanceState == null){
-            this.mCurrentStep = getIntent().getIntExtra(PLACE_REQUEST_TAG, 0);
+            this.mCurrentStep = getIntent().getIntExtra(PLACE_REQUEST_TAG, -1);
             this.mForm = (FormType)getIntent().getSerializableExtra(FORM_TYPE_REQUEST_TAG);
             this.mPlaces = new ArrayList<>();
             this.mPlaceDeparture = null;
@@ -71,25 +72,16 @@ public class RequestRideActivity extends BaseActivity implements ConnectionCallb
             }
             selectionPosition = -1;
 
-            String[] options = getResources().getStringArray(R.array.locations);
-            for(int i = 0; i < options.length; i++){
-                Place p = new Place();
-                p.id = -1 * (i+1);
-                if(this.mPlaceDeparture == null || this.mPlaceDeparture.id != p.id){
-                    p.description = options[i];
-                    p.latitude = 0;
-                    p.longitude = 0;
-                    this.mPlaces.add(p);
-                }
-            }
-            //TODO MAKE CALL TO SERVER
+            startProgressDialog(R.string.msg_getting_places);
+            new GetUserPlacesAsyncTask(this.mCurrentStep).execute();
+
         }else{
             this.mCurrentStep = savedInstanceState.getInt(PLACE_REQUEST_TAG);
-            this.mForm = (FormType)savedInstanceState.getSerializable(FORM_TYPE_REQUEST_TAG);
-            this.mPlaces = (List<Place>)savedInstanceState.getSerializable(PLACES_TAG);
-            this.mPlaceDeparture = (Place)savedInstanceState.getSerializable(DEPARTURE_PLACE_TAG);
-            this.mPlaceDestination = (Place)savedInstanceState.getSerializable(DESTINATION_PLACE_TAG);
-            selectionPosition = savedInstanceState.getInt(RADIO_SELECTION_TAG);
+            this.mForm = (FormType)savedInstanceState.getSerializable(FORM_TYPE_REQUEST_TAG+this.mCurrentStep);
+            this.mPlaces = (List<Place>)savedInstanceState.getSerializable(PLACES_TAG+this.mCurrentStep);
+            this.mPlaceDeparture = (Place)savedInstanceState.getSerializable(DEPARTURE_PLACE_TAG+this.mCurrentStep);
+            this.mPlaceDestination = (Place)savedInstanceState.getSerializable(DESTINATION_PLACE_TAG+this.mCurrentStep);
+            selectionPosition = savedInstanceState.getInt(RADIO_SELECTION_TAG+this.mCurrentStep);
         }
 
         this.mApiClient = new GoogleApiClient.Builder(this)
@@ -152,9 +144,9 @@ public class RequestRideActivity extends BaseActivity implements ConnectionCallb
                     Place place = this.mPlaces.get(index);
                     boolean ok = true;
                     if(place.description.equals(getString(R.string.txt_current_location))){
-                        if((android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.M &&
+                        if((Build.VERSION.SDK_INT == Build.VERSION_CODES.M &&
                                 AppPartiUVV.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION,
-                                        Manifest.permission.ACCESS_COARSE_LOCATION)) || android.os.Build.VERSION.SDK_INT != Build.VERSION_CODES.M) {
+                                        Manifest.permission.ACCESS_COARSE_LOCATION)) || Build.VERSION.SDK_INT != Build.VERSION_CODES.M) {
                             Location location = LocationServices.FusedLocationApi.getLastLocation(mApiClient);
                             if (location == null) {
                                 //TODO
@@ -187,10 +179,11 @@ public class RequestRideActivity extends BaseActivity implements ConnectionCallb
     private void goToNextStep(Place place){
         if (this.mCurrentStep == 0) {
             this.mPlaceDeparture = place;
-            Intent intent = new Intent(this, RequestRideActivity.class);
+            Intent intent = new Intent(this, RequestRideStep2Activity.class);
             intent.putExtra(DEPARTURE_PLACE_TAG, this.mPlaceDeparture);
             intent.putExtra(PLACE_REQUEST_TAG, 1);
             intent.putExtra(FORM_TYPE_REQUEST_TAG, this.mForm);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else {
             this.mPlaceDestination = place;
@@ -222,21 +215,25 @@ public class RequestRideActivity extends BaseActivity implements ConnectionCallb
 
     @Subscribe
     public void onGetPlaces(EventBusEvents.PlaceEvent event){
-        if(event.place == null) {
-            String[] options = getResources().getStringArray(R.array.locations);
-            for (int i = 0; i < options.length; i++) {
-                Place p = new Place();
-                p.description = options[i];
-                p.id = -1 * (i + 1);
-                event.places.add(p);
+        if(this.mCurrentStep == event.callerId || event.callerId == -1) {
+            if (event.place == null) {
+                String[] options = getResources().getStringArray(R.array.locations);
+                for (int i = 0; i < options.length; i++) {
+                    Place p = new Place();
+                    p.description = options[i];
+                    p.id = -1 * (i + 1);
+                    if (!event.places.contains(p)) {
+                        event.places.add(p);
+                    }
+                }
+                this.stopProgressDialog();
+                setUpContent(event.places, -1);
+            } else {
+                Place place = event.place;
+                place.id = -1;
+                this.stopProgressDialog();
+                goToNextStep(place);
             }
-            this.stopProgressDialog();
-            setUpContent(event.places, -1);
-        }else{
-            Place place = event.place;
-            place.id = -1;
-            this.stopProgressDialog();
-            goToNextStep(place);
         }
     }
 
@@ -249,15 +246,16 @@ public class RequestRideActivity extends BaseActivity implements ConnectionCallb
             View v = this.findViewById(position);
             position = this.mOptions.indexOfChild(v);
         }
-        outState.putInt(RADIO_SELECTION_TAG, position);
-        outState.putSerializable(FORM_TYPE_REQUEST_TAG, this.mForm);
-        outState.putSerializable(PLACES_TAG, (Serializable) this.mPlaces);
-        outState.putSerializable(DEPARTURE_PLACE_TAG, this.mPlaceDeparture);
-        outState.putSerializable(DESTINATION_PLACE_TAG, this.mPlaceDestination);
+        outState.putInt(RADIO_SELECTION_TAG+this.mCurrentStep, position);
+        outState.putSerializable(FORM_TYPE_REQUEST_TAG+this.mCurrentStep, this.mForm);
+        outState.putSerializable(PLACES_TAG+this.mCurrentStep, (Serializable) this.mPlaces);
+        outState.putSerializable(DEPARTURE_PLACE_TAG+this.mCurrentStep, this.mPlaceDeparture);
+        outState.putSerializable(DESTINATION_PLACE_TAG+this.mCurrentStep, this.mPlaceDestination);
     }
 
     private void setUpContent(List<Place> places, int selectedPosition){
         this.mOptions = (RadioGroup)findViewById(R.id.optionsGroup);
+        int c1 = this.mOptions.getChildCount();
         this.mPlaces = places;
         for(int i = 0; i < this.mPlaces.size(); i++){
             Place place = this.mPlaces.get(i);
@@ -265,6 +263,7 @@ public class RequestRideActivity extends BaseActivity implements ConnectionCallb
             radioButton.setText(place.description);
             this.mOptions.addView(radioButton);
         }
+        int c2 = this.mOptions.getChildCount();
         if(selectedPosition != -1){
             int id = this.mOptions.getChildAt(selectedPosition).getId();
             this.mOptions.check(id);

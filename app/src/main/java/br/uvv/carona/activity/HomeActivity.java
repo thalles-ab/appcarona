@@ -138,15 +138,15 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(editProfileIntent);
                 break;
             case R.id.action_offer_ride:
-                Intent offerRide = new Intent(this, RequestRideActivity.class);
-                offerRide.putExtra(RequestRideActivity.FORM_TYPE_REQUEST_TAG, FormType.OfferRide);
-                offerRide.putExtra(RequestRideActivity.PLACE_REQUEST_TAG, 0);
+                Intent offerRide = new Intent(this, RequestRideStep1Activity.class);
+                offerRide.putExtra(RequestRideStep1Activity.FORM_TYPE_REQUEST_TAG, FormType.OfferRide);
+                offerRide.putExtra(RequestRideStep1Activity.PLACE_REQUEST_TAG, 0);
                 startActivity(offerRide);
                 break;
             case R.id.action_request_ride:
-                Intent requestRideIntent = new Intent(this, RequestRideActivity.class);
-                requestRideIntent.putExtra(RequestRideActivity.FORM_TYPE_REQUEST_TAG, FormType.RequestRide);
-                requestRideIntent.putExtra(RequestRideActivity.PLACE_REQUEST_TAG, 0);
+                Intent requestRideIntent = new Intent(this, RequestRideStep1Activity.class);
+                requestRideIntent.putExtra(RequestRideStep1Activity.FORM_TYPE_REQUEST_TAG, FormType.RequestRide);
+                requestRideIntent.putExtra(RequestRideStep1Activity.PLACE_REQUEST_TAG, 0);
                 startActivity(requestRideIntent);
                 break;
             case R.id.action_check_requests_made:
