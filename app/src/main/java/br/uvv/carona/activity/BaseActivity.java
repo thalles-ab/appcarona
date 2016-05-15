@@ -145,10 +145,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         if(this.mProgressDialog == null){
             this.mProgressDialog = new ProgressDialog(this);
             this.mProgressDialog.setCancelable(false);
+            this.mProgressDialogMessage = message;
+            this.mProgressDialog.setMessage(this.mProgressDialogMessage);
+            this.mProgressDialog.show();
         }
-        this.mProgressDialogMessage = message;
-        this.mProgressDialog.setMessage(this.mProgressDialogMessage);
-        this.mProgressDialog.show();
     }
 
     public boolean isProgressDialogShowing(){

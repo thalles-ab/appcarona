@@ -75,7 +75,11 @@ public class GeolocationService extends IntentService {
         if(places == null || places.size() == 0){
             EventBus.getDefault().post(new EventBusEvents.ErrorEvent(message));
         } else{
-            EventBus.getDefault().post(new EventBusEvents.PlaceEvent(places));
+            if(places.size() == 1){
+                EventBus.getDefault().post(new EventBusEvents.PlaceEvent(places.get(0)));
+            }else {
+                EventBus.getDefault().post(new EventBusEvents.PlaceEvent(places));
+            }
         }
     }
 }

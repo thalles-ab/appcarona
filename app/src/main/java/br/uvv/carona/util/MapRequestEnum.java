@@ -6,5 +6,5 @@ package br.uvv.carona.util;
 public enum MapRequestEnum {
         AddPlace,
         MarkRoute,
-        SearchRideOffer
+        OtherPlace
 }

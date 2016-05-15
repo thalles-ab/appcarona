@@ -37,6 +37,7 @@ public class SplashScreenActivity extends BaseActivity {
     @Subscribe
     @Override
     public void onErrorEvent(EventBusEvents.ErrorEvent event) {
-
+        this.stopProgressDialog();
+        treatCommonErrors(event);
     }
 }

@@ -3,6 +3,7 @@ package br.uvv.carona.application;
 import android.annotation.TargetApi;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -18,6 +19,7 @@ import java.util.Calendar;
 public class AppPartiUVV extends Application {
     public static Application mApplication;
     public static final Gson sGson = new Gson();
+    protected static final String TOKEN_SP_TAG = ".TOKEN_SP_TAG";
 
     @Override
     public void onCreate() {
@@ -27,7 +29,20 @@ public class AppPartiUVV extends Application {
     }
 
     public static void saveToken(String token){
+        SharedPreferences prefs = mApplication.getSharedPreferences(
+                "br.uvv.carona", Context.MODE_PRIVATE);
+        prefs.edit()
+                .putString(TOKEN_SP_TAG, token)
+                .commit();
+    }
 
+    public static String getToken(){
+        SharedPreferences prefs = mApplication.getSharedPreferences(
+                "br.uvv.carona", Context.MODE_PRIVATE);
+        if(prefs != null){
+            return prefs.getString(TOKEN_SP_TAG, null);
+        }
+        return null;
     }
 
     @TargetApi(Build.VERSION_CODES.M)

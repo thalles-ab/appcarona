@@ -35,12 +35,24 @@
     <string name="lbl_departure">Origem</string>
     <string name="lbl_other_points">Outros Pontos</string>
     <string name="lbl_date">Data</string>
+    <string name="lbl_date_colon">Data:</string>
     <string name="lbl_hour">Hora</string>
+    <string name="lbl_hour_colon">Hora:</string>
     <string name="lbl_confirm_ride">Confirmação de Carona</string>
     <string name="lbl_route">Rota</string>
     <string name="lbl_personal_info">Dados Pessoais</string>
     <string name="lbl_address">Endereço</string>
     <string name="lbl_description">Descrição</string>
+    <string name="lbl_driver">Motorista</string>
+    <string name="lbl_time_takeoff">Saída:</string>
+    <string name="lbl_phone">Tel.:</string>
+    <string name="lbl_passagers">Passageiros</string>
+    <string name="lbl_passager">Passageiro</string>
+    <string name="lbl_save">salvar</string>
+    <string name="lbl_cancel_request">Cancelar pedido</string>
+    <string name="lbl_refuse_request">Recusar pedido</string>
+    <string name="lbl_accept_request">Aceitar pedido</string>
+    <string name="lbl_see_ride">Ver Carona</string>
 
     <!-- Hints -->
     <string name="hint_login">login</string>
@@ -79,14 +91,14 @@
     <string name="txt_uvv_boavista">UVV - Campus Boa Vista</string>
     <string name="txt_uvv_praia_costa">UVV - Campus Praia da Costa</string>
     <string name="txt_uvv_shopping_boulevard">UVV - Shopping Boulevard</string>
+    <string name="txt_today">Hoje</string>
 
     <!-- Messages -->
     <string name="msg_error_get_address">Não foi possível adquirir o endereço da localização indicada.</string>
     <string name="msg_error_couldnt_get_route">Não foi possível adquirir a rota para os pontos indicados.\nPor favor, tente novamente.</string>
-    <string name="msg_getting_route">Buscando rota...</string>
+    <string name="msg_getting_route">Buscando rota&#8230;</string>
     <string name="msg_allow_location_request">Este aplicativo necessita dos dados da localização do usuário para funcionar. Por favor, habilite o fornecimento de tais dados.</string>
     <string name="msg_turn_on_internet_connection">Este aplicativo necessita de uma conexão de internet para funcionar. Por favor conecte-se a uma rede Wi-Fi ou móvel.</string>
-    <string name="lbl_save">salvar</string>
 
 
     <!-- Options -->

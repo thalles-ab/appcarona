@@ -2,16 +2,16 @@ package br.uvv.carona.asynctask;
 
 import org.greenrobot.eventbus.EventBus;
 
-import br.uvv.carona.model.RideRequest;
+import br.uvv.carona.model.RideSolicitation;
 import br.uvv.carona.util.EventBusEvents;
 
 /**
  * Created by CB1772 on 12/05/2016.
  */
-public class NewRideRequestAsyncTask extends BaseAsyncTask<RideRequest, Void> {
+public class NewRideSolicitationAsyncTask extends BaseAsyncTask<RideSolicitation, Void> {
 
     @Override
-    protected Void doInBackground(RideRequest... params) {
+    protected Void doInBackground(RideSolicitation... params) {
         try {
             //TODO SERVER CALL
         }catch (Exception e){

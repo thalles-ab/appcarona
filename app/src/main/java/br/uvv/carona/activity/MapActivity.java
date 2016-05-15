@@ -53,7 +53,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
         OnMapReadyCallback, GoogleMap.OnMapClickListener, OnMarkerDragListener, OnMarkerClickListener{
 
     public static final String TYPE_MAP_REQUEST = ".TYPE_MAP_REQUEST";
-    public static final String PLACES_TAG = ".PLACES_TAG";
+    public static final String PLACE_TAG = ".PLACE_TAG";
     public static final String DEPARTURE_TAG = ".DEPARTURE_TAG";
     public static final String DESTINATION_TAG = ".DESTINATION_TAG";
     public static final String MARKERS_LATLNG_TAG = ".MARKERS_LATLNG_TAG";
@@ -185,6 +185,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
     @Override
     public void onErrorEvent(EventBusEvents.ErrorEvent event) {
         treatCommonErrors(event);
+        this.stopProgressDialog();
     }
 
     @Override
@@ -305,18 +306,16 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
 
     @Override
     public void onMapClick(LatLng latLng) {
-        if(this.mTypeMapRequest != MapRequestEnum.SearchRideOffer) {
-            if (this.mTypeMapRequest == MapRequestEnum.MarkRoute) {
-                this.mMarkers.add(drawMarker(latLng, BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE), true));
-                makeRouteRequest();
-            } else {
-                if (this.mDepartureMarker != null) {
-                    this.mDepartureMarker.remove();
-                    this.mDepartureMarker = null;
-                }
-
-                this.mDepartureMarker = drawMarker(latLng, BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN), true);
+        if (this.mTypeMapRequest == MapRequestEnum.MarkRoute) {
+            this.mMarkers.add(drawMarker(latLng, BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE), true));
+            makeRouteRequest();
+        } else {
+            if (this.mDepartureMarker != null) {
+                this.mDepartureMarker.remove();
+                this.mDepartureMarker = null;
             }
+
+            this.mDepartureMarker = drawMarker(latLng, BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN), true);
         }
     }
 
@@ -374,16 +373,21 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
         finish();
     }
 
-    public void sendResult(List<Place> places){
+    public void sendResult(Place place){
         Intent result = new Intent();
-        result.putExtra(PLACES_TAG, (Serializable) places);
+        result.putExtra(PLACE_TAG, place);
         setResult(RESULT_OK, result);
         finish();
     }
 
     @Subscribe
     public void getPlaceAddress(EventBusEvents.PlaceEvent event){
-        NewLocationConfirmDialog.newInstance(event.places.get(0)).show(getSupportFragmentManager(), "CONFIRM_NEW_PLACE");
+        this.stopProgressDialog();
+        if(this.mTypeMapRequest == MapRequestEnum.AddPlace) {
+            NewLocationConfirmDialog.newInstance(event.place).show(getSupportFragmentManager(), "CONFIRM_NEW_PLACE");
+        } else{
+            sendResult(event.place);
+        }
     }
 
     @Subscribe

@@ -54,8 +54,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/lbl_departure"
                     android:editable="false"
-                    android:focusableInTouchMode="false"
-                    android:text="A" />
+                    android:focusableInTouchMode="false" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -70,8 +69,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/lbl_destination"
                     android:editable="false"
-                    android:focusableInTouchMode="false"
-                    android:text="B"/>
+                    android:focusableInTouchMode="false"/>
             </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
@@ -93,8 +91,7 @@
                         android:singleLine="true"
                         android:hint="@string/lbl_date"
                         android:focusableInTouchMode="false"
-                        android:editable="false"
-                        android:text="00/00/0000"/>
+                        android:editable="false"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -109,8 +106,7 @@
                         android:singleLine="true"
                         android:hint="@string/lbl_hour"
                         android:focusableInTouchMode="false"
-                        android:editable="false"
-                        android:text="00:00"/>
+                        android:editable="false"/>
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
@@ -126,7 +122,7 @@
                     android:id="@+id/numberPassagersLbl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     android:textColor="#797979"
                     android:layout_marginLeft="9dp"
                     android:text="@string/lbl_num_passagers"/>

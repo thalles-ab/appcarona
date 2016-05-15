@@ -19,7 +19,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import br.uvv.carona.R;
 import br.uvv.carona.asynctask.GetUserInfoAsyncTask;
-import br.uvv.carona.fragment.RideRequestsFragment;
+import br.uvv.carona.fragment.RideSolicitationsFragment;
 import br.uvv.carona.model.Student;
 import br.uvv.carona.util.EventBusEvents;
 import br.uvv.carona.util.FormType;
@@ -110,11 +110,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             ((SimpleDraweeView) this.mNavigationView.getHeaderView(0).findViewById(R.id.user_photo)).setImageURI(Uri.parse(this.mUser.photo));
         }
         ((TextView)this.mNavigationView.getHeaderView(0).findViewById(R.id.user_name)).setText(this.mUser.name);
+        this.stopProgressDialog();
     }
 
     @Subscribe
     @Override
     public void onErrorEvent(EventBusEvents.ErrorEvent event) {
+        this.stopProgressDialog();
         treatCommonErrors(event);
     }
 
@@ -147,12 +149,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(requestRideIntent);
                 break;
             case R.id.action_check_requests_made:
-                RideRequestsFragment fragmentMade = RideRequestsFragment.newInstance(RideRequestsFragment.TYPE_REQUEST_MADE);
+                RideSolicitationsFragment fragmentMade = RideSolicitationsFragment.newInstance(RideSolicitationsFragment.TYPE_REQUEST_MADE);
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.fragment_wrapper, fragmentMade).commit();
                 break;
             case R.id.action_check_requests_received:
-                RideRequestsFragment fragmentReceived = RideRequestsFragment.newInstance(RideRequestsFragment.TYPE_REQUEST_RECEIVED);
+                RideSolicitationsFragment fragmentReceived = RideSolicitationsFragment.newInstance(RideSolicitationsFragment.TYPE_REQUEST_RECEIVED);
                 FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
                 ft2.replace(R.id.fragment_wrapper, fragmentReceived).commit();
                 break;
