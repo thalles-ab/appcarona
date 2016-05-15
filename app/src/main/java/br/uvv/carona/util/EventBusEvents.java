@@ -2,6 +2,7 @@ package br.uvv.carona.util;
 
 import java.util.List;
 
+import br.uvv.carona.model.Error;
 import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
 import br.uvv.carona.model.RideSolicitation;
@@ -22,6 +23,14 @@ public class EventBusEvents {
 
         public ErrorEvent(String message){
             this.message = message;
+        }
+    }
+
+    public static class ErrorsEvent{
+        public List<Error> errors;
+
+        public ErrorsEvent(List<Error> errors){
+            this.errors = errors;
         }
     }
 
@@ -79,5 +88,4 @@ public class EventBusEvents {
             this.token = token;
         }
     }
-
 }

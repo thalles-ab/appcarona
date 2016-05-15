@@ -3,6 +3,7 @@
 
     <!-- Labels -->
     <string name="lbl_enter">Entrar</string>
+    <string name="lbl_entering">Entrando...</string>
     <string name="lbl_profile">Perfil</string>
     <string name="lbl_ride">Carona</string>
     <string name="lbl_edit_profile">Editar Perfil</string>

@@ -1,5 +1,6 @@
 package br.uvv.carona.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -10,14 +11,18 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.uvv.carona.BuildConfig;
 import br.uvv.carona.R;
+import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.asynctask.CreateUserAsyncTask;
+import br.uvv.carona.asynctask.LoginAsyncTask;
 import br.uvv.carona.model.Student;
 import br.uvv.carona.util.EventBusEvents;
+import br.uvv.carona.util.Md5Generator;
 import br.uvv.carona.view.PhoneEditText;
 
 public class SignUpActivity extends BaseActivity {
-
+    private static final String EXTRA_STUDENT = "EXTRA_STUDENT";
     private EditText mUserName;
     private EditText mUserRegistration;
     private PhoneEditText mUserPhone;
@@ -26,11 +31,12 @@ public class SignUpActivity extends BaseActivity {
     private EditText mUserPasswordConfirmation;
     private List<EditText> mFields;
 
+    private Student mStudent;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-
         mUserName = (EditText)this.findViewById(R.id.fieldUserName);
         mUserRegistration = (EditText)this.findViewById(R.id.fieldUserRegistration);
         mUserPhone= (PhoneEditText)this.findViewById(R.id.fieldUserPhone);
@@ -49,13 +55,33 @@ public class SignUpActivity extends BaseActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.lbl_register);
+
+        if(savedInstanceState == null) {
+            mStudent = new Student();
+        }else{
+            mStudent = (Student) savedInstanceState.getSerializable(EXTRA_STUDENT);
+        }
     }
 
 
     @Subscribe
     @Override
     public void onErrorEvent(EventBusEvents.ErrorEvent event) {
+        stopProgressDialog();
+        //TODO Fazer tratamentos de erros mais genérico
+    }
 
+    @Subscribe
+    public void onSuccessEvent(EventBusEvents.SuccessEvent event){
+        new LoginAsyncTask().execute(mStudent);
+    }
+
+    @Subscribe
+    public void onLoginEvent(EventBusEvents.LoginEvent event){
+        AppPartiUVV.saveToken(event.token);
+        stopProgressDialog();
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
     }
 
     /**
@@ -72,24 +98,31 @@ public class SignUpActivity extends BaseActivity {
         if(!checkEditTextEmpty(mFields)){
             if(isUserFormValid()){
                 startProgressDialog(R.string.lbl_signing_up);
-                new CreateUserAsyncTask().execute(getStudent());
+                fillStudent();
+                new CreateUserAsyncTask().execute(mStudent);
             }
         }
     }
-    @Subscribe
-    public void onError(EventBusEvents.ErrorEvent event){
-        stopProgressDialog();
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(EXTRA_STUDENT, mStudent);
+        super.onSaveInstanceState(outState);
     }
 
-    private Student getStudent(){
-        Student student = new Student();
-        student.name = mUserName.getText().toString().trim();
-        student.code = mUserRegistration.getText().toString().trim();
-        student.email = mUserEmail.getText().toString().trim();
-        student.cellPhone = mUserPhone.getCleanText();
-        student.password = mUserPassword.getText().toString().trim();
-        return student;
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mStudent = (Student) savedInstanceState.getSerializable(EXTRA_STUDENT);
+    }
+
+    private void fillStudent(){
+        mStudent = new Student();
+        mStudent.name = mUserName.getText().toString().trim();
+        mStudent.code = mUserRegistration.getText().toString().trim();
+        mStudent.email = mUserEmail.getText().toString().trim();
+        mStudent.cellPhone = mUserPhone.getCleanText();
+        mStudent.password = Md5Generator.formatMD5(mUserPassword.getText().toString().trim());
     }
 
     private boolean isUserFormValid(){

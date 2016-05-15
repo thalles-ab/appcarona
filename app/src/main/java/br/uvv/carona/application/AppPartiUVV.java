@@ -3,7 +3,6 @@ package br.uvv.carona.application;
 import android.annotation.TargetApi;
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -17,32 +16,29 @@ import com.google.gson.Gson;
 import java.util.Calendar;
 
 public class AppPartiUVV extends Application {
+    private static final String TOKEN_KEY = "TOKEN_KEY";
     public static Application mApplication;
+    //TODO se for usar data definir format
     public static final Gson sGson = new Gson();
-    protected static final String TOKEN_SP_TAG = ".TOKEN_SP_TAG";
 
     @Override
     public void onCreate() {
         super.onCreate();
+        //TODO mdoificar config do fresco para aumentar cache
         Fresco.initialize(this);
         mApplication = this;
     }
 
     public static void saveToken(String token){
-        SharedPreferences prefs = mApplication.getSharedPreferences(
-                "br.uvv.carona", Context.MODE_PRIVATE);
-        prefs.edit()
-                .putString(TOKEN_SP_TAG, token)
-                .commit();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mApplication);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(TOKEN_KEY,token);
+        editor.apply();
     }
 
     public static String getToken(){
-        SharedPreferences prefs = mApplication.getSharedPreferences(
-                "br.uvv.carona", Context.MODE_PRIVATE);
-        if(prefs != null){
-            return prefs.getString(TOKEN_SP_TAG, null);
-        }
-        return null;
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mApplication);
+        return preferences.getString(TOKEN_KEY, null);
     }
 
     @TargetApi(Build.VERSION_CODES.M)

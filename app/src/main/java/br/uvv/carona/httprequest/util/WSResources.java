@@ -8,4 +8,5 @@ public class WSResources {
     public static final String RIDE = BASE_URL + "/ride";
     public static final String GET_STUDENT = BASE_URL + "/";
     public static final String URL_STUDENT = BASE_URL + "/student";
+    public static final String URL_LOGIN = BASE_URL + "/login";
 }

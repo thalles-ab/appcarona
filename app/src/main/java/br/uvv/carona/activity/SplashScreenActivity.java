@@ -2,6 +2,7 @@ package br.uvv.carona.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -9,6 +10,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import br.uvv.carona.R;
+import br.uvv.carona.application.AppPartiUVV;
+import br.uvv.carona.asynctask.AutoLoginAsyncTask;
+import br.uvv.carona.asynctask.LoginAsyncTask;
 import br.uvv.carona.util.EventBusEvents;
 
 public class SplashScreenActivity extends BaseActivity {
@@ -17,12 +21,10 @@ public class SplashScreenActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(!this.isShowingError){
+        String token = AppPartiUVV.getToken();
+
+        if(TextUtils.isEmpty(token)){
             Timer task = new Timer();
             task.schedule(new TimerTask() {
                 @Override
@@ -30,9 +32,19 @@ public class SplashScreenActivity extends BaseActivity {
                     Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }
-            },2000);
+            },1500);
+        }else{
+            new AutoLoginAsyncTask().execute(token);
         }
     }
+
+    @Subscribe
+    public void onSuccessEvent(EventBusEvents.SuccessEvent event){
+        stopProgressDialog();
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+    }
+
 
     @Subscribe
     @Override

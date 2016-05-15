@@ -18,6 +18,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import org.greenrobot.eventbus.Subscribe;
 
 import br.uvv.carona.R;
+import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.asynctask.GetUserInfoAsyncTask;
 import br.uvv.carona.fragment.RideSolicitationsFragment;
 import br.uvv.carona.model.Student;
@@ -162,6 +163,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 //TODO
                 break;
             case R.id.action_logout:
+                AppPartiUVV.saveToken(null);
                 Intent logoutIntent = new Intent(this, LoginActivity.class);
                 startActivity(logoutIntent);
                 finish();

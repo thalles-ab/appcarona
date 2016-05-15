@@ -2,24 +2,24 @@ package br.uvv.carona.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
-import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
-import br.uvv.carona.asynctask.GetUserInfoAsyncTask;
 import br.uvv.carona.asynctask.LoginAsyncTask;
 import br.uvv.carona.model.Student;
 import br.uvv.carona.util.EventBusEvents;
+import br.uvv.carona.util.Md5Generator;
 
 public class LoginActivity extends BaseActivity {
-
+    private EditText mLogin;
+    private EditText mPassword;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,30 +32,18 @@ public class LoginActivity extends BaseActivity {
      * @param view
      */
     public void onClickLogin(View view){
-        TextInputLayout inputLogin = (TextInputLayout)findViewById(R.id.input_layout_matricula);
-        TextInputLayout inputPassword = (TextInputLayout)findViewById(R.id.input_layout_password);
-        EditText loginField = (EditText) findViewById(R.id.input_field_registry);
-        EditText passwordField = (EditText) findViewById(R.id.input_field_password);
-        String login = loginField.getText().toString();
-        String password = passwordField.getText().toString();
-        boolean nothingIsWrong = true;
-        if(TextUtils.isEmpty(login)){
-            inputLogin.setError(getString(R.string.error_empty_field));
-            nothingIsWrong = false;
-        }else{
-            inputLogin.setErrorEnabled(false);
-        }
-        if(TextUtils.isEmpty(password)){
-            inputPassword.setError(getString(R.string.error_empty_field));
-            nothingIsWrong = false;
-        }else{
-            inputPassword.setErrorEnabled(false);
-        }
+        mLogin = (EditText) findViewById(R.id.input_field_registry);
+        mPassword = (EditText) findViewById(R.id.input_field_password);
 
-        if(nothingIsWrong){
+        List<EditText> fields = new ArrayList<>();
+        fields.add(mLogin);
+        fields.add(mPassword);
+
+        if(!checkEditTextEmpty(fields)){
             Student student = new Student();
-            student.code = login;
-            student.password = password;
+            student.code = mLogin.getText().toString().trim();
+            student.password = Md5Generator.formatMD5(mPassword.getText().toString().trim());
+            startProgressDialog(R.string.lbl_entering);
             new LoginAsyncTask().execute(student);
         }
     }
@@ -75,11 +63,13 @@ public class LoginActivity extends BaseActivity {
 
     @Subscribe
     public void onLoginResult(EventBusEvents.LoginEvent event){
+        stopProgressDialog();
         AppPartiUVV.saveToken(event.token);
         Intent intent = new Intent(this, HomeActivity.class);
         this.stopProgressDialog();
         startActivity(intent);
     }
+
 
     @Subscribe
     @Override

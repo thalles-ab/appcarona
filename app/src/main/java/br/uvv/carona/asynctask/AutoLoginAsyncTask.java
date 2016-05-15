@@ -2,20 +2,19 @@ package br.uvv.carona.asynctask;
 
 import org.greenrobot.eventbus.EventBus;
 
-import br.uvv.carona.model.Student;
-import br.uvv.carona.model.StudentInfo;
+import br.uvv.carona.model.BaseObject;
 import br.uvv.carona.service.LoginService;
 import br.uvv.carona.util.EventBusEvents;
 
 /**
- * Created by CB1772 on 12/05/2016.
+ * Created by geen-20 on 14/05/2016.
  */
-public class LoginAsyncTask extends BaseAsyncTask<Student, StudentInfo> {
+public class AutoLoginAsyncTask extends BaseAsyncTask<String, BaseObject> {
 
     @Override
-    protected StudentInfo doInBackground(Student... params) {
+    protected BaseObject doInBackground(String... params) {
         try{
-            return LoginService.login(params[0]);
+            return LoginService.loginWithToken(params[0]);
         }catch (Exception e){
             this.mException = e;
         }
@@ -23,10 +22,10 @@ public class LoginAsyncTask extends BaseAsyncTask<Student, StudentInfo> {
     }
 
     @Override
-    protected void onPostExecute(StudentInfo studentInfo) {
+    protected void onPostExecute(BaseObject studentInfo) {
         boolean success = studentInfo != null && this.mException == null;
         if(success){
-            EventBus.getDefault().post(new EventBusEvents.LoginEvent(studentInfo.token));
+            EventBus.getDefault().post(new EventBusEvents.SuccessEvent(true));
         }
         super.onPostExecute(studentInfo);
     }

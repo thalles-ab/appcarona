@@ -20,7 +20,7 @@ public class BaseAsyncTask<Params, T> extends AsyncTask<Params, T, T> {
     }
 
 
-    //TODO tratar erros do baseObject
+    //TODO tratar erros do baseObject e listar em dialogo
     @Override
     protected void onPostExecute(T t) {
         super.onPostExecute(t);
@@ -28,12 +28,13 @@ public class BaseAsyncTask<Params, T> extends AsyncTask<Params, T, T> {
             if(this.mException.getMessage() != null) {
                 Log.e("GET_ROUTE", this.mException.getMessage());
             }
+
+            //TODO
+            if (t != null && ((BaseObject) t).erros != null) {
+                EventBus.getDefault().post(new EventBusEvents.ErrorsEvent(((BaseObject) t).erros));
+                return;
+            }
             EventBus.getDefault().post(new EventBusEvents.ErrorEvent(mException.getMessage()));
         }
-    }
-
-    public boolean success(T t){
-        BaseObject ob = (BaseObject) t;
-        return mException == null && (ob.erros == null || ob.erros.isEmpty());
     }
 }
