@@ -2,27 +2,16 @@ package br.uvv.carona.asynctask;
 
 import org.greenrobot.eventbus.EventBus;
 
-import br.uvv.carona.application.AppPartiUVV;
-import br.uvv.carona.httprequest.BaseHttpRequest;
-import br.uvv.carona.httprequest.util.HttpMethodUtil;
-import br.uvv.carona.httprequest.util.WSResources;
 import br.uvv.carona.model.Student;
+import br.uvv.carona.service.StudentService;
 import br.uvv.carona.util.EventBusEvents;
 
-public class GetUserInfoAsyncTask extends BaseAsyncTask<Integer, Student> {
+public class GetUserInfoAsyncTask extends BaseAsyncTask<Long, Student> {
 
     @Override
-    protected Student doInBackground(Integer... params) {
+    protected Student doInBackground(Long... params) {
         try {
-            StringBuilder url = new StringBuilder();
-            url.append(WSResources.GET_STUDENT);
-            url.append("?id=");
-            if(params == null){
-                url.append("-1");
-            }else{
-                url.append(params[0]);
-            }
-            return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequestWithAuthorization(HttpMethodUtil.GET, url.toString(), null, null), Student.class);
+           return StudentService.getStudent(params[0] != null ? params[0].longValue(): 0);
         }catch (Exception e){
             this.mException = e;
         }
@@ -31,7 +20,7 @@ public class GetUserInfoAsyncTask extends BaseAsyncTask<Integer, Student> {
 
     @Override
     protected void onPostExecute(Student student) {
-        boolean success = student != null && this.mException == null;
+        boolean success = student != null && this.mException == null && student.erros == null;
         if(success){
             EventBus.getDefault().post(new EventBusEvents.UserEvent(student));
         }

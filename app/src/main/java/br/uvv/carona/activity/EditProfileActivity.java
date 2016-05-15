@@ -11,6 +11,7 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,14 +22,16 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import br.uvv.carona.R;
+import br.uvv.carona.application.AppPartiUVV;
+import br.uvv.carona.asynctask.UpdateUserAsyncTask;
 import br.uvv.carona.asynctask.UploadPhotoAsyncTask;
+import br.uvv.carona.dialog.MessageDialog;
 import br.uvv.carona.httprequest.util.WSResources;
 import br.uvv.carona.model.Student;
 import br.uvv.carona.model.UploadFile;
@@ -38,7 +41,6 @@ import br.uvv.carona.view.PhoneEditText;
 
 
 public class EditProfileActivity extends BaseActivity {
-    private static final String EXTRA_IMAGE_URI = "EXTRA_IMAGE_URI";
     private static final String EXTRA_STUDENT = "EXTRA_STUDENT";
     private static final int EXTRA_GALLERY_ACTIVITY = 205;
     private EditText mUserName;
@@ -49,7 +51,6 @@ public class EditProfileActivity extends BaseActivity {
 
     private Student mStudent;
     private SimpleDraweeView mPhoto;
-    private Uri mLastImageUri;
     private Toolbar mToolbar;
     private Uri mOutputFile;
 
@@ -72,17 +73,30 @@ public class EditProfileActivity extends BaseActivity {
         mFields.add(mUserPhone);
 
         if(savedInstanceState == null){
-            mStudent = new Student();
+            mStudent = (Student) getIntent().getSerializableExtra(HomeActivity.EXTRA_USER);
+            setUserInfo();
         }else{
-            mLastImageUri = savedInstanceState.getParcelable(EXTRA_IMAGE_URI);
-            mPhoto.setImageURI(mLastImageUri);
             mStudent = (Student) savedInstanceState.get(EXTRA_STUDENT);
         }
 
+        setUserPhoto();
         setSupportActionBar(mToolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(mStudent.name);
+    }
+
+    private void setUserInfo(){
+        mUserName.setText(mStudent.name);
+        mUserRegistration.setText(mStudent.code);
+        mUserEmail.setText(mStudent.email);
+        mUserPhone.setText(mStudent.cellPhone);
+    }
+
+    private void setUserPhoto(){
+        if(!TextUtils.isEmpty(mStudent.photo)){
+            mPhoto.setImageURI(Uri.parse(WSResources.BASE_UPLOAD_URL + mStudent.photo));
+        }
     }
 
     @Override
@@ -95,10 +109,30 @@ public class EditProfileActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save_profile:
-                //TODO Atualizar perfil
+                if(isUserFormValid()){
+                    fillStudent();
+                    startProgressDialog(R.string.lbl_updating_profile);
+                    new UpdateUserAsyncTask().execute(mStudent);
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Subscribe
+    public void onSuccessEvent(EventBusEvents.SuccessEvent event){
+        stopProgressDialog();
+        AppPartiUVV.persistUser(mStudent);
+        setUserPhoto();
+        MessageDialog dialog =  MessageDialog.newInstance(getString(R.string.success_profile_updated));
+        dialog.show(getSupportFragmentManager(), "update");
+    }
+
+    private void fillStudent(){
+        mStudent.name = mUserName.getText().toString().trim();
+        mStudent.code = mUserRegistration.getText().toString().trim();
+        mStudent.email = mUserEmail.getText().toString().trim();
+        mStudent.cellPhone = mUserPhone.getCleanText();
     }
 
     @Subscribe
@@ -110,7 +144,6 @@ public class EditProfileActivity extends BaseActivity {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(EXTRA_IMAGE_URI, mLastImageUri);
         outState.putSerializable(EXTRA_STUDENT, mStudent);
         super.onSaveInstanceState(outState);
     }
@@ -119,7 +152,6 @@ public class EditProfileActivity extends BaseActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mStudent = (Student) savedInstanceState.getSerializable(EXTRA_STUDENT);
-        mLastImageUri = savedInstanceState.getParcelable(EXTRA_IMAGE_URI);
     }
 
     public void onClickSelectPhoto(View view){
@@ -168,20 +200,38 @@ public class EditProfileActivity extends BaseActivity {
                 File photo = new File(filePath);
                 if (photo.exists()) {
                     mStudent.file = photo;
+                    startProgressDialog(R.string.lbl_updating_photo);
                     new UploadPhotoAsyncTask().execute(mStudent);
                 }
             }
         }
     }
 
-    //TODO retorno
+    private boolean isUserFormValid(){
+        boolean valid = true;
+        if(mUserPhone.getCleanText().length() < getResources().getInteger(R.integer.phone_min_length)){
+            mUserPhone.setError(getString(R.string.error_invalid_phone));
+            valid = false;
+        }
+
+        if(mUserRegistration.getText().toString().trim().length() < getResources().getInteger(R.integer.input_register_min_length)){
+            mUserRegistration.setError(getString(R.string.error_invalid_registration));
+            valid = false;
+        }
+
+        if(!Patterns.EMAIL_ADDRESS.matcher(mUserEmail.getText().toString().trim()).matches()){
+            mUserEmail.setError(getString(R.string.error_invalid_email));
+            valid = false;
+        }
+
+        return valid;
+    }
+
     @Subscribe
     public void onUploadEvent(UploadFile file){
-        if(!TextUtils.isEmpty(file.url)){
-            mStudent.photo = WSResources.BASE_UPLOAD_URL+file.url;
-            mLastImageUri = Uri.parse(mStudent.photo);
-            mPhoto.setImageURI(mLastImageUri);
-        }
+        mStudent.file = null;
+        new UpdateUserAsyncTask().execute(mStudent);
+        mStudent.photo = file.url;
     }
 
     private void openImageIntent() {
@@ -212,7 +262,7 @@ public class EditProfileActivity extends BaseActivity {
             imagesFolder.mkdirs();
         }
         SimpleDateFormat date = new SimpleDateFormat("yyyyMMddHHmmss");
-        File file = new File(imagesFolder, getString(R.string.app_name)+"_"+date.format(new Date())+".png");
+        File file = new File(imagesFolder, getString(R.string.app_name)+"_"+date.format(new Date())+".jpeg");
         return Uri.fromFile(file);
     }
 

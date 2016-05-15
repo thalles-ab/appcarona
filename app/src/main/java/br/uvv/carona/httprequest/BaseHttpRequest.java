@@ -24,6 +24,7 @@ import java.net.URLConnection;
 
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.httprequest.util.HttpMethodUtil;
+import br.uvv.carona.httprequest.util.ImageUtils;
 import br.uvv.carona.model.Student;
 
 public class BaseHttpRequest{
@@ -46,6 +47,9 @@ public class BaseHttpRequest{
         int maxBufferSize = 1*1024*1024;
         HttpURLConnection connection = null;
         try {
+            if (method == HttpMethodUtil.GET && object != null) {
+                url += (String) object;
+            }
             URL urlink = new URL(url);
             connection = (HttpURLConnection)urlink.openConnection();
             if(object instanceof Student && ((Student) object).file != null && ((Student) object).file.exists()){
@@ -95,11 +99,8 @@ public class BaseHttpRequest{
                     dataOS.writeBytes("Content-Transfer-Encoding: binary" + end);
                     dataOS.writeBytes(end);
 
-                    Bitmap bmp = BitmapFactory.decodeFile(file.getPath());
-                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                    bmp.compress(Bitmap.CompressFormat.PNG, 50, bos);
-                    InputStream inputStream = new ByteArrayInputStream(bos.toByteArray());
-//                    FileInputStream inputStream = new FileInputStream(file);
+                    byte[] compressedImage = ImageUtils.compressImage(file.getPath());
+                    InputStream inputStream = new ByteArrayInputStream(compressedImage);
                     int bytesAvailable = inputStream.available();
                     int bufferSize = Math.min(bytesAvailable, maxBufferSize);
                     byte[] buffer = new byte[bufferSize];

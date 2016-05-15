@@ -11,24 +11,48 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
+import com.facebook.cache.disk.DiskCacheConfig;
+import com.facebook.common.internal.Supplier;
+import com.facebook.common.util.ByteConstants;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.LongSerializationPolicy;
 
-import java.util.Calendar;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
+import br.uvv.carona.model.Student;
 
 public class AppPartiUVV extends Application {
+    private static final String PERSIST_FILENAME = "persist.partiuvv.info";
+    private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZZZ";
     private static final String TOKEN_KEY = "TOKEN_KEY";
     public static Application mApplication;
-    //TODO se for usar data definir format
-    public static final Gson sGson = new Gson();
+    public static Gson sGson;
+    private static Student mStudent;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        //TODO mdoificar config do fresco para aumentar cache
+        sGson = new GsonBuilder().setLongSerializationPolicy(LongSerializationPolicy.STRING).setDateFormat(DATE_FORMAT).create();
         Fresco.initialize(this);
         mApplication = this;
+        ImagePipelineConfig config = ImagePipelineConfig.newBuilder(mApplication)
+                .setDownsampleEnabled(true)
+                .setMainDiskCacheConfig(getDefaultMainDiskCacheConfig(mApplication))
+                .build();
+        Fresco.initialize(mApplication, config);
+        if (mStudent == null) {
+            mStudent = readUser();
+        }
     }
 
     public static void saveToken(String token){
@@ -61,5 +85,55 @@ public class AppPartiUVV extends Application {
         ConnectivityManager cManager = (ConnectivityManager) mApplication.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cManager.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnected();
+    }
+
+    private static synchronized Student readUser() {
+        Student object = null;
+        try {
+            File file = new File(mApplication.getFilesDir(), PERSIST_FILENAME);
+            FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream in = new ObjectInputStream(fis);
+            object = (Student) in.readObject();
+            in.close();
+            fis.close();
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (Exception ex) {
+            Log.e(mApplication.getClass().getName(), "Erro ao recuperar as informações persistentes.", ex);
+        }
+        return object;
+    }
+
+    public static synchronized void persistUser(Student object) {
+        try {
+            File file = new File(mApplication.getFilesDir(), PERSIST_FILENAME);
+            FileOutputStream fos = new FileOutputStream(file, false);
+            ObjectOutputStream out = new ObjectOutputStream(fos);
+            out.writeObject(object);
+            out.close();
+            fos.close();
+        } catch (Exception ex) {
+            Log.e(mApplication.getClass().getName(), "Erro ao salvar as informações persistentes.", ex);
+        }
+    }
+
+    private static DiskCacheConfig getDefaultMainDiskCacheConfig(final Context context) {
+        return DiskCacheConfig.newBuilder(context)
+                .setBaseDirectoryPathSupplier(
+                        new Supplier<File>() {
+                            @Override
+                            public File get() {
+                                return context.getApplicationContext().getCacheDir();
+                            }
+                        })
+                .setBaseDirectoryName("image_cache")
+                .setMaxCacheSize(40 * ByteConstants.MB)
+                .setMaxCacheSizeOnLowDiskSpace(10 * ByteConstants.MB)
+                .setMaxCacheSizeOnVeryLowDiskSpace(2 * ByteConstants.MB)
+                .build();
+    }
+
+    public static Student getStudent(){
+        return readUser();
     }
 }

@@ -39,6 +39,7 @@
     <dimen name="size_signup_icon">125dp</dimen>
     <dimen name="size_home_page_photo">100dp</dimen>
     <dimen name="size_user_photo">100dp</dimen>
+    <dimen name="size_user_photo_home">80dp</dimen>
     <dimen name="size_edit_profile_page_photo">100dp</dimen>
     <dimen name="width_photo_border">1dp</dimen>
     <dimen name="app_bar_size">250dp</dimen>

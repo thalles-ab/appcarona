@@ -4,25 +4,27 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorSecondary"
-    android:paddingTop="25dp"
-    android:paddingBottom="25dp">
+    android:background="@color/colorPrimary"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp">
 
     <LinearLayout
         android:id="@+id/userDataWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:gravity="center_vertical">
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/user_photo"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:layout_margin="5dp"
+            android:layout_width="@dimen/size_user_photo_home"
+            android:layout_height="@dimen/size_user_photo_home"
+            android:layout_margin="@dimen/margin_button"
+            app:actualImageScaleType="centerCrop"
             app:placeholderImage="@drawable/user_placeholder"
             app:placeholderImageScaleType="centerCrop"
-            app:roundedCornerRadius="100dp"
+            app:roundAsCircle="true"
+            android:layout_gravity="center"
             android:focusableInTouchMode="false"
             android:clickable="false"/>
 
@@ -34,10 +36,13 @@
             android:padding="@dimen/padding_home_page_user_data">
 
             <TextView
+                android:gravity="center"
+                android:layout_gravity="center"
                 android:id="@+id/user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_home_page_user_data"
+                android:maxLines="2"
                 android:hint="@string/hint_name"
                 android:textSize="16sp"
                 android:textColor="@color/white"

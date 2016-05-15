@@ -35,6 +35,14 @@ public class MessageDialog extends DialogFragment {
         return fragment;
     }
 
+    public static MessageDialog newInstance(String message) {
+        Bundle args = new Bundle();
+        args.putString(MESSAGE_TAG, message);
+        MessageDialog fragment = new MessageDialog();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -59,7 +67,11 @@ public class MessageDialog extends DialogFragment {
         this.mDialog.findViewById(R.id.confirm_action).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnClick.onConfirmClick(mDialog);
+                if(mOnClick == null){
+                    mDialog.hide();
+                }else{
+                    mOnClick.onConfirmClick(mDialog);
+                }
             }
         });
     }

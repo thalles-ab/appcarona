@@ -12,6 +12,7 @@ import java.util.List;
 
 import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
+import br.uvv.carona.asynctask.GetUserInfoAsyncTask;
 import br.uvv.carona.asynctask.LoginAsyncTask;
 import br.uvv.carona.model.Student;
 import br.uvv.carona.util.EventBusEvents;
@@ -65,11 +66,16 @@ public class LoginActivity extends BaseActivity {
     public void onLoginResult(EventBusEvents.LoginEvent event){
         stopProgressDialog();
         AppPartiUVV.saveToken(event.token);
-        Intent intent = new Intent(this, HomeActivity.class);
-        this.stopProgressDialog();
-        startActivity(intent);
+        new GetUserInfoAsyncTask().execute(new Long(0));
     }
 
+    @Subscribe
+    public void onEventGetUser(EventBusEvents.UserEvent event){
+        stopProgressDialog();
+        AppPartiUVV.persistUser(event.student);
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+    }
 
     @Subscribe
     @Override
