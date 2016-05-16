@@ -24,11 +24,13 @@
                     android:icon="@drawable/ic_human_greeting"
                     android:title="@string/lbl_request_ride"/>
                 <item android:id="@+id/action_check_offered_rides"
-                    android:icon="@drawable/ic_car"
+                    android:icon="@drawable/ic_steering"
                     android:title="@string/lbl_offered_rides"/>
                 <item android:id="@+id/action_check_requests_received"
+                    android:icon="@drawable/ic_comment_alert_outline"
                     android:title="@string/lbl_see_requests_received"/>
                 <item android:id="@+id/action_check_requests_made"
+                    android:icon="@drawable/ic_comment_check_outline"
                     android:title="@string/lbl_see_requests_made"/>
             </group>
         </menu>

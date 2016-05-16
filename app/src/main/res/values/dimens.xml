@@ -37,7 +37,7 @@
 
     <!-- Size, Width and Height -->
     <dimen name="width_login_fields">200dp</dimen>
-    <dimen name="size_login_page_logo">150dp</dimen>
+    <dimen name="size_login_page_logo">200dp</dimen>
     <dimen name="size_signup_icon">125dp</dimen>
     <dimen name="size_home_page_photo">100dp</dimen>
     <dimen name="size_user_photo">100dp</dimen>
