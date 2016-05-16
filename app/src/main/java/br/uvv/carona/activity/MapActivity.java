@@ -1,6 +1,7 @@
 package br.uvv.carona.activity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
@@ -40,6 +41,7 @@ import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.asynctask.GetRouteAsyncTask;
 import br.uvv.carona.dialog.ConfirmRideOfferDialog;
+import br.uvv.carona.dialog.MessageDialog;
 import br.uvv.carona.dialog.NewLocationConfirmDialog;
 import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;

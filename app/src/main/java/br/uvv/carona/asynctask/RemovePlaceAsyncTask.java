@@ -17,8 +17,8 @@ public class RemovePlaceAsyncTask extends BaseAsyncTask<List<Place>, BaseObject>
     @Override
     protected BaseObject doInBackground(List<Place>... params) {
         try{
-            return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequestWithAuthorization(HttpMethodUtil.POST,
-                    WSResources.DELETE_PLACE, AppPartiUVV.getToken(), params[0]), BaseObject.class);
+            return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequest(HttpMethodUtil.POST,
+                    WSResources.DELETE_PLACE, params[0]), BaseObject.class);
         }catch (Exception e){
             this.mException = e;
         }

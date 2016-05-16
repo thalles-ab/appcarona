@@ -27,8 +27,8 @@ public class GetRideOffersAsyncTask extends BaseAsyncTask<Ride, List<Ride>> {
     protected List<Ride> doInBackground(Ride... params) {
         try{
             Type type = new TypeToken<List<Ride>>() {}.getType();
-            List<Ride> rides = AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequestWithAuthorization(HttpMethodUtil.POST,
-                    WSResources.RIDE_LIST, AppPartiUVV.getToken(), mRide), type);
+            List<Ride> rides = AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequest(HttpMethodUtil.POST,
+                    WSResources.RIDE_LIST, mRide), type);
             return rides;
         }catch (Exception e){
             this.mException = e;

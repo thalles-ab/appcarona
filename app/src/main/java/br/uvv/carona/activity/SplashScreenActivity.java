@@ -26,7 +26,7 @@ public class SplashScreenActivity extends BaseActivity {
 
         String token = AppPartiUVV.getToken();
 
-//        if(TextUtils.isEmpty(token)){
+        if(TextUtils.isEmpty(token)){
             Timer task = new Timer();
             task.schedule(new TimerTask() {
                 @Override
@@ -56,13 +56,5 @@ public class SplashScreenActivity extends BaseActivity {
         AppPartiUVV.persistUser(event.student);
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
-    }
-
-
-    @Subscribe
-    @Override
-    public void onErrorEvent(EventBusEvents.ErrorEvent event) {
-        this.stopProgressDialog();
-        treatCommonErrors(event);
     }
 }

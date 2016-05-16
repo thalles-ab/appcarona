@@ -15,15 +15,14 @@ public class SavePlaceAsyncTask extends BaseAsyncTask<Place, Place> {
     private Place mPlace;
 
     @Override
-    protected Void doInBackground(Place... params) {
+    protected Place doInBackground(Place... params) {
         try{
             this.isEdit = params[0].id > 0;
             if(isEdit){
                 this.mPlace = params[0];
             }
             return AppPartiUVV.sGson.fromJson(BaseHttpRequest
-                    .createRequestWithAuthorization(HttpMethodUtil.POST, WSResources.PLACE,
-                            AppPartiUVV.getToken(), params[0]), Place.class);
+                    .createRequest(HttpMethodUtil.POST, WSResources.PLACE, params[0]), Place.class);
         }catch (Exception e){
             this.mException = e;
         }
