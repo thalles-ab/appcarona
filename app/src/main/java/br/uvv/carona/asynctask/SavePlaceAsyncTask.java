@@ -9,15 +9,21 @@ import br.uvv.carona.httprequest.util.WSResources;
 import br.uvv.carona.model.Place;
 import br.uvv.carona.util.EventBusEvents;
 
-public class SavePlaceAsyncTask extends BaseAsyncTask<Place, Void> {
+public class SavePlaceAsyncTask extends BaseAsyncTask<Place, Place> {
+
+    private boolean isEdit;
+    private Place mPlace;
 
     @Override
     protected Void doInBackground(Place... params) {
         try{
-//            AppPartiUVV.sGson.fromJson(BaseHttpRequest
-//                    .createRequestWithAuthorization(HttpMethodUtil.POST, WSResources.PLACE,
-//                            AppPartiUVV.getToken(), params[0]), Place.class);
-            return null;
+            this.isEdit = params[0].id > 0;
+            if(isEdit){
+                this.mPlace = params[0];
+            }
+            return AppPartiUVV.sGson.fromJson(BaseHttpRequest
+                    .createRequestWithAuthorization(HttpMethodUtil.POST, WSResources.PLACE,
+                            AppPartiUVV.getToken(), params[0]), Place.class);
         }catch (Exception e){
             this.mException = e;
         }
@@ -25,9 +31,14 @@ public class SavePlaceAsyncTask extends BaseAsyncTask<Place, Void> {
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
+    protected void onPostExecute(Place object) {
         boolean success = this.mException == null;
-        EventBus.getDefault().post(new EventBusEvents.SuccessEvent(success));
-        super.onPostExecute(aVoid);
+        if(success) {
+            if(this.isEdit){
+                EventBus.getDefault().post(new EventBusEvents.PlaceUpdateEvent(false, this.mPlace));
+            }
+            EventBus.getDefault().post(new EventBusEvents.SuccessEvent(success, object));
+        }
+        super.onPostExecute(object);
     }
 }

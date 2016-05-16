@@ -21,6 +21,7 @@
     <string name="lbl_places">Locais</string>
     <string name="lbl_change_photo">Alterar foto</string>
     <string name="lbl_add_location">Adicionar Localização</string>
+    <string name="lbl_select_location">Selecionar Localização</string>
     <string name="lbl_remove_car">Remover Carro</string>
     <string name="lbl_save_changes">Salvar Alterações</string>
     <string name="lbl_forgot_password">Esqueceu a Senha?</string>
@@ -116,6 +117,9 @@
     <string name="txt_cancelled">Cancelado</string>
 
     <!-- Messages -->
+    <string name="msg_deleting_place">Deletando locais&#8230;</string>
+    <string name="msg_searching_ride">Buscando caronas&#8230;</string>
+    <string name="msg_ride_sent">Carona registrada com sucesso.</string>
     <string name="msg_sending_ride">Enviando carona&#8230;</string>
     <string name="msg_saving_place">Salvando local&#8230;</string>
     <string name="msg_getting_places">Buscando locais salvos&#8230;</string>
@@ -131,12 +135,12 @@
         <item>@string/txt_current_location</item>
         <item>@string/txt_other</item>
     </string-array>
-    <integer-array name="qnt_passagers">
+    <string-array name="qnt_passagers">
         <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
-    </integer-array>
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

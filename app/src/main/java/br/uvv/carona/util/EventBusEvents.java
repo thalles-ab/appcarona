@@ -12,9 +12,15 @@ public class EventBusEvents {
 
     public static class SuccessEvent{
         public boolean success;
+        public Object object;
 
         public SuccessEvent(boolean success){
             this.success = success;
+        }
+
+        public SuccessEvent(boolean success, Object object){
+            this.success = success;
+            this.object = object;
         }
     }
 
@@ -66,16 +72,58 @@ public class EventBusEvents {
         }
     }
 
-    public static class RideEvent {
-        public List<Ride> routes;
-        public Ride route;
+    public static class PlaceAddressEvent{
+        public Place place;
+        public List<Place> places;
+        public int callerId = -1;
 
-        public RideEvent(List<Ride> routes) {
-            this.routes = routes;
+        public PlaceAddressEvent(Place place){
+            this.place = place;
         }
 
-        public RideEvent(Ride route) {
+        public PlaceAddressEvent(List<Place> places) {
+            this.places = places;
+        }
+
+        public PlaceAddressEvent(Place place, int callerId){
+            this.place = place;
+            this.callerId = callerId;
+        }
+
+        public PlaceAddressEvent(List<Place> places, int callerId) {
+            this.places = places;
+            this.callerId = callerId;
+        }
+    }
+
+    public static class RideEvent {
+        public List<Ride> rides;
+        public Ride ride;
+        public boolean success = false;
+
+        public RideEvent(List<Ride> rides) {
+            this.rides = rides;
+        }
+
+        public RideEvent(Ride ride) {
+            this.ride = ride;
+        }
+    }
+
+    public static class RouteEvent{
+        public Ride route;
+        public boolean success = false;
+
+        public RouteEvent(Ride route) {
             this.route = route;
+        }
+    }
+
+    public static class NewRideEvent{
+        public boolean success;
+
+        public NewRideEvent(boolean success) {
+            this.success = success;
         }
     }
 
@@ -89,6 +137,21 @@ public class EventBusEvents {
 
         public RideRequestEvent(List<RideSolicitation> requests) {
             this.requests = requests;
+        }
+    }
+
+    public static class PlaceUpdateEvent{
+        public boolean isDelete;
+        public Place place;
+
+        public PlaceUpdateEvent(boolean isDelete) {
+            this.isDelete = isDelete;
+            place = null;
+        }
+
+        public PlaceUpdateEvent(boolean isDelete, Place place) {
+            this.isDelete = isDelete;
+            this.place = place;
         }
     }
 

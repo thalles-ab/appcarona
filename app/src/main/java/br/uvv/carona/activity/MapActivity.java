@@ -181,6 +181,20 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
         return super.onOptionsItemSelected(item);
     }
 
+    @Subscribe
+    public void onSuccess(EventBusEvents.SuccessEvent event){
+        if(event.success){
+            MessageDialog dialog = MessageDialog.newInstance(getString(R.string.msg_ride_sent), new MessageDialog.OnDialogButtonClick() {
+                @Override
+                public void onConfirmClick(Dialog dialog) {
+                    dialog.dismiss();
+                    Intent intent = new Intent(dialog.getContext(), HomeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                }
+            });
+        }
+    }
+
     @Override
     public void onConnected(Bundle bundle) {
         if(this.mMap != null) {

@@ -143,7 +143,7 @@ public class RequestRideStep2Activity extends BaseActivity implements Connection
                     int index = this.mOptions.indexOfChild(v);
                     Place place = this.mPlaces.get(index);
                     boolean ok = true;
-                    if(place.description.equals(getString(R.string.txt_current_location))){
+                    if(place.id == -1){
                         if((Build.VERSION.SDK_INT == Build.VERSION_CODES.M &&
                                 AppPartiUVV.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION,
                                         Manifest.permission.ACCESS_COARSE_LOCATION)) || Build.VERSION.SDK_INT != Build.VERSION_CODES.M) {
@@ -161,7 +161,7 @@ public class RequestRideStep2Activity extends BaseActivity implements Connection
                             //TODO
                         }
                         ok = false;
-                    }else if(place.description.equals(getString(R.string.txt_other))){
+                    }else if(place.id == -2){
                         Intent intent = new Intent(this, MapActivity.class);
                         intent.putExtra(MapActivity.TYPE_MAP_REQUEST, MapRequestEnum.OtherPlace);
                         startActivityForResult(intent,REQUEST_NEW_PLACE_CODE);
@@ -187,7 +187,7 @@ public class RequestRideStep2Activity extends BaseActivity implements Connection
             startActivity(intent);
         } else {
             this.mPlaceDestination = place;
-            if (this.mPlaceDeparture.equals(this.mPlaceDestination)) {
+            if (this.mPlaceDeparture.equals(this.mPlaceDestination) && this.mPlaceDeparture.id != -2) {
                 //TODO SHOW ERROR
             } else {
                 if (this.mForm == FormType.OfferRide) {
@@ -227,6 +227,16 @@ public class RequestRideStep2Activity extends BaseActivity implements Connection
                 this.stopProgressDialog();
                 goToNextStep(place);
             }
+        }
+    }
+
+    @Subscribe
+    public void onGetPlaces(EventBusEvents.PlaceAddressEvent event){
+        if(this.mCurrentStep == event.callerId || event.callerId == -1) {
+            Place place = event.place;
+            place.id = -1;
+            this.stopProgressDialog();
+            goToNextStep(place);
         }
     }
 
@@ -270,6 +280,7 @@ public class RequestRideStep2Activity extends BaseActivity implements Connection
             if(data != null){
                 if(requestCode == REQUEST_NEW_PLACE_CODE){
                     Place place = (Place)data.getSerializableExtra(MapActivity.PLACE_TAG);
+                    place.id = -2;
                     goToNextStep(place);
                 }
             }

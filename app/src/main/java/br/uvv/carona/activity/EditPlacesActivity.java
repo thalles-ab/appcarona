@@ -18,11 +18,14 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import br.uvv.carona.R;
 import br.uvv.carona.adapter.PlaceListAdapter;
 import br.uvv.carona.asynctask.GetUserPlacesAsyncTask;
+import br.uvv.carona.asynctask.RemovePlaceAsyncTask;
 import br.uvv.carona.asynctask.SavePlaceAsyncTask;
 import br.uvv.carona.dialog.MessageDialog;
 import br.uvv.carona.dialog.SingleFieldDialog;
@@ -48,17 +51,19 @@ public class EditPlacesActivity extends BaseActivity implements PlaceListAdapter
         setContentView(R.layout.activity_edit_places);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        Map<Integer, Place> selected = new HashMap<>();
         if(savedInstanceState == null){
             this.mPlaces = new ArrayList<>();
             startProgressDialog(R.string.msg_getting_places);
             new GetUserPlacesAsyncTask().execute();
         }else{
             this.mPlaces = (List<Place>)savedInstanceState.getSerializable(PLACE_LIST_TAG);
+            selected = (Map<Integer, Place>)savedInstanceState.getSerializable(SELECTED_ITEMS_TAG);
             layoutManager.onRestoreInstanceState(savedInstanceState.getParcelable(LAYOUT_MANAGER_STATE_TAG));
         }
 
         this.mRecyclerView = (RecyclerView)findViewById(R.id.places_list);
-        this.mAdapter = new PlaceListAdapter(this, this.mPlaces, this);
+        this.mAdapter = new PlaceListAdapter(this, this.mPlaces, this, selected);
         this.mRecyclerView.setAdapter(this.mAdapter);
         this.mRecyclerView.setLayoutManager(layoutManager);
         setUpToolbar();
@@ -70,7 +75,7 @@ public class EditPlacesActivity extends BaseActivity implements PlaceListAdapter
         inflater.inflate(R.menu.menu_place, menu);
         this.mMenu = menu;
         if(this.mAdapter != null){
-            this.onChange(0);
+            this.onChange(this.mAdapter.getSelected().size());
         }
         return true;
     }
@@ -84,7 +89,13 @@ public class EditPlacesActivity extends BaseActivity implements PlaceListAdapter
                 startActivityForResult(intent,REQUEST_NEW_PLACE_CODE);
                 return true;
             case R.id.action_delete:
-                this.mAdapter.deleteSelectedPlaces();
+                startProgressDialog(R.string.msg_deleting_place);
+                Map<Integer, Place> selected = this.mAdapter.getSelected();
+                List<Place> places = new ArrayList<>();
+                for(int key : selected.keySet()){
+                    places.add(selected.get(key));
+                }
+                new RemovePlaceAsyncTask().execute(places);
                 return true;
             case R.id.action_edit:
                 final Place place = this.mAdapter.getSingleSelectedPlace();
@@ -129,6 +140,7 @@ public class EditPlacesActivity extends BaseActivity implements PlaceListAdapter
         super.onSaveInstanceState(outState);
         outState.putSerializable(PLACE_LIST_TAG, (Serializable)this.mPlaces);
         outState.putParcelable(LAYOUT_MANAGER_STATE_TAG, this.mRecyclerView.getLayoutManager().onSaveInstanceState());
+        outState.putSerializable(SELECTED_ITEMS_TAG, (Serializable) this.mAdapter.getSelected());
     }
 
     @Subscribe
@@ -138,10 +150,21 @@ public class EditPlacesActivity extends BaseActivity implements PlaceListAdapter
         stopProgressDialog();
     }
 
-    @Subscribe void onSuccessEvent(EventBusEvents.SuccessEvent event){
+    @Subscribe
+    public void onSuccessEvent(EventBusEvents.SuccessEvent event){
         if(event.success){
             this.mAdapter.clearSelectedPlaces();
             this.mAdapter.notifyDataSetChanged();
+        }
+        stopProgressDialog();
+    }
+
+    @Subscribe
+    public void onEditSuccess(EventBusEvents.PlaceUpdateEvent event){
+        if(event.isDelete){
+            this.mAdapter.deleteSelectedPlaces();
+        }else if(event.place != null){
+            this.mAdapter.replacePlace(event.place);
         }
         stopProgressDialog();
     }

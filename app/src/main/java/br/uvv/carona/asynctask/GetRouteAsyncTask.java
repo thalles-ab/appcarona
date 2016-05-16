@@ -113,7 +113,7 @@ public class GetRouteAsyncTask extends BaseAsyncTask<RouteRequest, String> {
                         end.latitude = results.get(0).legs.get(legSize).endLocation.lat;
                         end.longitude = results.get(0).legs.get(legSize).endLocation.lng;
                         routeRide.endPoint = end;
-                        EventBus.getDefault().post(new EventBusEvents.RideEvent(routeRide));
+                        EventBus.getDefault().post(new EventBusEvents.RouteEvent(routeRide));
                     }else{
                         this.mException = new Exception(AppPartiUVV.getStringText(R.string.msg_error_couldnt_get_route));
                     }

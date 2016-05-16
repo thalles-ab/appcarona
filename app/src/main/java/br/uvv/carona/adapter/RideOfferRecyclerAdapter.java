@@ -68,6 +68,19 @@ public class RideOfferRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         return this.mOffers.size();
     }
 
+    public void addItems(List<Ride> rides){
+        if(this.mOffers.size() > 0) {
+            for (int i = 0; i < rides.size(); i++) {
+                if(!this.mOffers.contains(rides.get(i))){
+                    this.mOffers.add(rides.get(i));
+                }
+            }
+        }else{
+            this.mOffers.addAll(rides);
+        }
+        this.notifyDataSetChanged();
+    }
+
     public class RideOfferViewHolder extends RecyclerView.ViewHolder{
         public SimpleDraweeView driverPhoto;
         public TextView driverName;

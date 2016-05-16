@@ -143,7 +143,7 @@ public class RequestRideStep1Activity extends BaseActivity implements Connection
                     int index = this.mOptions.indexOfChild(v);
                     Place place = this.mPlaces.get(index);
                     boolean ok = true;
-                    if(place.description.equals(getString(R.string.txt_current_location))){
+                    if(place.id == -1){
                         if((android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.M &&
                                 AppPartiUVV.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION,
                                         Manifest.permission.ACCESS_COARSE_LOCATION)) || android.os.Build.VERSION.SDK_INT != Build.VERSION_CODES.M) {
@@ -161,7 +161,7 @@ public class RequestRideStep1Activity extends BaseActivity implements Connection
                             //TODO
                         }
                         ok = false;
-                    }else if(place.description.equals(getString(R.string.txt_other))){
+                    }else if(place.id == -2){
                         Intent intent = new Intent(this, MapActivity.class);
                         intent.putExtra(MapActivity.TYPE_MAP_REQUEST, MapRequestEnum.OtherPlace);
                         startActivityForResult(intent,REQUEST_NEW_PLACE_CODE);
@@ -179,15 +179,15 @@ public class RequestRideStep1Activity extends BaseActivity implements Connection
     private void goToNextStep(Place place){
         if (this.mCurrentStep == 0) {
             this.mPlaceDeparture = place;
-            Intent intent = new Intent(this, RequestRideStep2Activity.class);
-            intent.putExtra(RequestRideStep2Activity.DEPARTURE_PLACE_TAG, this.mPlaceDeparture);
-            intent.putExtra(RequestRideStep2Activity.PLACE_REQUEST_TAG, 1);
-            intent.putExtra(RequestRideStep2Activity.FORM_TYPE_REQUEST_TAG, this.mForm);
+            Intent intent = new Intent(this, RequestRideStep1Activity.class);
+            intent.putExtra(DEPARTURE_PLACE_TAG, this.mPlaceDeparture);
+            intent.putExtra(PLACE_REQUEST_TAG, 1);
+            intent.putExtra(FORM_TYPE_REQUEST_TAG, this.mForm);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else {
             this.mPlaceDestination = place;
-            if (this.mPlaceDeparture.equals(this.mPlaceDestination)) {
+            if (this.mPlaceDeparture.equals(this.mPlaceDestination) && this.mPlaceDeparture.id != -2) {
                 //TODO SHOW ERROR
             } else {
                 if (this.mForm == FormType.OfferRide) {
@@ -208,7 +208,7 @@ public class RequestRideStep1Activity extends BaseActivity implements Connection
 
     @Subscribe
     public void onGetPlaces(EventBusEvents.PlaceEvent event){
-        if(this.mCurrentStep == event.callerId || event.callerId == -1) {
+        if(this.mCurrentStep == event.callerId) {
             if (event.place == null) {
                 String[] options = getResources().getStringArray(R.array.locations);
                 for (int i = 0; i < options.length; i++) {
@@ -270,6 +270,7 @@ public class RequestRideStep1Activity extends BaseActivity implements Connection
             if(data != null){
                 if(requestCode == REQUEST_NEW_PLACE_CODE){
                     Place place = (Place)data.getSerializableExtra(MapActivity.PLACE_TAG);
+                    place.id = -2;
                     goToNextStep(place);
                 }
             }
