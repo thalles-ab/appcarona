@@ -19,6 +19,7 @@ import br.uvv.carona.R;
 import br.uvv.carona.activity.RideDetailActivity;
 import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
+import br.uvv.carona.util.DateFormatUtil;
 
 /**
  * Created by CB1772 on 04/05/2016.
@@ -61,6 +62,11 @@ public class RideOfferRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 v.getContext().startActivity(i);
             }
         });
+
+        if(offer.expirationDate != null) {
+            viewHolder.rideDate.setText(DateFormatUtil.formatDateView.format(offer.expirationDate));
+            viewHolder.rideTime.setText(DateFormatUtil.formatHourView.format(offer.expirationDate));
+        }
     }
 
     @Override

@@ -25,6 +25,18 @@ public class EventBusEvents {
         }
     }
 
+    public static class SuccessAnswerRideSolicitation{
+        public boolean isAccept;
+        public boolean success;
+        public RideSolicitation solicitation;
+
+        public SuccessAnswerRideSolicitation(boolean isAccept, boolean success, RideSolicitation solicitation) {
+            this.isAccept = isAccept;
+            this.success = success;
+            this.solicitation = solicitation;
+        }
+    }
+
     public static class ErrorEvent{
         public String message;
 

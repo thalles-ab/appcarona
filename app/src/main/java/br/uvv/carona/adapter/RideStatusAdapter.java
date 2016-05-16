@@ -22,6 +22,7 @@ import java.util.List;
 
 import br.uvv.carona.R;
 import br.uvv.carona.activity.RideDetailActivity;
+import br.uvv.carona.asynctask.AnswerRideSolicitationAsyncTask;
 import br.uvv.carona.fragment.RideStatusFragment;
 import br.uvv.carona.model.Ride;
 import br.uvv.carona.model.RideSolicitation;
@@ -134,11 +135,11 @@ public class RideStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                 intent.putExtra(RideDetailActivity.RIDE_TAG, ride);
                                 v.getContext().startActivity(intent);
                             } else if (text.equals(mContext.getString(R.string.lbl_cancel_solicitation))) {
-                                //TODO
+                                new AnswerRideSolicitationAsyncTask(false, mSolicitations.get(position));
                             } else if (text.equals(mContext.getString(R.string.lbl_accept_solicitation))) {
-                                //TODO
+                                new AnswerRideSolicitationAsyncTask(true, mSolicitations.get(position));
                             } else {
-                                //TODO
+                                new AnswerRideSolicitationAsyncTask(false, mSolicitations.get(position));
                             }
                             options.dismiss();
                         }

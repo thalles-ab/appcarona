@@ -2,11 +2,8 @@ package br.uvv.carona.asynctask;
 
 import org.greenrobot.eventbus.EventBus;
 
-import br.uvv.carona.application.AppPartiUVV;
-import br.uvv.carona.httprequest.BaseHttpRequest;
-import br.uvv.carona.httprequest.util.HttpMethodUtil;
-import br.uvv.carona.httprequest.util.WSResources;
 import br.uvv.carona.model.Place;
+import br.uvv.carona.service.PlaceService;
 import br.uvv.carona.util.EventBusEvents;
 
 public class SavePlaceAsyncTask extends BaseAsyncTask<Place, Place> {
@@ -18,11 +15,11 @@ public class SavePlaceAsyncTask extends BaseAsyncTask<Place, Place> {
     protected Place doInBackground(Place... params) {
         try{
             this.isEdit = params[0].id > 0;
+            //As on update there's no return, I must send to view the change if the call was a success
             if(isEdit){
                 this.mPlace = params[0];
             }
-            return AppPartiUVV.sGson.fromJson(BaseHttpRequest
-                    .createRequest(HttpMethodUtil.POST, WSResources.PLACE, params[0]), Place.class);
+            return PlaceService.saveOrUpdatePlace(params[0]);
         }catch (Exception e){
             this.mException = e;
         }

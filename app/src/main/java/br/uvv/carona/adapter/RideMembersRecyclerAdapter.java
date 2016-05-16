@@ -14,11 +14,12 @@ import java.util.List;
 
 import br.uvv.carona.R;
 import br.uvv.carona.model.Student;
+import br.uvv.carona.model.StudentRide;
 
 public class RideMembersRecyclerAdapter extends RecyclerView.Adapter {
-    List<Student> mMembers;
+    List<StudentRide> mMembers;
 
-    public RideMembersRecyclerAdapter(List<Student> members){
+    public RideMembersRecyclerAdapter(List<StudentRide> members){
         this.mMembers = members;
     }
 
@@ -32,11 +33,11 @@ public class RideMembersRecyclerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         UserMemberViewHolder userHolder = (UserMemberViewHolder)holder;
-        Student student = this.mMembers.get(position);
-        if(!TextUtils.isEmpty(student.photo)){
-            userHolder.userPhoto.setImageURI(Uri.parse(student.photo));
+        StudentRide student = this.mMembers.get(position);
+        if(!TextUtils.isEmpty(student.student.photo)){
+            userHolder.userPhoto.setImageURI(Uri.parse(student.student.photo));
         }
-        userHolder.userName.setText(student.name);
+        userHolder.userName.setText(student.student.name);
     }
 
     @Override

@@ -14,7 +14,7 @@ import br.uvv.carona.model.enums.TypeSituation;
 
 public class Ride extends BaseObject {
     public Student student;
-    public List<Student> students;
+    public List<StudentRide> students;
     public TypeDay dayType;
     public Date expirationDate;
     public int quantityPassengers;

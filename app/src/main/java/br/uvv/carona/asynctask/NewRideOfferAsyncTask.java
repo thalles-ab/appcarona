@@ -6,27 +6,18 @@ import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.httprequest.BaseHttpRequest;
 import br.uvv.carona.httprequest.util.HttpMethodUtil;
 import br.uvv.carona.httprequest.util.WSResources;
+import br.uvv.carona.model.BaseObject;
 import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
+import br.uvv.carona.service.RideService;
 import br.uvv.carona.util.EventBusEvents;
 
-public class NewRideOfferAsyncTask extends BaseAsyncTask<Ride, Void> {
+public class NewRideOfferAsyncTask extends BaseAsyncTask<Ride, BaseObject> {
 
     @Override
-    protected Void doInBackground(Ride... params) {
+    protected BaseObject doInBackground(Ride... params) {
         try{
-            Ride ride = params[0];
-            if(ride.startPoint.id < 1){
-                ride.startPoint.id = 0;
-                ride.startPoint = AppPartiUVV.sGson.fromJson(BaseHttpRequest
-                        .createRequest(HttpMethodUtil.POST, WSResources.PLACE, ride.startPoint), Place.class);
-            }
-            if(ride.endPoint.id < 1){
-                ride.endPoint.id = 0;
-                ride.endPoint = AppPartiUVV.sGson.fromJson(BaseHttpRequest
-                        .createRequest(HttpMethodUtil.POST, WSResources.PLACE, ride.endPoint), Place.class);
-            }
-            BaseHttpRequest.createRequest(HttpMethodUtil.POST, WSResources.RIDE, ride);
+            return RideService.saveRide(params[0]);
         }catch (Exception e){
             this.mException = e;
         }
@@ -34,7 +25,7 @@ public class NewRideOfferAsyncTask extends BaseAsyncTask<Ride, Void> {
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
+    protected void onPostExecute(BaseObject aVoid) {
         boolean success = this.mException == null;
         if(success) {
             EventBus.getDefault().post(new EventBusEvents.NewRideEvent(success));

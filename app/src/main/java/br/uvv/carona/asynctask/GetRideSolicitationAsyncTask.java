@@ -6,17 +6,15 @@ import java.util.List;
 
 import br.uvv.carona.model.Ride;
 import br.uvv.carona.model.RideSolicitation;
+import br.uvv.carona.service.RideSolicitationService;
 import br.uvv.carona.util.EventBusEvents;
 
-/**
- * Created by CB1772 on 12/05/2016.
- */
 public class GetRideSolicitationAsyncTask extends BaseAsyncTask<Ride, List<RideSolicitation>> {
 
     @Override
     protected List<RideSolicitation> doInBackground(Ride... params) {
         try{
-            //TODO MAKE SERVER CALL
+            return RideSolicitationService.getSolicitations();
         }catch (Exception e){
             this.mException = e;
         }

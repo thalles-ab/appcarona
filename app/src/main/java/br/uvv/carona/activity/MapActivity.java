@@ -195,6 +195,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
                 }
             });
         }
+        this.stopProgressDialog();
     }
 
     @Override
@@ -261,7 +262,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
             if(this.mDepartureMarker != null && this.mDestinationMarker != null && this.mNewRideRoute == null){
                 makeRouteRequest();
             }else if(mNewRideRoute != null){
-                getRoute(new EventBusEvents.RideEvent(mNewRideRoute));
+                getRoute(new EventBusEvents.RouteEvent(mNewRideRoute));
             }
         }
     }
@@ -390,7 +391,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
     }
 
     @Subscribe
-    public void getPlaceAddress(EventBusEvents.PlaceEvent event){
+    public void getPlaceAddress(EventBusEvents.PlaceAddressEvent event){
         this.stopProgressDialog();
         if(this.mTypeMapRequest == MapRequestEnum.AddPlace) {
             NewLocationConfirmDialog.newInstance(event.place).show(getSupportFragmentManager(), "CONFIRM_NEW_PLACE");
@@ -400,7 +401,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
     }
 
     @Subscribe
-    public void getRoute(EventBusEvents.RideEvent event){
+    public void getRoute(EventBusEvents.RouteEvent event){
         this.mNewRideRoute = event.route;
         List<LatLng> routePoints = this.mNewRideRoute.getDecodedPoints();
         this.mRoute = this.mMap.addPolyline(new PolylineOptions()

@@ -230,6 +230,16 @@ public class RequestRideStep1Activity extends BaseActivity implements Connection
         }
     }
 
+    @Subscribe
+    public void onGetPlaces(EventBusEvents.PlaceAddressEvent event){
+        if(this.mCurrentStep == event.callerId || event.callerId == -1) {
+            Place place = event.place;
+            place.id = -1;
+            this.stopProgressDialog();
+            goToNextStep(place);
+        }
+    }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
