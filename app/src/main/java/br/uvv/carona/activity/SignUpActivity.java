@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.uvv.carona.R;
-import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.asynctask.CreateUserAsyncTask;
 import br.uvv.carona.asynctask.LoginAsyncTask;
 import br.uvv.carona.model.Student;
@@ -65,13 +64,8 @@ public class SignUpActivity extends BaseActivity {
     @Subscribe
     public void onSuccessEvent(EventBusEvents.SuccessEvent event){
         new LoginAsyncTask().execute(mStudent);
-    }
-
-    @Subscribe
-    public void onLoginEvent(EventBusEvents.LoginEvent event){
-        AppPartiUVV.saveToken(event.token);
-        stopProgressDialog();
-        Intent intent = new Intent(this, HomeActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 

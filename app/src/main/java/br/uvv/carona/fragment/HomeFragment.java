@@ -54,14 +54,20 @@ public class HomeFragment extends Fragment {
 
     @Subscribe(sticky = true)
     public void onEventStatistic(Statistic event){
-        mTaken.setText(String.valueOf(event.amountTakenRides));
-        mGiven.setText(String.valueOf(event.amountGivenRides));
+        EventBus.getDefault().removeAllStickyEvents();
+        mStatistic = event;
+        fillStatistics();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(EXTRA_STATISTIC, mStatistic);
         super.onSaveInstanceState(outState);
+    }
+
+    private void fillStatistics(){
+        mTaken.setText(String.valueOf(mStatistic.amountTakenRides));
+        mGiven.setText(String.valueOf(mStatistic.amountGivenRides));
     }
 
     @Override
@@ -73,5 +79,6 @@ public class HomeFragment extends Fragment {
         }else{
             mStatistic = (Statistic) savedInstanceState.getSerializable(EXTRA_STATISTIC);
         }
+        fillStatistics();
     }
 }

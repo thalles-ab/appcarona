@@ -35,9 +35,6 @@ import br.uvv.carona.view.PhoneEditText;
 
 public abstract class BaseActivity extends AppCompatActivity {
     private static final int REQUEST_LOCATION_CODE = 10;
-    private static final String IS_SHOWING_ERROR_TAG = ".IS_SHOWING_ERROR";
-    private static final String IS_SHOWING_PROGRESS_DIALOG_TAG = ".IS_SHOWING_PROGRESS_DIALOG";
-    private static final String MESSAGE_PROGRESS_DIALOG_TAG = ".MESSAGE_PROGRESS_DIALOG";
     private String mProgressDialogMessage;
     private ProgressDialog mProgressDialog;
     protected ErrorDialogFragment mAlertDialog;
@@ -46,17 +43,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if(savedInstanceState == null){
-            this.isShowingError = false;
-        }else{
-            this.isShowingError = savedInstanceState.getBoolean(IS_SHOWING_ERROR_TAG);
-            boolean showingProgress = savedInstanceState.getBoolean(IS_SHOWING_PROGRESS_DIALOG_TAG);
-            if(showingProgress){
-                this.mProgressDialogMessage = savedInstanceState.getString(MESSAGE_PROGRESS_DIALOG_TAG);
-                startProgressDialog(this.mProgressDialogMessage);
-            }
-        }
     }
 
     @Override
@@ -64,17 +50,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onStart();
         EventBus.getDefault().register(this);
     }
-
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-////        outState.putBoolean(IS_SHOWING_ERROR_TAG, this.isShowingError);
-////        boolean isShowing = isProgressDialogShowing();
-////        outState.putBoolean(IS_SHOWING_PROGRESS_DIALOG_TAG, isShowing);
-////        if(isShowing){
-////            outState.putString(MESSAGE_PROGRESS_DIALOG_TAG, this.mProgressDialogMessage);
-////        }
-////        super.onSaveInstanceState(outState);
-//    }
 
     @Override
     protected void onResume() {
@@ -159,14 +134,24 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Subscribe
+    public void onOpenProfile(EventBusEvents.OpenProfileEvent event) {
+        stopProgressDialog();
+        Intent editProfileIntent = new Intent(this, EditProfileActivity.class);
+        editProfileIntent.putExtra(HomeActivity.EXTRA_USER, event.student);
+        startActivity(editProfileIntent);
+    }
+
+    @Subscribe
     public void onErroAuthentication(AuthenticationException event) {
         stopProgressDialog();
         logout();
     }
 
     public void logout(){
+        AppPartiUVV.persistUser(null);
         AppPartiUVV.saveToken(null);
         Intent logoutIntent = new Intent(this, LoginActivity.class);
+        logoutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(logoutIntent);
         finish();
     }

@@ -74,12 +74,11 @@ public class EditProfileActivity extends BaseActivity {
 
         if(savedInstanceState == null){
             mStudent = (Student) getIntent().getSerializableExtra(HomeActivity.EXTRA_USER);
-            setUserInfo();
         }else{
             mStudent = (Student) savedInstanceState.get(EXTRA_STUDENT);
         }
-
         setUserPhoto();
+        setUserInfo();
         setSupportActionBar(mToolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -216,15 +215,15 @@ public class EditProfileActivity extends BaseActivity {
             mUserEmail.setError(getString(R.string.error_invalid_email));
             valid = false;
         }
-
         return valid;
     }
 
     @Subscribe
     public void onUploadEvent(UploadFile file){
+        stopProgressDialog();
         mStudent.file = null;
-        new UpdateUserAsyncTask().execute(mStudent);
         mStudent.photo = file.url;
+        setUserPhoto();
     }
 
     private void openImageIntent() {

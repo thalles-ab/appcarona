@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.asynctask.GetUserInfoAsyncTask;
 import br.uvv.carona.asynctask.LoginAsyncTask;
+import br.uvv.carona.model.Error;
 import br.uvv.carona.model.Student;
 import br.uvv.carona.util.EventBusEvents;
 import br.uvv.carona.util.Md5Generator;
@@ -63,17 +65,34 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Subscribe
+    public void onEventErrors(List<Error> erros) {
+        super.onEventErrors(erros);
+        AppPartiUVV.persistUser(null);
+        AppPartiUVV.saveToken(null);
+    }
+
+    @Subscribe
+    public void onErrorEvent(EventBusEvents.ErrorEvent event) {
+        super.onErrorEvent(event);
+        AppPartiUVV.persistUser(null);
+        AppPartiUVV.saveToken(null);
+    }
+
+    @Subscribe(sticky = true)
     public void onLoginResult(EventBusEvents.LoginEvent event){
-        stopProgressDialog();
+        EventBus.getDefault().removeAllStickyEvents();
+        startProgressDialog(R.string.lbl_entering);
+        AppPartiUVV.persistUser(null);
         AppPartiUVV.saveToken(event.token);
         new GetUserInfoAsyncTask().execute(new Long(0));
     }
 
     @Subscribe
     public void onEventGetUser(EventBusEvents.UserEvent event){
-        stopProgressDialog();
         AppPartiUVV.persistUser(event.student);
         Intent intent = new Intent(this, HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+        stopProgressDialog();
     }
 }

@@ -11,9 +11,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:id="@+id/ride_wrapper"
-        android:padding="10dp"
-        fresco:cardElevation="5dp"
-        fresco:cardMaxElevation="10dp">
+        fresco:cardElevation="3dp"
+        fresco:cardMaxElevation="5dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -101,7 +100,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/lbl_date_colon"
-                            android:layout_margin="5dp"
+                            android:layout_marginTop="5dp"
                             android:textSize="14sp"
                             android:focusableInTouchMode="false"
                             android:clickable="false"/>
@@ -131,7 +130,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/lbl_hour_colon"
-                            android:layout_margin="5dp"
+                            android:layout_marginTop="5dp"
                             android:textSize="14sp"
                             android:focusableInTouchMode="false"
                             android:clickable="false"/>

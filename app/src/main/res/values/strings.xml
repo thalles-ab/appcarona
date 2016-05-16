@@ -57,7 +57,7 @@
     <string name="lbl_accept_solicitation">Aceitar pedido</string>
     <string name="lbl_see_ride">Ver Carona</string>
     <string name="lbl_select_source">Selecione a origem:</string>
-    <string name="lbl_updating_photo">Atualizando foto...</string>
+    <string name="lbl_updating_photo">Fazendo upload da foto...</string>
     <string name="lbl_updating_profile">Atualizando perfil...</string>
     <string name="lbl_edit_place_description">Editar nome do lugar</string>
     <string name="lbl_edit_place">Editar Local</string>
@@ -65,6 +65,8 @@
     <string name="lbl_statistic">Estatísticas de Caronas</string>
     <string name="lbl_rides_given"># Oferecidas</string>
     <string name="lbl_rides_taken"># Solicitadas</string>
+    <string name="lbl_contact">Contato</string>
+    <string name="lbl_empty_text">Nenhum resultado</string>
 
 
     <!-- Hints -->

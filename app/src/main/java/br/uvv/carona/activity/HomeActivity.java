@@ -21,11 +21,9 @@ import org.greenrobot.eventbus.Subscribe;
 
 import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
-import br.uvv.carona.asynctask.StatsAsyncTask;
 import br.uvv.carona.fragment.HomeFragment;
 import br.uvv.carona.fragment.RideStatusFragment;
 import br.uvv.carona.httprequest.util.WSResources;
-import br.uvv.carona.model.Statistic;
 import br.uvv.carona.model.Student;
 import br.uvv.carona.util.FormType;
 
@@ -52,6 +50,15 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         this.mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         this.mUserPhoto = (SimpleDraweeView) mNavigationView.getHeaderView(0).findViewById(R.id.user_photo);
         this.mUserName = (TextView) mNavigationView.getHeaderView(0).findViewById(R.id.user_name);
+
+        this.mUserPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent editProfileIntent = new Intent(HomeActivity.this, EditProfileActivity.class);
+                editProfileIntent.putExtra(EXTRA_USER, mUser);
+                startActivity(editProfileIntent);
+            }
+        });
 
         if(this.mDrawerLayout.isDrawerOpen(GravityCompat.START)){
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);

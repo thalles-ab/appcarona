@@ -61,6 +61,14 @@ public class EventBusEvents {
         }
     }
 
+    public static class OpenProfileEvent{
+        public Student student;
+
+        public OpenProfileEvent(Student student){
+            this.student = student;
+        }
+    }
+
     public static class PlaceEvent {
         public Place place;
         public List<Place> places;

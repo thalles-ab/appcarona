@@ -24,10 +24,9 @@ public class RideService {
 
     public static List<Ride> getUserOffers() throws Exception{
         Type type = new TypeToken<List<Ride>>() {}.getType();
-        //TODO
-//        List<Ride> rides = AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequestWithAuthorization(HttpMethodUtil.POST,
-//                WSResources.RIDE_LIST, AppPartiUVV.getToken(), ride), type);
-        return null;
+        List<Ride> rides = AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequest(HttpMethodUtil.GET,
+                WSResources.RIDE, null), type);
+        return rides;
     }
 
     public static Ride getRide(Ride ride) throws Exception{

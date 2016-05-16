@@ -4,9 +4,11 @@ import android.content.Context;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.NumberKeyListener;
 import android.util.AttributeSet;
+import android.view.View;
 
 /**
  * Created by geen-20 on 14/05/2016.
@@ -41,16 +43,30 @@ public class PhoneEditText extends AppCompatEditText {
     }
 
     private void initialize() {
-
         final int maxNumberLength = 11;
         this.setKeyListener(keylistenerNumber);
 
-        this.setText("(  )     -     ");
-        this.setSelection(1);
+        this.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(TextUtils.isEmpty(getCleanText())){
+                    if(hasFocus){
+                        PhoneEditText.this.setText("(  )     -     ");
+                        PhoneEditText.this.setSelection(1);
+                    }else{
+                        PhoneEditText.this.setText("");
+                    }
+                }
+            }
+        });
 
         this.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 String current = s.toString();
+
+                if(current.length() == 0){
+                    return;
+                }
                 if (isUpdating) {
                     isUpdating = false;
                     return;

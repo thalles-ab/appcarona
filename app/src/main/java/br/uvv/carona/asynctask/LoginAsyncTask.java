@@ -25,7 +25,7 @@ public class LoginAsyncTask extends BaseAsyncTask<Student, StudentInfo> {
     protected void onPostExecute(StudentInfo studentInfo) {
         boolean success = studentInfo != null && this.mException == null && studentInfo.erros == null;
         if(success){
-            EventBus.getDefault().post(new EventBusEvents.LoginEvent(studentInfo.token));
+            EventBus.getDefault().postSticky(new EventBusEvents.LoginEvent(studentInfo.token));
         }
         super.onPostExecute(studentInfo);
     }
