@@ -7,6 +7,7 @@ import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
 import br.uvv.carona.model.RideSolicitation;
 import br.uvv.carona.model.Student;
+import br.uvv.carona.model.route.RouteResult;
 
 public class EventBusEvents {
 
@@ -109,6 +110,7 @@ public class EventBusEvents {
     }
 
     public static class RideEvent {
+        public Ride route;
         public List<Ride> rides;
         public Ride ride;
         public boolean success = false;

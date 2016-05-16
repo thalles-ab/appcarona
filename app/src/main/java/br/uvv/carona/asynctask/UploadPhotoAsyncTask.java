@@ -4,7 +4,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import br.uvv.carona.model.Student;
 import br.uvv.carona.model.UploadFile;
-import br.uvv.carona.service.UploadService;
+import br.uvv.carona.service.CommomService;
 
 /**
  * Created by Nathalia on 15/05/2016.
@@ -14,7 +14,7 @@ public class UploadPhotoAsyncTask extends BaseAsyncTask<Student, UploadFile> {
     @Override
     protected UploadFile doInBackground(Student... params) {
         try {
-            return UploadService.upload(params[0]);
+            return CommomService.upload(params[0]);
         } catch (Exception e) {
             this.mException = e;
         }

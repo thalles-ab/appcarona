@@ -21,8 +21,10 @@ import org.greenrobot.eventbus.Subscribe;
 
 import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
+import br.uvv.carona.asynctask.StatsAsyncTask;
 import br.uvv.carona.fragment.RideStatusFragment;
 import br.uvv.carona.httprequest.util.WSResources;
+import br.uvv.carona.model.Statistic;
 import br.uvv.carona.model.Student;
 import br.uvv.carona.util.EventBusEvents;
 import br.uvv.carona.util.FormType;
@@ -35,6 +37,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private FrameLayout mFragmentWrapper;
     private SimpleDraweeView mUserPhoto;
     private TextView mUserName;
+    private TextView mTaken;
+    private TextView mGiven;
 
     private Student mUser;
 
@@ -51,6 +55,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         this.mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         this.mUserPhoto = (SimpleDraweeView) mNavigationView.getHeaderView(0).findViewById(R.id.user_photo);
         this.mUserName = (TextView) mNavigationView.getHeaderView(0).findViewById(R.id.user_name);
+        this.mTaken = (TextView) findViewById(R.id.taken);
+        this.mGiven = (TextView) findViewById(R.id.given);
 
 
         if(this.mDrawerLayout.isDrawerOpen(GravityCompat.START)){
@@ -59,6 +65,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dehaze_white_24dp);
         }
 
+        new StatsAsyncTask().execute();
 
         this.mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -90,6 +97,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         }
         setUserInfo();
         disableNavigationViewScrollbars(mNavigationView);
+    }
+
+    @Subscribe(sticky = true)
+    public void onEventStatistic(Statistic event){
+        mTaken.setText(String.valueOf(event.amountTakenRides));
+        mGiven.setText(String.valueOf(event.amountGivenRides));
     }
 
     private void disableNavigationViewScrollbars(NavigationView navigationView) {

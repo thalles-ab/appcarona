@@ -62,6 +62,9 @@
     <string name="lbl_edit_place_description">Editar nome do lugar</string>
     <string name="lbl_edit_place">Editar Local</string>
     <string name="lbl_information">Informação</string>
+    <string name="lbl_statistic">Estatísticas de Caronas</string>
+    <string name="lbl_rides_given"># Oferecidas</string>
+    <string name="lbl_rides_taken"># Solicitadas</string>
 
 
     <!-- Hints -->
