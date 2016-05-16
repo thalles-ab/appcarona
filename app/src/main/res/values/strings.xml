@@ -120,6 +120,10 @@
     <string name="txt_cancelled">Cancelado</string>
 
     <!-- Messages -->
+    <string name="msg_solicitation_success">Solicitação realizada com sucesso!</string>
+    <string name="msg_sending_solicitation">Enviando solicitação&#8230;</string>
+    <string name="msg_sending_answer">Enviando resposta&#8230;</string>
+    <string name="msg_canceling_ride">Cancelando carona&#8230;</string>
     <string name="msg_deleting_place">Deletando locais&#8230;</string>
     <string name="msg_searching_ride">Buscando caronas&#8230;</string>
     <string name="msg_ride_sent">Carona registrada com sucesso.</string>

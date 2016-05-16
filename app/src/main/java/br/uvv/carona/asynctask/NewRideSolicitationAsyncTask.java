@@ -22,8 +22,10 @@ public class NewRideSolicitationAsyncTask extends BaseAsyncTask<RideSolicitation
 
     @Override
     protected void onPostExecute(BaseObject aVoid) {
-        boolean success = this.mException != null;
-        EventBus.getDefault().post(new EventBusEvents.SuccessEvent(success));
+        boolean success = this.mException == null;
+        if(success) {
+            EventBus.getDefault().post(new EventBusEvents.SuccessEvent(success));
+        }
         super.onPostExecute(aVoid);
     }
 }

@@ -30,6 +30,13 @@ public class RideService {
         return null;
     }
 
+    public static Ride getRide(Ride ride) throws Exception{
+        StringBuilder builder = new StringBuilder("/");
+        builder.append(ride.id);
+        return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequest(HttpMethodUtil.GET,
+                WSResources.RIDE+builder.toString(), ride), Ride.class);
+    }
+
     public static BaseObject saveRide(Ride ride) throws Exception{
         if(ride.startPoint.id < 1){
             ride.startPoint.id = 0;
@@ -48,7 +55,7 @@ public class RideService {
         StringBuilder builder = new StringBuilder("/");
         builder.append(ride.id);
         return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequest(HttpMethodUtil.DELETE,
-                WSResources.RIDE+builder.toString(), ride), BaseObject.class);
+                WSResources.DELETE_RIDE+builder.toString(), ride), BaseObject.class);
     }
 
 }

@@ -26,7 +26,6 @@ import br.uvv.carona.fragment.RideStatusFragment;
 import br.uvv.carona.httprequest.util.WSResources;
 import br.uvv.carona.model.Statistic;
 import br.uvv.carona.model.Student;
-import br.uvv.carona.util.EventBusEvents;
 import br.uvv.carona.util.FormType;
 
 public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{

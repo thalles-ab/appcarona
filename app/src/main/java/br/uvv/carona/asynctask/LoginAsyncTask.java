@@ -8,9 +8,6 @@ import br.uvv.carona.service.LoginService;
 import br.uvv.carona.service.StudentService;
 import br.uvv.carona.util.EventBusEvents;
 
-/**
- * Created by CB1772 on 12/05/2016.
- */
 public class LoginAsyncTask extends BaseAsyncTask<Student, StudentInfo> {
 
     @Override

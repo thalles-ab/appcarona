@@ -45,6 +45,12 @@ public class RideMembersRecyclerAdapter extends RecyclerView.Adapter {
         return this.mMembers.size();
     }
 
+    public void replaceContent(List<StudentRide> studentRides){
+        this.mMembers.clear();
+        this.mMembers.addAll(studentRides);
+        this.notifyDataSetChanged();
+    }
+
     public class UserMemberViewHolder extends RecyclerView.ViewHolder{
         public SimpleDraweeView userPhoto;
         public TextView userName;

@@ -11,9 +11,6 @@ import br.uvv.carona.fragment.RideMapFragment;
 import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
 
-/**
- * Created by CB1772 on 08/05/2016.
- */
 public class RideDetailPageAdapter extends FragmentPagerAdapter {
     public static final int TOTAL_TAB_COUNT = 2;
     public static final int MEMBERS_AND_DETAILS = 0;

@@ -41,7 +41,9 @@ public class SplashScreenActivity extends BaseActivity {
     }
 
     @Subscribe
+    @Override
     public void onErrorEvent(EventBusEvents.ErrorEvent event) {
+        stopProgressDialog();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
@@ -54,6 +56,7 @@ public class SplashScreenActivity extends BaseActivity {
     @Subscribe
     public void onEventGetUser(EventBusEvents.UserEvent event){
         AppPartiUVV.persistUser(event.student);
+        stopProgressDialog();
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
     }

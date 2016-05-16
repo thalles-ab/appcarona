@@ -21,8 +21,10 @@ import java.util.Calendar;
 import java.util.List;
 
 import br.uvv.carona.R;
+import br.uvv.carona.activity.BaseActivity;
 import br.uvv.carona.activity.RideDetailActivity;
 import br.uvv.carona.asynctask.AnswerRideSolicitationAsyncTask;
+import br.uvv.carona.asynctask.CancelRideAsyncTask;
 import br.uvv.carona.fragment.RideStatusFragment;
 import br.uvv.carona.model.Ride;
 import br.uvv.carona.model.RideSolicitation;
@@ -98,7 +100,8 @@ public class RideStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                 intent.putExtra(RideDetailActivity.RIDE_TAG, ride);
                                 v.getContext().startActivity(intent);
                             }else{
-                                //TODO
+                                ((BaseActivity)mContext).startProgressDialog(R.string.msg_canceling_ride);
+                                new CancelRideAsyncTask().execute(ride);
                             }
                             options.dismiss();
                         }
@@ -115,8 +118,7 @@ public class RideStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     options.setWidth(AppBarLayout.LayoutParams.WRAP_CONTENT);
                     final ArrayAdapter<String> adapter;
                     if (RideStatusAdapter.this.mTypeSolicitation == RideStatusFragment.TYPE_REQUEST_MADE) {
-                        String[] optionsTxt = {mContext.getString(R.string.lbl_see_ride),
-                                mContext.getString(R.string.lbl_cancel_offer)};
+                        String[] optionsTxt = {mContext.getString(R.string.lbl_see_ride)};
                         adapter = new ArrayAdapter(v.getContext(), R.layout.layout_ride_solicitation_option_item, optionsTxt);
                     } else {
                         String[] optionsTxt = {mContext.getString(R.string.lbl_see_ride),
@@ -134,11 +136,11 @@ public class RideStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                 intent.putExtra(RideDetailActivity.IS_NEW_REQUEST_TAG, true);
                                 intent.putExtra(RideDetailActivity.RIDE_TAG, ride);
                                 v.getContext().startActivity(intent);
-                            } else if (text.equals(mContext.getString(R.string.lbl_cancel_solicitation))) {
-                                new AnswerRideSolicitationAsyncTask(false, mSolicitations.get(position));
                             } else if (text.equals(mContext.getString(R.string.lbl_accept_solicitation))) {
+                                ((BaseActivity)mContext).startProgressDialog(R.string.msg_sending_answer);
                                 new AnswerRideSolicitationAsyncTask(true, mSolicitations.get(position));
                             } else {
+                                ((BaseActivity)mContext).startProgressDialog(R.string.msg_sending_answer);
                                 new AnswerRideSolicitationAsyncTask(false, mSolicitations.get(position));
                             }
                             options.dismiss();

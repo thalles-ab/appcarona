@@ -1,5 +1,7 @@
 package br.uvv.carona.activity;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -12,7 +14,9 @@ import org.greenrobot.eventbus.Subscribe;
 
 import br.uvv.carona.R;
 import br.uvv.carona.adapter.RideDetailPageAdapter;
+import br.uvv.carona.asynctask.GetRideAsyncTask;
 import br.uvv.carona.asynctask.NewRideSolicitationAsyncTask;
+import br.uvv.carona.dialog.MessageDialog;
 import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
 import br.uvv.carona.model.RideSolicitation;
@@ -79,6 +83,7 @@ public class RideDetailActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_confirm:
+                startProgressDialog(R.string.msg_sending_solicitation);
                 RideSolicitation solicitation = new RideSolicitation();
                 solicitation.ride = this.mRide;
                 new NewRideSolicitationAsyncTask().execute(solicitation);
@@ -92,5 +97,21 @@ public class RideDetailActivity extends BaseActivity {
         super.onSaveInstanceState(outState);
         outState.putSerializable(RIDE_TAG, this.mRide);
         outState.putBoolean(IS_NEW_REQUEST_TAG, this.mIsRideRequest);
+    }
+
+    @Subscribe
+    public void onSuccess(EventBusEvents.SuccessEvent event){
+        if(event.success){
+            MessageDialog.newInstance(getString(R.string.msg_solicitation_success), new MessageDialog.OnDialogButtonClick() {
+                @Override
+                public void onConfirmClick(Dialog dialog) {
+                    Intent intent = new Intent(dialog.getContext(), HomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    dialog.dismiss();
+                    startActivity(intent);
+                }
+            });
+        }
+        stopProgressDialog();
     }
 }

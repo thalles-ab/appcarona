@@ -13,12 +13,17 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.text.SimpleDateFormat;
 
 import br.uvv.carona.R;
 import br.uvv.carona.adapter.RideMembersRecyclerAdapter;
+import br.uvv.carona.asynctask.GetRideAsyncTask;
 import br.uvv.carona.model.Ride;
 import br.uvv.carona.util.DateFormatUtil;
+import br.uvv.carona.util.EventBusEvents;
 
 public class RideDetailFragment extends Fragment {
     private static final String FRAG_RIDE_DETAIL_TAG = ".FRAG_RIDE_DETAIL_TAG";
@@ -47,6 +52,8 @@ public class RideDetailFragment extends Fragment {
             if (getArguments() != null) {
                 this.mRide = (Ride) getArguments().getSerializable(FRAG_RIDE_DETAIL_TAG);
             }
+
+            new GetRideAsyncTask().execute(this.mRide);
         }else{
             this.mRide = (Ride) savedInstanceState.getSerializable(FRAG_RIDE_DETAIL_TAG);
         }
@@ -75,9 +82,21 @@ public class RideDetailFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(FRAG_RIDE_DETAIL_TAG, this.mRide);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     private void setInfoOnScreen(){
@@ -93,5 +112,11 @@ public class RideDetailFragment extends Fragment {
         if(this.mRide.student.allowCellphone) {
             this.mDriverPhone.setText(this.mRide.student.cellPhone);
         }
+    }
+
+    @Subscribe
+    public void onGetRideEvent(EventBusEvents.RideEvent event){
+        this.mRide = event.ride;
+        this.mAdapter.replaceContent(this.mRide.students);
     }
 }

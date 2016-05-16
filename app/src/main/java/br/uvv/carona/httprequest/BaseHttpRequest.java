@@ -134,6 +134,9 @@ public class BaseHttpRequest{
             connection.connect();
             int code = connection.getResponseCode();
             if (code != HttpURLConnection.HTTP_OK) {
+                InputStream is = connection.getErrorStream();
+                response = readIt(is);
+                is.close();
                 switch (code) {
                     case HttpURLConnection.HTTP_UNAUTHORIZED:
                         Log.i(TAG, ": Login ou senha incorretos");
