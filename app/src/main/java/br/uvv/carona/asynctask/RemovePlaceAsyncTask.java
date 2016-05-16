@@ -4,12 +4,9 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-import br.uvv.carona.application.AppPartiUVV;
-import br.uvv.carona.httprequest.BaseHttpRequest;
-import br.uvv.carona.httprequest.util.HttpMethodUtil;
-import br.uvv.carona.httprequest.util.WSResources;
 import br.uvv.carona.model.BaseObject;
 import br.uvv.carona.model.Place;
+import br.uvv.carona.service.PlaceService;
 import br.uvv.carona.util.EventBusEvents;
 
 public class RemovePlaceAsyncTask extends BaseAsyncTask<List<Place>, BaseObject> {
@@ -17,8 +14,7 @@ public class RemovePlaceAsyncTask extends BaseAsyncTask<List<Place>, BaseObject>
     @Override
     protected BaseObject doInBackground(List<Place>... params) {
         try{
-            return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequestWithAuthorization(HttpMethodUtil.POST,
-                    WSResources.DELETE_PLACE, AppPartiUVV.getToken(), params[0]), BaseObject.class);
+            return PlaceService.removePlaces(params[0]);
         }catch (Exception e){
             this.mException = e;
         }
