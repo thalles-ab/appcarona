@@ -114,8 +114,10 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
         if(this.mTypeMapRequest == MapRequestEnum.MarkRoute){
             actionBar.setTitle(R.string.lbl_offer_ride);
             actionBar.setSubtitle(R.string.lbl_route);
-        }else{
+        }else if(this.mTypeMapRequest == MapRequestEnum.AddPlace){
             actionBar.setTitle(R.string.lbl_add_location);
+        }else{
+            actionBar.setTitle(R.string.lbl_select_location);
         }
     }
 
