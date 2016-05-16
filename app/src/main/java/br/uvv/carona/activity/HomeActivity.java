@@ -22,6 +22,7 @@ import org.greenrobot.eventbus.Subscribe;
 import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.asynctask.StatsAsyncTask;
+import br.uvv.carona.fragment.HomeFragment;
 import br.uvv.carona.fragment.RideStatusFragment;
 import br.uvv.carona.httprequest.util.WSResources;
 import br.uvv.carona.model.Statistic;
@@ -37,9 +38,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private FrameLayout mFragmentWrapper;
     private SimpleDraweeView mUserPhoto;
     private TextView mUserName;
-    private TextView mTaken;
-    private TextView mGiven;
-
     private Student mUser;
 
     @Override
@@ -55,17 +53,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         this.mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         this.mUserPhoto = (SimpleDraweeView) mNavigationView.getHeaderView(0).findViewById(R.id.user_photo);
         this.mUserName = (TextView) mNavigationView.getHeaderView(0).findViewById(R.id.user_name);
-        this.mTaken = (TextView) findViewById(R.id.taken);
-        this.mGiven = (TextView) findViewById(R.id.given);
-
 
         if(this.mDrawerLayout.isDrawerOpen(GravityCompat.START)){
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         }else{
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dehaze_white_24dp);
         }
-
-        new StatsAsyncTask().execute();
 
         this.mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -97,13 +90,15 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         }
         setUserInfo();
         disableNavigationViewScrollbars(mNavigationView);
+        showHome();
     }
 
-    @Subscribe(sticky = true)
-    public void onEventStatistic(Statistic event){
-        mTaken.setText(String.valueOf(event.amountTakenRides));
-        mGiven.setText(String.valueOf(event.amountGivenRides));
+    private void showHome(){
+        HomeFragment fragmentHome = HomeFragment.newInstance();
+        FragmentTransaction ft4 = getSupportFragmentManager().beginTransaction();
+        ft4.replace(R.id.fragment_wrapper, fragmentHome).commit();
     }
+
 
     private void disableNavigationViewScrollbars(NavigationView navigationView) {
         if (navigationView != null) {
@@ -200,6 +195,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 RideStatusFragment fragmentRides = RideStatusFragment.newInstance(RideStatusFragment.TYPE_ACTIVE_RIDE);
                 FragmentTransaction ft3 = getSupportFragmentManager().beginTransaction();
                 ft3.replace(R.id.fragment_wrapper, fragmentRides).commit();
+                break;
+            case R.id.action_home:
+                showHome();
                 break;
             case R.id.action_logout:
                 logout();
