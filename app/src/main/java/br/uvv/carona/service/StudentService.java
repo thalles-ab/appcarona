@@ -1,5 +1,8 @@
 package br.uvv.carona.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.httprequest.BaseHttpRequest;
 import br.uvv.carona.httprequest.util.HttpMethodUtil;
@@ -17,14 +20,14 @@ public class StudentService {
     }
 
     public static BaseObject updateStudent(Student student) throws Exception {
-        return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequestWithAuthorization(HttpMethodUtil.PUT, WSResources.URL_STUDENT, AppPartiUVV.getToken(), student), BaseObject.class);
+        return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequest(HttpMethodUtil.PUT, WSResources.URL_STUDENT, student), BaseObject.class);
     }
 
     public static Student getStudent(Long id) throws Exception {
-        String param = null;
+        Map<String, Object> map = new HashMap<>();
         if(id > 0){
-            param = "id=" + id;
+            map.put("id", id);
         }
-        return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequestWithAuthorization(HttpMethodUtil.GET, WSResources.URL_STUDENT, AppPartiUVV.getToken(), param), Student.class);
+        return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequest(HttpMethodUtil.GET, WSResources.URL_STUDENT, map.isEmpty() ? null : map), Student.class);
     }
 }

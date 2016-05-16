@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="@string/lbl_profile">
+    <item android:title="@string/lbl_profile" >
         <menu>
             <item android:id="@+id/action_edit_profile"
+                android:icon="@drawable/ic_account"
                 android:title="@string/lbl_edit_profile"/>
             <item android:id="@+id/action_edit_places"
+                android:icon="@drawable/ic_map_marker"
                 android:title="@string/lbl_edit_places"/>
         </menu>
     </item>
@@ -16,10 +18,13 @@
                 android:enabled="true"
                 android:menuCategory="container">
                 <item android:id="@+id/action_offer_ride"
+                    android:icon="@drawable/ic_car"
                     android:title="@string/lbl_offer_ride"/>
                 <item android:id="@+id/action_request_ride"
+                    android:icon="@drawable/ic_human_greeting"
                     android:title="@string/lbl_request_ride"/>
                 <item android:id="@+id/action_check_offered_rides"
+                    android:icon="@drawable/ic_car"
                     android:title="@string/lbl_offered_rides"/>
                 <item android:id="@+id/action_check_requests_received"
                     android:title="@string/lbl_see_requests_received"/>
@@ -30,6 +35,7 @@
     </item>
 
     <item android:id="@+id/action_logout"
+        android:icon="@drawable/ic_logout"
         android:title="@string/lbl_logout"/>
 
 </menu>

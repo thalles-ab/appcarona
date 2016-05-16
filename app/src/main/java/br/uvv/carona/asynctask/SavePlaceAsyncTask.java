@@ -14,9 +14,9 @@ public class SavePlaceAsyncTask extends BaseAsyncTask<Place, Void> {
     @Override
     protected Void doInBackground(Place... params) {
         try{
-            AppPartiUVV.sGson.fromJson(BaseHttpRequest
-                    .createRequestWithAuthorization(HttpMethodUtil.POST, WSResources.PLACE,
-                            AppPartiUVV.getToken(), params[0]), Place.class);
+//            AppPartiUVV.sGson.fromJson(BaseHttpRequest
+//                    .createRequestWithAuthorization(HttpMethodUtil.POST, WSResources.PLACE,
+//                            AppPartiUVV.getToken(), params[0]), Place.class);
             return null;
         }catch (Exception e){
             this.mException = e;

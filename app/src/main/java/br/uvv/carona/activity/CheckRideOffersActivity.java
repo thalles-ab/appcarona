@@ -70,13 +70,6 @@ public class CheckRideOffersActivity extends BaseActivity {
         outState.putParcelable(OFFERS_ADAPTER_TAG, this.mRecyclerView.getLayoutManager().onSaveInstanceState());
     }
 
-    @Subscribe
-    @Override
-    public void onErrorEvent(EventBusEvents.ErrorEvent event) {
-        this.stopProgressDialog();
-        treatCommonErrors(event);
-    }
-
     private void addRoute(String name, String photoUrl){
         Ride r = new Ride();
         Student s = new Student();

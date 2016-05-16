@@ -207,13 +207,6 @@ public class RequestRideStep2Activity extends BaseActivity implements Connection
     }
 
     @Subscribe
-    @Override
-    public void onErrorEvent(EventBusEvents.ErrorEvent event) {
-        treatCommonErrors(event);
-        this.stopProgressDialog();
-    }
-
-    @Subscribe
     public void onGetPlaces(EventBusEvents.PlaceEvent event){
         if(this.mCurrentStep == event.callerId || event.callerId == -1) {
             if (event.place == null) {

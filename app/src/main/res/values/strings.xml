@@ -60,6 +60,8 @@
     <string name="lbl_updating_profile">Atualizando perfil...</string>
     <string name="lbl_edit_place_description">Editar nome do lugar</string>
     <string name="lbl_edit_place">Editar Local</string>
+    <string name="lbl_information">Informação</string>
+
 
     <!-- Hints -->
     <string name="hint_login">login</string>
@@ -80,6 +82,7 @@
     <string name="btn_change_date_time">Alterar Data/Hora</string>
     <string name="btn_select">Selecionar</string>
     <string name="btn_confirm">Confirmar</string>
+    <string name="btn_ok">Ok</string>
 
     <!-- Errors -->
     <string name="error_fill_field">Preencha este campo.</string>
@@ -89,6 +92,9 @@
     <string name="error_invalid_phone">Celular inválido</string>
     <string name="error_invalid_registration">Matrícula deve conter 9 digitos</string>
     <string name="error_password_less_than_six">Senha deve ter no mínimo 6 caracteres</string>
+    <string name="error_unauthorized">Matrícula ou senha inválidos.</string>
+    <string name="error_ws_generic">Desculpe, ocorreu um erro inesperado.</string>
+    <string name="error_not_connect_networking">Sem conexão com a internet.</string>
 
 
     <!-- Successs -->

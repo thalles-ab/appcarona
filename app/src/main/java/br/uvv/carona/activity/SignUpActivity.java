@@ -62,14 +62,6 @@ public class SignUpActivity extends BaseActivity {
         }
     }
 
-
-    @Subscribe
-    @Override
-    public void onErrorEvent(EventBusEvents.ErrorEvent event) {
-        stopProgressDialog();
-        //TODO Fazer tratamentos de erros mais genérico
-    }
-
     @Subscribe
     public void onSuccessEvent(EventBusEvents.SuccessEvent event){
         new LoginAsyncTask().execute(mStudent);

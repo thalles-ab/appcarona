@@ -135,13 +135,6 @@ public class EditProfileActivity extends BaseActivity {
         mStudent.cellPhone = mUserPhone.getCleanText();
     }
 
-    @Subscribe
-    @Override
-    public void onErrorEvent(EventBusEvents.ErrorEvent event) {
-        this.stopProgressDialog();
-        treatCommonErrors(event);
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(EXTRA_STUDENT, mStudent);

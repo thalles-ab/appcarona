@@ -14,7 +14,7 @@ public class NewRideOfferAsyncTask extends BaseAsyncTask<Ride, Void> {
     @Override
     protected Void doInBackground(Ride... params) {
         try{
-            BaseHttpRequest.createRequestWithAuthorization(HttpMethodUtil.POST, WSResources.RIDE, AppPartiUVV.getToken(), params[0]);
+//            BaseHttpRequest.createRequestWithAuthorization(HttpMethodUtil.POST, WSResources.RIDE, AppPartiUVV.getToken(), params[0]);
         }catch (Exception e){
             this.mException = e;
         }

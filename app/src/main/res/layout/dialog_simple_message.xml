@@ -16,7 +16,7 @@
         android:id="@+id/confirm_action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btn_confirm"
+        android:text="@string/btn_ok"
         android:background="@drawable/background_dialog_message_button"
         android:layout_alignParentRight="true"
         android:layout_below="@id/message"

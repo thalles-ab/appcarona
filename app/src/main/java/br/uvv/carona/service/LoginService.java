@@ -17,8 +17,8 @@ public class LoginService {
         return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequest(HttpMethodUtil.POST, WSResources.URL_LOGIN, student), StudentInfo.class);
     }
 
-    public static BaseObject loginWithToken(String token) throws Exception {
-        return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequestWithAuthorization(HttpMethodUtil.POST, WSResources.URL_LOGIN,token, null), BaseObject.class);
+    public static BaseObject loginWithToken() throws Exception {
+        return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequest(HttpMethodUtil.POST, WSResources.URL_LOGIN, null), BaseObject.class);
     }
 
 }

@@ -181,13 +181,6 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
         return super.onOptionsItemSelected(item);
     }
 
-    @Subscribe
-    @Override
-    public void onErrorEvent(EventBusEvents.ErrorEvent event) {
-        treatCommonErrors(event);
-        this.stopProgressDialog();
-    }
-
     @Override
     public void onConnected(Bundle bundle) {
         if(this.mMap != null) {

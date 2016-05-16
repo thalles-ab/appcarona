@@ -28,8 +28,10 @@ public class GetUserPlacesAsyncTask extends BaseAsyncTask<Void, List<Place>> {
     protected List<Place> doInBackground(Void... params) {
         try{
             Type type = new TypeToken<List<Place>>() {}.getType();
-            List<Place> places = AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequestWithAuthorization(HttpMethodUtil.GET, WSResources.PLACE, AppPartiUVV.getToken(), null), type);
-            return places;
+
+//            List<Place> places = AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequestWithAuthorization(HttpMethodUtil.GET, WSResources.PLACE, AppPartiUVV.getToken(), null), type);
+//            return places;
+            return null;
         }catch(Exception e){
             this.mException = e;
         }
