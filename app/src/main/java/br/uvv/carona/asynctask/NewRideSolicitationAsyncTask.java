@@ -2,18 +2,18 @@ package br.uvv.carona.asynctask;
 
 import org.greenrobot.eventbus.EventBus;
 
+import br.uvv.carona.model.BaseObject;
+import br.uvv.carona.model.Ride;
 import br.uvv.carona.model.RideSolicitation;
+import br.uvv.carona.service.RideSolicitationService;
 import br.uvv.carona.util.EventBusEvents;
 
-/**
- * Created by CB1772 on 12/05/2016.
- */
-public class NewRideSolicitationAsyncTask extends BaseAsyncTask<RideSolicitation, Void> {
+public class NewRideSolicitationAsyncTask extends BaseAsyncTask<RideSolicitation, BaseObject> {
 
     @Override
-    protected Void doInBackground(RideSolicitation... params) {
+    protected BaseObject doInBackground(RideSolicitation... params) {
         try {
-            //TODO SERVER CALL
+            return RideSolicitationService.makeRequest(params[0]);
         }catch (Exception e){
             this.mException = e;
         }
@@ -21,7 +21,7 @@ public class NewRideSolicitationAsyncTask extends BaseAsyncTask<RideSolicitation
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
+    protected void onPostExecute(BaseObject aVoid) {
         boolean success = this.mException != null;
         EventBus.getDefault().post(new EventBusEvents.SuccessEvent(success));
         super.onPostExecute(aVoid);

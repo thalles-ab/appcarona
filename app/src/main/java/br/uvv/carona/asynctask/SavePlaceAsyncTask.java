@@ -12,7 +12,7 @@ public class SavePlaceAsyncTask extends BaseAsyncTask<Place, Place> {
     private Place mPlace;
 
     @Override
-    protected Void doInBackground(Place... params) {
+    protected Place doInBackground(Place... params) {
         try{
             this.isEdit = params[0].id > 0;
             //As on update there's no return, I must send to view the change if the call was a success

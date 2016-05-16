@@ -10,7 +10,9 @@ public class WSResources {
     public static final String URL_UPLOAD = "http://ec2-52-38-251-192.us-west-2.compute.amazonaws.com/carona-upload/api/file";
     public static final String RIDE = BASE_URL + "/ride";
     public static final String PLACE = BASE_URL + "/place";
+    public static final String RIDE_SOLICITATION = BASE_URL + "/solicitationRide";
     public static final String RIDE_LIST = RIDE + "/list";
+    public static final String RIDE_SOLICITATION_LIST = RIDE_SOLICITATION + "/list";
     public static final String GET_STUDENT = BASE_URL + "/";
     public static final String URL_STUDENT = BASE_URL + "/student";
     public static final String URL_LOGIN = BASE_URL + "/login";

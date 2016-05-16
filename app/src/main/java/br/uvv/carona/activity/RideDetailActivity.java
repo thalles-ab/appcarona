@@ -12,8 +12,10 @@ import org.greenrobot.eventbus.Subscribe;
 
 import br.uvv.carona.R;
 import br.uvv.carona.adapter.RideDetailPageAdapter;
+import br.uvv.carona.asynctask.NewRideSolicitationAsyncTask;
 import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
+import br.uvv.carona.model.RideSolicitation;
 import br.uvv.carona.util.EventBusEvents;
 
 public class RideDetailActivity extends BaseActivity {
@@ -77,6 +79,9 @@ public class RideDetailActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_confirm:
+                RideSolicitation solicitation = new RideSolicitation();
+                solicitation.ride = this.mRide;
+                new NewRideSolicitationAsyncTask().execute(solicitation);
                 return true;
         }
         return super.onOptionsItemSelected(item);

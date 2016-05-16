@@ -73,8 +73,7 @@ public class GetRouteAsyncTask extends BaseAsyncTask<RouteRequest, String> {
             urlBuilder.append(Locale.getDefault().toString());
             urlBuilder.append("&key=");
             urlBuilder.append(mGoogleApiKey);
-            return null;
-//            return BaseHttpRequest.createRequestWithAuthorization(HttpMethodUtil.GET, urlBuilder.toString(), null, null);
+            return BaseHttpRequest.createRequest(HttpMethodUtil.GET, urlBuilder.toString(), null);
         }catch (Exception e){
             this.mException = e;
             Log.e("ERROR REQUEST", e.getMessage());

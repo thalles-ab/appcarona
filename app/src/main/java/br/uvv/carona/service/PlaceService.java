@@ -16,19 +16,19 @@ public class PlaceService {
 
     public static List<Place> getUserPlaces() throws Exception{
         Type type = new TypeToken<List<Place>>() {}.getType();
-        List<Place> places = AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequestWithAuthorization(HttpMethodUtil.GET, WSResources.PLACE, AppPartiUVV.getToken(), null), type);
+        List<Place> places = AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequest(HttpMethodUtil.GET,
+                WSResources.PLACE, null), type);
         return places;
     }
 
     public static BaseObject removePlaces(List<Place> places) throws Exception{
-        return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequestWithAuthorization(HttpMethodUtil.POST,
-                WSResources.DELETE_PLACE, AppPartiUVV.getToken(), places), BaseObject.class);
+        return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequest(HttpMethodUtil.POST,
+                WSResources.DELETE_PLACE,  places), BaseObject.class);
     }
 
     public static Place saveOrUpdatePlace(Place place) throws Exception{
         return AppPartiUVV.sGson.fromJson(BaseHttpRequest
-                .createRequestWithAuthorization(HttpMethodUtil.POST, WSResources.PLACE,
-                        AppPartiUVV.getToken(), place), Place.class);
+                .createRequest(HttpMethodUtil.POST, WSResources.PLACE, place), Place.class);
     }
 
 }
