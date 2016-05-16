@@ -82,13 +82,6 @@ public class RideDetailActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Subscribe
-    @Override
-    public void onErrorEvent(EventBusEvents.ErrorEvent event) {
-        this.stopProgressDialog();
-        treatCommonErrors(event);
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);

@@ -12,7 +12,8 @@ import br.uvv.carona.model.UploadFile;
  */
 public class UploadService {
     public static UploadFile upload(Student student) throws Exception {
-        return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequest(HttpMethodUtil.POST, WSResources.URL_UPLOAD, student), UploadFile.class);
+//        return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequest(HttpMethodUtil.POST, WSResources.URL_UPLOAD, student), UploadFile.class);
+        return null;
     }
 
 }

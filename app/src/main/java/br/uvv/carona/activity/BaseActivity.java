@@ -9,9 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -27,7 +25,10 @@ import java.util.List;
 
 import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
+import br.uvv.carona.dialog.ErrorDialogFragment;
 import br.uvv.carona.dialog.MessageDialog;
+import br.uvv.carona.exception.AuthenticationException;
+import br.uvv.carona.model.Error;
 import br.uvv.carona.util.BaseTextWatcher;
 import br.uvv.carona.util.EventBusEvents;
 import br.uvv.carona.view.PhoneEditText;
@@ -39,7 +40,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private static final String MESSAGE_PROGRESS_DIALOG_TAG = ".MESSAGE_PROGRESS_DIALOG";
     private String mProgressDialogMessage;
     private ProgressDialog mProgressDialog;
-
+    protected ErrorDialogFragment mAlertDialog;
     protected boolean isShowingError = false;
 
     @Override
@@ -64,30 +65,22 @@ public abstract class BaseActivity extends AppCompatActivity {
         EventBus.getDefault().register(this);
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(IS_SHOWING_ERROR_TAG, this.isShowingError);
-        boolean isShowing = isProgressDialogShowing();
-        outState.putBoolean(IS_SHOWING_PROGRESS_DIALOG_TAG, isShowing);
-        if(isShowing){
-            outState.putString(MESSAGE_PROGRESS_DIALOG_TAG, this.mProgressDialogMessage);
-        }
-    }
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+////        outState.putBoolean(IS_SHOWING_ERROR_TAG, this.isShowingError);
+////        boolean isShowing = isProgressDialogShowing();
+////        outState.putBoolean(IS_SHOWING_PROGRESS_DIALOG_TAG, isShowing);
+////        if(isShowing){
+////            outState.putString(MESSAGE_PROGRESS_DIALOG_TAG, this.mProgressDialogMessage);
+////        }
+////        super.onSaveInstanceState(outState);
+//    }
 
     @Override
     protected void onResume() {
         super.onResume();
         String[] request = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-        if (!AppPartiUVV.hasInternetConnection()) {
-            showError(getString(R.string.msg_turn_on_internet_connection), new MessageDialog.OnDialogButtonClick() {
-                @Override
-                public void onConfirmClick(Dialog dialog) {
-                    dialog.dismiss();
-                    ActivityCompat.finishAffinity(dialog.getOwnerActivity());
-                }
-            });
-        } else if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.M &&
+        if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.M &&
                 !AppPartiUVV.hasPermission(request)) {
             ActivityCompat.requestPermissions(this, request, REQUEST_LOCATION_CODE);
         }
@@ -124,12 +117,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                     @Override
                     public void onConfirmClick(Dialog dialog) {
                         dialog.dismiss();
-                        //TODO
-//                        if(android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1){
-//                            ActivityCompat.finishAffinity(dialog.getOwnerActivity());
-//                        }else {
-//                            dialog.getOwnerActivity().finishAffinity();
-//                        }
                     }
                 });
             }
@@ -144,11 +131,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void startProgressDialog(String message){
         if(this.mProgressDialog == null){
             this.mProgressDialog = new ProgressDialog(this);
-            this.mProgressDialog.setCancelable(false);
-            this.mProgressDialogMessage = message;
-            this.mProgressDialog.setMessage(this.mProgressDialogMessage);
-            this.mProgressDialog.show();
         }
+        this.mProgressDialog.setCancelable(false);
+        this.mProgressDialogMessage = message;
+        this.mProgressDialog.setMessage(this.mProgressDialogMessage);
+        this.mProgressDialog.show();
     }
 
     public boolean isProgressDialogShowing(){
@@ -162,9 +149,35 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public abstract void onErrorEvent(EventBusEvents.ErrorEvent event);
-    protected void treatCommonErrors(EventBusEvents.ErrorEvent event){
-        this.stopProgressDialog();
+    @Subscribe
+    public void onErrorEvent(EventBusEvents.ErrorEvent event) {
+        stopProgressDialog();
+        if(!this.isShowingError) {
+            mAlertDialog = ErrorDialogFragment.newInstance(event.message);
+            mAlertDialog.show(getSupportFragmentManager(), "dialog");
+        }
+    }
+
+    @Subscribe
+    public void onErroAuthentication(AuthenticationException event) {
+        stopProgressDialog();
+        logout();
+    }
+
+    public void logout(){
+        AppPartiUVV.saveToken(null);
+        Intent logoutIntent = new Intent(this, LoginActivity.class);
+        startActivity(logoutIntent);
+        finish();
+    }
+
+    @Subscribe
+    public void onEventErrors(List<Error> erros) {
+        stopProgressDialog();
+        if(!this.isShowingError) {
+            mAlertDialog = ErrorDialogFragment.newInstance(erros);
+            mAlertDialog.show(getSupportFragmentManager(), "dialog");
+        }
     }
 
     protected void showError(String message, final MessageDialog.OnDialogButtonClick onDialogButtonClick){

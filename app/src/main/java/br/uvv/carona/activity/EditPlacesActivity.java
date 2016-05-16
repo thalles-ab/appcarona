@@ -169,13 +169,6 @@ public class EditPlacesActivity extends BaseActivity implements PlaceListAdapter
         stopProgressDialog();
     }
 
-    @Subscribe
-    @Override
-    public void onErrorEvent(EventBusEvents.ErrorEvent event) {
-        treatCommonErrors(event);
-        stopProgressDialog();
-    }
-
     @Override
     public void onChange(Object object) {
         int qnt = (int)object;

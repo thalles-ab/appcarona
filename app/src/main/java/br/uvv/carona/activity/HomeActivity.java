@@ -132,11 +132,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Subscribe
-    @Override
-    public void onErrorEvent(EventBusEvents.ErrorEvent event) {
-        this.stopProgressDialog();
-        treatCommonErrors(event);
-    }
 
     @Override
     public void onBackPressed() {
@@ -194,10 +189,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 ft3.replace(R.id.fragment_wrapper, fragmentRides).commit();
                 break;
             case R.id.action_logout:
-                AppPartiUVV.saveToken(null);
-                Intent logoutIntent = new Intent(this, LoginActivity.class);
-                startActivity(logoutIntent);
-                finish();
+                logout();
                 break;
         }
         this.mDrawerLayout.closeDrawer(GravityCompat.START);

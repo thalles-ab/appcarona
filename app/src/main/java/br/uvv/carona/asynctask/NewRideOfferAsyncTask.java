@@ -6,7 +6,6 @@ import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.httprequest.BaseHttpRequest;
 import br.uvv.carona.httprequest.util.HttpMethodUtil;
 import br.uvv.carona.httprequest.util.WSResources;
-import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
 import br.uvv.carona.util.EventBusEvents;
 

@@ -55,6 +55,8 @@ public class CheckRideOffersActivity extends BaseActivity {
             this.mDestination = (Place)savedInstanceState.getSerializable(DESTINATION_PLACE_TAG);
         }
 
+        Place departure = (Place)getIntent().getSerializableExtra(DEPARTURE_PLACE_TAG);
+        Place destination = (Place)getIntent().getSerializableExtra(DESTINATION_PLACE_TAG);
 
         this.mRecyclerView = (RecyclerView)findViewById(R.id.offersList);
         this.mRecyclerAdapter = new RideOfferRecyclerAdapter(this.mOffers, this.mDeparture, this.mDestination);
@@ -76,14 +78,7 @@ public class CheckRideOffersActivity extends BaseActivity {
         outState.putSerializable(DESTINATION_PLACE_TAG, this.mDestination);
     }
 
-    @Subscribe
-    @Override
-    public void onErrorEvent(EventBusEvents.ErrorEvent event) {
-        this.stopProgressDialog();
-        treatCommonErrors(event);
-    }
-
-    @Subscribe
+   @Subscribe
     public void onGetRides(EventBusEvents.RideEvent event){
         this.mRecyclerAdapter.addItems(event.rides);
         this.stopProgressDialog();

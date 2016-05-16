@@ -13,6 +13,8 @@ import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.asynctask.AutoLoginAsyncTask;
 import br.uvv.carona.asynctask.GetUserInfoAsyncTask;
+import br.uvv.carona.dialog.ErrorDialogFragment;
+import br.uvv.carona.dialog.MessageDialog;
 import br.uvv.carona.util.EventBusEvents;
 
 public class SplashScreenActivity extends BaseActivity {
@@ -24,7 +26,7 @@ public class SplashScreenActivity extends BaseActivity {
 
         String token = AppPartiUVV.getToken();
 
-        if(TextUtils.isEmpty(token)){
+//        if(TextUtils.isEmpty(token)){
             Timer task = new Timer();
             task.schedule(new TimerTask() {
                 @Override
@@ -36,6 +38,12 @@ public class SplashScreenActivity extends BaseActivity {
         }else{
             new AutoLoginAsyncTask().execute(token);
         }
+    }
+
+    @Subscribe
+    public void onErrorEvent(EventBusEvents.ErrorEvent event) {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 
     @Subscribe

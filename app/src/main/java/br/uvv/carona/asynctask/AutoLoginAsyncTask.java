@@ -14,7 +14,7 @@ public class AutoLoginAsyncTask extends BaseAsyncTask<String, BaseObject> {
     @Override
     protected BaseObject doInBackground(String... params) {
         try{
-            return LoginService.loginWithToken(params[0]);
+            return LoginService.loginWithToken();
         }catch (Exception e){
             this.mException = e;
         }
