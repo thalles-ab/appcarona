@@ -21,9 +21,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
-import br.uvv.carona.asynctask.GetUserInfoAsyncTask;
 import br.uvv.carona.fragment.RideStatusFragment;
-import br.uvv.carona.fragment.RideSolicitationsFragment;
 import br.uvv.carona.httprequest.util.WSResources;
 import br.uvv.carona.model.Student;
 import br.uvv.carona.util.EventBusEvents;

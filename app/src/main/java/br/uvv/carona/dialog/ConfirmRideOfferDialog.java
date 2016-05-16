@@ -17,18 +17,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import java.util.ArrayList;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import br.uvv.carona.R;
 import br.uvv.carona.activity.BaseActivity;
 import br.uvv.carona.activity.CheckRideOffersActivity;
+import br.uvv.carona.activity.HomeActivity;
 import br.uvv.carona.activity.MapActivity;
 import br.uvv.carona.asynctask.NewRideOfferAsyncTask;
 import br.uvv.carona.model.Ride;
 import br.uvv.carona.util.DateFormatUtil;
+import br.uvv.carona.util.EventBusEvents;
 
 public class ConfirmRideOfferDialog extends DialogFragment {
     private static final String ROUTE_TAG = ".ROUTE_TAG";
@@ -43,7 +46,7 @@ public class ConfirmRideOfferDialog extends DialogFragment {
     private TextView mDateField;
     private TextView mTimeField;
     private Spinner mNumberPassagers;
-    private ArrayAdapter<Integer> mAdapter;
+    private ArrayAdapter<String> mAdapter;
 
     private Ride mRoute;
     private boolean mIsRideRequest;
@@ -75,12 +78,8 @@ public class ConfirmRideOfferDialog extends DialogFragment {
         this.mDateField = (TextView)this.mDialog.findViewById(R.id.rideDate);
         this.mTimeField = (TextView)this.mDialog.findViewById(R.id.rideHour);
         this.mNumberPassagers = (Spinner)this.mDialog.findViewById(R.id.numberPassagersSB);
-        int[] itens = getResources().getIntArray(R.array.qnt_passagers);
-        List<Integer> items = new ArrayList<>();
-        for(int i : itens){
-            items.add(i);
-        }
-        this.mAdapter = new ArrayAdapter<>(getContext(), R.layout.layout_ride_solicitation_option_item, items);
+        String[] itens = getResources().getStringArray(R.array.qnt_passagers);
+        this.mAdapter = new ArrayAdapter<>(getContext(), R.layout.layout_ride_solicitation_option_item, itens);
 
         this.mDialog.findViewById(R.id.cancel_action).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,10 +98,10 @@ public class ConfirmRideOfferDialog extends DialogFragment {
                 }else{
                     ((MapActivity)getActivity()).startProgressDialog(R.string.msg_sending_ride);
                     int p = mNumberPassagers.getSelectedItemPosition();
-                    Integer text = mAdapter.getItem(p);
-                    Integer qnt = text;
-//                    mRoute.quantityPassengers = 1;
-//                    new NewRideOfferAsyncTask().execute(mRoute);
+                    String text = mAdapter.getItem(p);
+                    Integer qnt = Integer.parseInt(text);
+                    mRoute.quantityPassengers = qnt;
+                    new NewRideOfferAsyncTask().execute(mRoute);
                 }
             }
         });
@@ -223,6 +222,32 @@ public class ConfirmRideOfferDialog extends DialogFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(ROUTE_TAG, this.mRoute);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onNewRideEvent(EventBusEvents.NewRideEvent event){
+        MessageDialog.newInstance(getString(R.string.msg_ride_sent), new MessageDialog.OnDialogButtonClick() {
+            @Override
+            public void onConfirmClick(Dialog dialog) {
+                Intent intent = new Intent(dialog.getContext(), HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                dialog.dismiss();
+                mDialog.dismiss();
+            }
+        }).show(((BaseActivity)getActivity()).getSupportFragmentManager(), "SUCCESS");
     }
 
     /**

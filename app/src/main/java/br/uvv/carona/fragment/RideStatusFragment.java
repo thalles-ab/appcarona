@@ -175,6 +175,6 @@ public class RideStatusFragment extends Fragment {
 
     @Subscribe
     public void onGetRideRequests(EventBusEvents.RideEvent event){
-        this.mAdapter.addItems((List<Object>)(Object)event.routes);
+        this.mAdapter.addItems((List<Object>)(Object)event.rides);
     }
 }

@@ -22,13 +22,12 @@ public class PlaceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private Context mContext;
     private OnChangeListener mOnChange;
 
-    public PlaceListAdapter(Context context, List<Place> places, OnChangeListener onChange){
+    public PlaceListAdapter(Context context, List<Place> places, OnChangeListener onChange, Map<Integer, Place> selectedPlaces){
         this.mContext = context;
         this.mPlaces = places;
-        this.mSelected = new HashMap();
+        this.mSelected = selectedPlaces;
         this.mOnChange = onChange;
     }
-
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -146,10 +145,27 @@ public class PlaceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.notifyItemInserted(this.mPlaces.indexOf(place));
     }
 
+    public void replacePlace(Place place){
+        if(this.mPlaces.contains(place)){
+            int pos = this.mPlaces.indexOf(place);
+            this.mPlaces.remove(pos);
+            this.mPlaces.add(pos, place);
+            this.notifyItemChanged(pos);
+        }else{
+            this.mPlaces.add(place);
+            this.notifyDataSetChanged();
+        }
+
+    }
+
     public void replaceContent(List<Place> places){
         this.mPlaces.clear();
         this.mPlaces.addAll(places);
         this.notifyDataSetChanged();
+    }
+
+    public Map<Integer, Place> getSelected(){
+        return this.mSelected;
     }
 
     private class PlaceViewHolder extends RecyclerView.ViewHolder{

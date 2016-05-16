@@ -1,6 +1,7 @@
 package br.uvv.carona.activity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
@@ -40,6 +41,7 @@ import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.asynctask.GetRouteAsyncTask;
 import br.uvv.carona.dialog.ConfirmRideOfferDialog;
+import br.uvv.carona.dialog.MessageDialog;
 import br.uvv.carona.dialog.NewLocationConfirmDialog;
 import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
@@ -112,8 +114,10 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
         if(this.mTypeMapRequest == MapRequestEnum.MarkRoute){
             actionBar.setTitle(R.string.lbl_offer_ride);
             actionBar.setSubtitle(R.string.lbl_route);
-        }else{
+        }else if(this.mTypeMapRequest == MapRequestEnum.AddPlace){
             actionBar.setTitle(R.string.lbl_add_location);
+        }else{
+            actionBar.setTitle(R.string.lbl_select_location);
         }
     }
 
@@ -188,6 +192,20 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
         this.stopProgressDialog();
     }
 
+    @Subscribe
+    public void onSuccess(EventBusEvents.SuccessEvent event){
+        if(event.success){
+            MessageDialog dialog = MessageDialog.newInstance(getString(R.string.msg_ride_sent), new MessageDialog.OnDialogButtonClick() {
+                @Override
+                public void onConfirmClick(Dialog dialog) {
+                    dialog.dismiss();
+                    Intent intent = new Intent(dialog.getContext(), HomeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                }
+            });
+        }
+    }
+
     @Override
     public void onConnected(Bundle bundle) {
         if(this.mMap != null) {
@@ -252,7 +270,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
             if(this.mDepartureMarker != null && this.mDestinationMarker != null && this.mNewRideRoute == null){
                 makeRouteRequest();
             }else if(mNewRideRoute != null){
-                getRoute(new EventBusEvents.RideEvent(mNewRideRoute));
+                getRoute(new EventBusEvents.RouteEvent(mNewRideRoute));
             }
         }
     }
@@ -353,6 +371,8 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
                 if(this.mNewRideRoute == null){
                     //TODO ask to select
                 }else{
+                    this.mNewRideRoute.startPoint = this.mDeparturePlace;
+                    this.mNewRideRoute.endPoint = this.mDestinationPlace;
                     ConfirmRideOfferDialog confirmRideOfferDialog = ConfirmRideOfferDialog.newInstance(this.mNewRideRoute, false);
                     confirmRideOfferDialog.show(getSupportFragmentManager(), "crod");
                 }
@@ -381,7 +401,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
     }
 
     @Subscribe
-    public void getPlaceAddress(EventBusEvents.PlaceEvent event){
+    public void getPlaceAddress(EventBusEvents.PlaceAddressEvent event){
         this.stopProgressDialog();
         if(this.mTypeMapRequest == MapRequestEnum.AddPlace) {
             NewLocationConfirmDialog.newInstance(event.place).show(getSupportFragmentManager(), "CONFIRM_NEW_PLACE");
@@ -391,7 +411,7 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
     }
 
     @Subscribe
-    public void getRoute(EventBusEvents.RideEvent event){
+    public void getRoute(EventBusEvents.RouteEvent event){
         this.mNewRideRoute = event.route;
         List<LatLng> routePoints = this.mNewRideRoute.getDecodedPoints();
         this.mRoute = this.mMap.addPolyline(new PolylineOptions()

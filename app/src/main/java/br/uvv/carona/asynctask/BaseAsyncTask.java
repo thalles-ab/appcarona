@@ -14,11 +14,11 @@ import br.uvv.carona.util.EventBusEvents;
 public class BaseAsyncTask<Params, T> extends AsyncTask<Params, T, T> {
     protected Exception mException;
 
+
     @Override
     protected T doInBackground(Params... params) {
         return null;
     }
-
 
     //TODO tratar erros do baseObject e listar em dialogo
     @Override
