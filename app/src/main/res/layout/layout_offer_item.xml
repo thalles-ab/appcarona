@@ -83,6 +83,7 @@
                     android:gravity="center_vertical"
                     android:focusableInTouchMode="false"
                     android:clickable="false"
+                    android:layout_marginTop="3dp"
                     android:layout_marginRight="5dp"
                     android:layout_marginLeft="5dp">
 
@@ -100,9 +101,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/lbl_date_colon"
-                            android:layout_marginTop="5dp"
                             android:textSize="14sp"
                             android:focusableInTouchMode="false"
+                            android:layout_gravity="center_vertical"
                             android:clickable="false"/>
 
                         <TextView
@@ -112,6 +113,7 @@
                             android:textSize="14sp"
                             android:layout_marginRight="5dp"
                             android:focusableInTouchMode="false"
+                            android:layout_gravity="center_vertical"
                             android:clickable="false"/>
 
                     </LinearLayout>
@@ -130,7 +132,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/lbl_hour_colon"
-                            android:layout_marginTop="5dp"
                             android:textSize="14sp"
                             android:focusableInTouchMode="false"
                             android:clickable="false"/>

@@ -21,9 +21,6 @@ import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
 import br.uvv.carona.util.DateFormatUtil;
 
-/**
- * Created by CB1772 on 04/05/2016.
- */
 public class RideOfferRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<Ride> mOffers;
     private Place mDeparture;

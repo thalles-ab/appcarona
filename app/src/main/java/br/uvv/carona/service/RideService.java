@@ -39,13 +39,13 @@ public class RideService {
     public static BaseObject saveRide(Ride ride) throws Exception{
         if(ride.startPoint.id < 1){
             ride.startPoint.id = 0;
-            ride.startPoint = AppPartiUVV.sGson.fromJson(BaseHttpRequest
-                    .createRequest(HttpMethodUtil.POST, WSResources.PLACE, ride.startPoint), Place.class);
+            ride.startPoint.id = AppPartiUVV.sGson.fromJson(BaseHttpRequest
+                    .createRequest(HttpMethodUtil.POST, WSResources.PLACE, ride.startPoint), Place.class).id;
         }
         if(ride.endPoint.id < 1){
             ride.endPoint.id = 0;
-            ride.endPoint = AppPartiUVV.sGson.fromJson(BaseHttpRequest
-                    .createRequest(HttpMethodUtil.POST, WSResources.PLACE, ride.endPoint), Place.class);
+            ride.endPoint.id = AppPartiUVV.sGson.fromJson(BaseHttpRequest
+                    .createRequest(HttpMethodUtil.POST, WSResources.PLACE, ride.endPoint), Place.class).id;
         }
         return AppPartiUVV.sGson.fromJson(BaseHttpRequest.createRequest(HttpMethodUtil.POST, WSResources.RIDE, ride), BaseObject.class);
     }

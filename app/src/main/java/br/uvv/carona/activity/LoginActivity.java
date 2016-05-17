@@ -9,6 +9,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import br.uvv.carona.R;
@@ -90,6 +92,7 @@ public class LoginActivity extends BaseActivity {
     @Subscribe
     public void onEventGetUser(EventBusEvents.UserEvent event){
         AppPartiUVV.persistUser(event.student);
+
         Intent intent = new Intent(this, HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

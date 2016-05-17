@@ -20,6 +20,7 @@ import java.util.List;
 import br.uvv.carona.R;
 import br.uvv.carona.activity.BaseActivity;
 import br.uvv.carona.adapter.RideStatusAdapter;
+import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.model.Place;
 import br.uvv.carona.model.Ride;
 import br.uvv.carona.model.RideSolicitation;
@@ -56,48 +57,11 @@ public class RideStatusFragment extends Fragment {
         if (savedInstanceState == null) {
             this.mTypeRequest = getArguments().getInt(TYPE_REQUEST_TAG);
             if(this.mTypeRequest == TYPE_ACTIVE_RIDE){
-                this.mRides = new ArrayList<>();
-                for(int i = 0;  i < 15; i++){
-                    Ride ride = new Ride();
-                    ride.expirationDate = new Date();
-                    if(i % 5 == 0){
-                        ride.expirationDate.setTime(ride.expirationDate.getTime() - 86400000);
-                    }
-                    ride.student = new Student();
-                    ride.student = new Student();
-                    ride.student.name = "Fulano-"+(i+1);
-                    ride.startPoint = new Place();
-                    ride.startPoint.latitude = -20.353751;
-                    ride.startPoint.longitude = -40.353516;
-                    ride.endPoint = new Place();
-                    ride.endPoint.latitude = -20.297618;
-                    ride.endPoint.longitude = -40.295777;
-                    ride.routeGoogleFormat = "|if{BnphuF{^{UmgA~[ckB_N~B_aD}hAm}Dur@nS{RsMdCiE";
-                    this.mRides.add(ride);
-                }
-            }else {
-                this.mSolicitations = new ArrayList<>();
-                for (int i = 0; i < ((this.mTypeRequest == TYPE_REQUEST_MADE) ? 10 : 15); i++) {
-                    RideSolicitation request = new RideSolicitation();
-                    request.status = (i % 3 == 0) ? RideSolicitationStatus.Accepted : (i % 3 == 1) ? RideSolicitationStatus.Waiting : RideSolicitationStatus.Refused;
-                    request.ride = new Ride();
-                    request.ride.startPoint = new Place();
-                    request.ride.startPoint.latitude = -20.353751;
-                    request.ride.startPoint.longitude = -40.353516;
-                    request.ride.endPoint = new Place();
-                    request.ride.endPoint.latitude = -20.297618;
-                    request.ride.endPoint.longitude = -40.295777;
-                    request.ride.routeGoogleFormat = "|if{BnphuF{^{UmgA~[ckB_N~B_aD}hAm}Dur@nS{RsMdCiE";
-                    request.ride.expirationDate = new Date();
-                    if (i % 5 == 0) {
-                        request.ride.expirationDate.setTime(request.ride.expirationDate.getTime() - 86400000);
-                    }
-                    request.ride.student = new Student();
-                    request.ride.student.name = "Abigaiu-" + (i + 1);
-                    request.student = new Student();
-                    request.student.name = "Fulano-" + (i + 1);
-                    this.mSolicitations.add(request);
-                }
+                this.mRides = AppPartiUVV.simuRide;
+            }else if(this.mTypeRequest == TYPE_REQUEST_RECEIVED){
+                this.mSolicitations = AppPartiUVV.simuSolicitation;
+            }else{
+                this.mSolicitations = AppPartiUVV.simuSolicitationMade;
             }
         }else{
             this.mTypeRequest = savedInstanceState.getInt(TYPE_REQUEST_TAG);

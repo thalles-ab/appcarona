@@ -28,8 +28,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
+import br.uvv.carona.model.Place;
+import br.uvv.carona.model.Ride;
+import br.uvv.carona.model.RideSolicitation;
 import br.uvv.carona.model.Student;
+import br.uvv.carona.util.RideSolicitationStatus;
 
 public class AppPartiUVV extends Application {
     private static final String PERSIST_FILENAME = "persist.partiuvv.info";
@@ -38,6 +45,10 @@ public class AppPartiUVV extends Application {
     public static Application mApplication;
     public static Gson sGson;
     private static Student mStudent;
+
+    public static List<Ride> simuRide;
+    public static List<RideSolicitation> simuSolicitation;
+    public static List<RideSolicitation> simuSolicitationMade = new ArrayList<>();
 
     @Override
     public void onCreate() {
@@ -53,6 +64,38 @@ public class AppPartiUVV extends Application {
         if (mStudent == null) {
             mStudent = readUser();
         }
+
+
+    }
+
+    public static void addRide(double latS, double latE, double lngS, double lngE, String gRoute, int max, Date date){
+        Ride ride = new Ride();
+        ride.student = readUser();
+        ride.routeGoogleFormat = gRoute;
+        ride.quantityPassengers = max;
+        Place start = new Place();
+        start.latitude = latS;
+        start.longitude = lngS;
+        Place end = new Place();
+        end.latitude = latE;
+        end.longitude = lngE;
+        ride.endPoint = end;
+        ride.startPoint = start;
+        ride.students = new ArrayList<>();
+        ride.expirationDate = date;
+        ride.id = simuRide.size()+1;
+        simuRide.add(ride);
+    }
+
+    public static void addRideSolicitation(String name, String photoUrl, Ride ride){
+        RideSolicitation solicitation = new RideSolicitation();
+        solicitation.id = simuSolicitation.size()+1;
+        solicitation.ride = ride;
+        Student student = new Student();
+        student.name = name;
+        student.photo = photoUrl;
+        solicitation.student = student;
+        simuSolicitation.add(solicitation);
     }
 
     public static void saveToken(String token){

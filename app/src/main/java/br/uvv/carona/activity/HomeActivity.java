@@ -19,6 +19,10 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
 import br.uvv.carona.R;
 import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.fragment.HomeFragment;
@@ -91,12 +95,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         });
         if(savedInstanceState == null){
             this.mUser = AppPartiUVV.getStudent();
+            showHome();
         }else{
             this.mUser = (Student) savedInstanceState.getSerializable(EXTRA_USER);
         }
         setUserInfo();
         disableNavigationViewScrollbars(mNavigationView);
-        showHome();
     }
 
     private void showHome(){
@@ -119,6 +123,67 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mUserName.setText(mUser.name);
         if(!TextUtils.isEmpty(mUser.photo)){
             mUserPhoto.setImageURI(Uri.parse(WSResources.BASE_UPLOAD_URL + mUser.photo));
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(AppPartiUVV.simuRide == null){
+            AppPartiUVV.simuRide = new ArrayList<>();
+            AppPartiUVV.simuSolicitation = new ArrayList<>();
+            AppPartiUVV.simuSolicitationMade = new ArrayList<>();
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR, 2016);
+            calendar.set(Calendar.MONTH, 5);
+            calendar.set(Calendar.DAY_OF_MONTH, 18);
+            calendar.set(Calendar.HOUR_OF_DAY, 6);
+            calendar.set(Calendar.MINUTE, 30);
+            Date a = calendar.getTime();
+            AppPartiUVV.addRide(-20.3554469, -20.354858743617466, -40.3540771, -40.29762055724859,
+                    "rtf{BrshuFqHeAc@?yDcISa@ACJOBI@Id@kDp@oGRyAIOMc@sDuHsBaEi@eAXi@lAaCnBqDpA_CpGyLbAiBl@qAv@{BXiAVoBJmC@kBCcAKiAUmA}@kDcB{HgDuO_@eB_B{H{@wD_AwEaBqHqBiFo@sA}EsH_GoJ}JePoCwE}AiC}C{EuBoDkAwBTKfEcCfDkBxEoCjDiBLCl@HfJv@~BiAnBk@~@QNqCRmB\\sEDGHo@HCJQ@UIOCCAA?eANaCYm@oA_CgFoJu@uAx@e@dB_ArDyBfEoCrEyCpC{A|Aw@jCkATK@B@B@@FBLE@QEEfBiAyCmEeCoD",
+                    2, a);
+            calendar.set(Calendar.HOUR_OF_DAY, 11);
+            Date b = calendar.getTime();
+            AppPartiUVV.addRide(-20.354858743617466, -20.3554469, -40.29762055724859,-40.3540771,
+                    "hqf{Bbr}tF_@m@KDYd@UToDtBaClAeAl@_CjA}A~@]N[D_AKoBe@eAS]MEEKCMBELBLJFD^BJCt@KdAQ`B]hESlC}@EMBYFk@g@OXxAbCnAbC^|@lBpDtB|DlBxDjBpD@HG\\C@GFEF?RFPFDBB@TAVBHo@xHAPOfC_APoBj@_Ab@_Ad@}D[sAM{BUO?KB{EhCwEnCaFtCoBbAKDDHpB`E`C~DrGlKZl@T^nArBHHNh@nHtLtEnHJR~AfC`CfDLVt@`BhAvCRj@xApGjAlFn@rC`@bChBxIlCvLl@vC|@vEbAzD\\zBFhCA~@GfBY`CWpAu@vBmBzDcJ~PuEtIsA`CGJU@cFvA|@bDnAl@TVn@vAlBdEnB`EzC|F\\p@xDbIb@?zHfA",
+                    4, b);
+            calendar.set(Calendar.DAY_OF_MONTH, 19);
+            calendar.set(Calendar.HOUR_OF_DAY, 13);
+            calendar.set(Calendar.MINUTE, 30);
+            Date c = calendar.getTime();
+            AppPartiUVV.addRide(-20.33524172334717, -20.35500019666682, -40.2915071323514, -40.29792666435242,
+                    "vub{Bxl|tFSxCMnBtALpCX|BPjE^zGp@lMjAxE^`DZhALtMjAhIv@rBLtPzAnBN~C\\fD^dHj@~Hv@fCVfAx@vDzC^ZuAfBeCvDkClDg@w@_CoDgA_BuAqB",
+                    3, c);
+            calendar.set(Calendar.HOUR_OF_DAY, 9);
+            AppPartiUVV.addRide(-20.35500019666682, -20.33524172334717, -40.29792666435242, -40.2915071323514,
+                    "xrf{Bbt}tFoDkFu@oAAUDOFKt@FvBPLBLWdA{An@w@?@@?B?BADEAIEEI@?@A@yAqA{CcCMGaA}@CCCGACy@KgB]iBOoBUkAEW?k@H_Cf@aBRaCd@mAJiDEqAKeDa@oAI}C_@gGi@gCQ_AKi@Im@AiB?q@E}@OeDa@iHq@{E]qCS{BYgCOwBUqD[qAIsAGJqAJqArABtABMtAEl@",
+                    2, a);
+            AppPartiUVV.addRideSolicitation("Luciana Amália Santigo",
+                    "https://pixabay.com/static/uploads/photo/2014/08/20/18/08/woman-422706_960_720.jpg",
+                    AppPartiUVV.simuRide.get(1));
+            AppPartiUVV.addRideSolicitation("Caio Vítor Ferreira",
+                    "https://pixabay.com/static/uploads/photo/2016/01/05/11/36/portrait-1122364_960_720.jpg"
+                    , AppPartiUVV.simuRide.get(3));
+            AppPartiUVV.addRideSolicitation("Heitor Quirino Salazar",
+                    "https://pixabay.com/static/uploads/photo/2015/09/02/12/38/man-918576_960_720.jpg",
+                    AppPartiUVV.simuRide.get(2));
+            AppPartiUVV.addRideSolicitation("Brenda Gomes",
+                    "https://pixabay.com/static/uploads/photo/2016/01/27/10/59/female-1164098_960_720.jpg",
+                    AppPartiUVV.simuRide.get(0));
+            AppPartiUVV.addRideSolicitation("Luciana Amália Santigo",
+                    "https://pixabay.com/static/uploads/photo/2015/11/07/11/50/blonde-1031534_960_720.jpg",
+                    AppPartiUVV.simuRide.get(1));
+            AppPartiUVV.addRideSolicitation("Inês Magalhães",
+                    "https://pixabay.com/static/uploads/photo/2015/07/24/18/27/young-858730_960_720.jpg",
+                    AppPartiUVV.simuRide.get(1));
+            AppPartiUVV.addRideSolicitation("Clarissa Pinheiro",
+                    "https://pixabay.com/static/uploads/photo/2016/02/19/10/06/musician-1209073_960_720.jpg",
+                    AppPartiUVV.simuRide.get(2));
+            AppPartiUVV.addRideSolicitation("Lorenzo Cardozo",
+                    "https://pixabay.com/static/uploads/photo/2015/01/08/18/30/entrepreneur-593371_960_720.jpg",
+                    AppPartiUVV.simuRide.get(3));
         }
     }
 

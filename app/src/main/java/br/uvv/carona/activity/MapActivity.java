@@ -365,6 +365,8 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMapLoadedCa
                 if(this.mNewRideRoute == null){
                     //TODO ask to select
                 }else{
+                    this.mNewRideRoute.endPoint = this.mDestinationPlace;
+                    this.mNewRideRoute.startPoint = this.mDeparturePlace;
                     ConfirmRideOfferDialog confirmRideOfferDialog = ConfirmRideOfferDialog.newInstance(this.mNewRideRoute, false);
                     confirmRideOfferDialog.show(getSupportFragmentManager(), "crod");
                 }

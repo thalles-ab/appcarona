@@ -23,6 +23,7 @@ import java.util.List;
 import br.uvv.carona.R;
 import br.uvv.carona.activity.BaseActivity;
 import br.uvv.carona.activity.RideDetailActivity;
+import br.uvv.carona.application.AppPartiUVV;
 import br.uvv.carona.asynctask.AnswerRideSolicitationAsyncTask;
 import br.uvv.carona.asynctask.CancelRideAsyncTask;
 import br.uvv.carona.fragment.RideStatusFragment;
@@ -69,9 +70,9 @@ public class RideStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             RideSolicitation solicitation = this.mSolicitations.get(position);
             ride = solicitation.ride;
             if (this.mTypeSolicitation == RideStatusFragment.TYPE_REQUEST_MADE) {
-                student = solicitation.student;
-            } else {
                 student = solicitation.ride.student;
+            } else {
+                student = solicitation.student;
             }
         }
         viewHolder.driverName.setText(student.name);
@@ -100,8 +101,16 @@ public class RideStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                 intent.putExtra(RideDetailActivity.RIDE_TAG, ride);
                                 v.getContext().startActivity(intent);
                             }else{
-                                ((BaseActivity)mContext).startProgressDialog(R.string.msg_canceling_ride);
-                                new CancelRideAsyncTask().execute(ride);
+//                                ((BaseActivity)mContext).startProgressDialog(R.string.msg_canceling_ride);
+//                                new CancelRideAsyncTask().execute(ride);
+                                int p = mRides.indexOf(ride);
+                                AppPartiUVV.simuRide.remove(p);
+                                for(int i = AppPartiUVV.simuSolicitation.size()-1; i >= 0; i--){
+                                    if(AppPartiUVV.simuSolicitation.get(i).ride.id == ride.id){
+                                        AppPartiUVV.simuSolicitation.remove(i);
+                                    }
+                                }
+                                notifyItemRemoved(p);
                             }
                             options.dismiss();
                         }
@@ -110,6 +119,7 @@ public class RideStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 }
             });
         }else {
+            final RideSolicitation solicitation = this.mSolicitations.get(position);
             viewHolder.wrapper.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
@@ -137,11 +147,17 @@ public class RideStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                 intent.putExtra(RideDetailActivity.RIDE_TAG, ride);
                                 v.getContext().startActivity(intent);
                             } else if (text.equals(mContext.getString(R.string.lbl_accept_solicitation))) {
-                                ((BaseActivity)mContext).startProgressDialog(R.string.msg_sending_answer);
-                                new AnswerRideSolicitationAsyncTask(true, mSolicitations.get(position));
+//                                ((BaseActivity)mContext).startProgressDialog(R.string.msg_sending_answer);
+//                                new AnswerRideSolicitationAsyncTask(true, mSolicitations.get(position));
+                                int p = mSolicitations.indexOf(solicitation);
+                                AppPartiUVV.simuSolicitation.remove(p);
+                                notifyItemRemoved(p);
                             } else {
-                                ((BaseActivity)mContext).startProgressDialog(R.string.msg_sending_answer);
-                                new AnswerRideSolicitationAsyncTask(false, mSolicitations.get(position));
+//                                ((BaseActivity)mContext).startProgressDialog(R.string.msg_sending_answer);
+//                                new AnswerRideSolicitationAsyncTask(false, mSolicitations.get(position));
+                                int p = mSolicitations.indexOf(solicitation);
+                                AppPartiUVV.simuSolicitation.remove(p);
+                                notifyItemRemoved(p);
                             }
                             options.dismiss();
                         }
@@ -164,29 +180,23 @@ public class RideStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
         }
 
-        if(ride.situation == TypeSituation.Enable) {
-            if(this.mTypeSolicitation == RideStatusFragment.TYPE_ACTIVE_RIDE){
-                viewHolder.rideSolicitationStatus.setText(this.mContext.getString(R.string.txt_waiting_response));
-                viewHolder.rideSolicitationStatus.setBackgroundResource(R.drawable.bg_ride_status_waiting);
-            }else {
-                switch (this.mSolicitations.get(position).status) {
-                    case Accepted:
-                        viewHolder.rideSolicitationStatus.setText(this.mContext.getString(R.string.txt_accepted));
-                        viewHolder.rideSolicitationStatus.setBackgroundResource(R.drawable.bg_ride_status_accepted);
-                        break;
-                    case Refused:
-                        viewHolder.rideSolicitationStatus.setText(this.mContext.getString(R.string.txt_denied));
-                        viewHolder.rideSolicitationStatus.setBackgroundResource(R.drawable.bg_ride_status_refused);
-                        break;
-                    case Waiting:
-                        viewHolder.rideSolicitationStatus.setText(this.mContext.getString(R.string.txt_waiting_response));
-                        viewHolder.rideSolicitationStatus.setBackgroundResource(R.drawable.bg_ride_status_waiting);
-                        break;
-                }
+        if(this.mTypeSolicitation == RideStatusFragment.TYPE_REQUEST_MADE){
+            switch (this.mSolicitations.get(position).status) {
+                case Accepted:
+                    viewHolder.rideSolicitationStatus.setText(this.mContext.getString(R.string.txt_accepted));
+                    viewHolder.rideSolicitationStatus.setBackgroundResource(R.drawable.bg_ride_status_accepted);
+                    break;
+                case Refused:
+                    viewHolder.rideSolicitationStatus.setText(this.mContext.getString(R.string.txt_denied));
+                    viewHolder.rideSolicitationStatus.setBackgroundResource(R.drawable.bg_ride_status_refused);
+                    break;
+                case Waiting:
+                    viewHolder.rideSolicitationStatus.setText(this.mContext.getString(R.string.txt_waiting_response));
+                    viewHolder.rideSolicitationStatus.setBackgroundResource(R.drawable.bg_ride_status_waiting);
+                    break;
             }
         }else{
-            viewHolder.rideSolicitationStatus.setText(this.mContext.getString(R.string.txt_cancelled));
-            viewHolder.rideSolicitationStatus.setBackgroundResource(R.drawable.bg_ride_status_refused);
+            viewHolder.rideSolicitationStatus.setVisibility(View.GONE);
         }
     }
 
